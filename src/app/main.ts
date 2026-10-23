@@ -5,15 +5,15 @@
 // del núcleo que usan la CLI y las pruebas (evaluarEn, estadoDeConfiguracion…).
 import './estilos.css';
 import referencia from '../../results/run-referencia.json';
-import { PARAMETROS_BASE } from '../core/ag';
 import { estadoDeConfiguracion, nivelDeCalidad } from '../core/comparacion';
-import { agregarZona, clonarEscenario, escalarDesechos, escenarioInicial } from '../core/escenario';
+import { agregarZona, clonarEscenario, escenarioInicial } from '../core/escenario';
 import { evaluarEn } from '../core/evaluacion';
 import type { Factibilidad } from '../core/factibilidad';
 import { distancia } from '../core/geo';
 import type { Configuracion, Escenario, EstadoSolucion, Evaluacion, ParametrosAG, Prioridad, RegistroGeneracion, ResultadoEjecucion, ZonaProhibida } from '../core/tipos';
 import { Escena3D, hayWebGL } from './escena/escena3d';
 import { estadoParaMostrar } from './estadoVista';
+import { crearPreset, type NombrePreset } from './presets';
 import { aplicarTemaCSS } from './tema';
 import { GraficaEvolucion } from './ui/grafica';
 import { chip, esc, esqueleto, metricas, origen, panelEscenario, tablaRegiones, type DatosBarra } from './ui/hud';
@@ -217,16 +217,11 @@ function cambiarEscenario(nuevo: Escenario): void {
 }
 
 let contadorZonas = 1;
-function aplicarPreset(nombre: string): void {
-  const base = escenarioInicial();
-  if (nombre === 'inicial') cambiarEscenario(base);
-  if (nombre === 'reducido') cambiarEscenario(escalarDesechos(base, 4));
-  if (nombre === 'dificil') cambiarEscenario(agregarZona(base, 'desechos', { id: 'bloqueo-yucatan', nombre: 'Bloqueo sobre Yucatán', lat: 20.5, lon: -89, radioGrados: 21, activa: true }));
-  if (nombre === 'inviable') {
-    // Mismo escenario y semilla que P6 (b): el resultado reproduce results/p6-inviable.json.
-    estado.parametros = { ...PARAMETROS_BASE, semilla: 1 };
-    cambiarEscenario(agregarZona(base, 'desechos', { id: 'gigante', nombre: 'Zona gigante', lat: 0, lon: 0, radioGrados: 178, activa: true }));
-  }
+function aplicarPreset(nombre: NombrePreset): void {
+  // Cada preset fija escenario y parámetros de una ejecución documentada (presets.ts).
+  const p = crearPreset(nombre);
+  estado.parametros = p.parametros;
+  cambiarEscenario(p.escenario);
 }
 
 function editarZona(id: string, campo: string, valor: string | boolean): void {
@@ -281,7 +276,7 @@ $('panel-izq').addEventListener('change', (ev) => {
 $('panel-izq').addEventListener('click', (ev) => {
   const b = (ev.target as HTMLElement).closest('button');
   if (!b) return;
-  if (b.dataset.preset) aplicarPreset(b.dataset.preset);
+  if (b.dataset.preset) aplicarPreset(b.dataset.preset as NombrePreset);
   if (b.dataset.accion === 'evolucionar') evolucionar();
   if (b.dataset.accion === 'detener') detener();
   if (b.dataset.accion === 'referencia') cargarReferencia();
