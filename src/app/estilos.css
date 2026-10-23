@@ -110,6 +110,7 @@ svg { flex: none; }
 .detalles {
   top: 96px; right: 16px; width: min(380px, calc(100% - 32px));
   padding: 14px 16px; z-index: 6;
+  background: var(--panelAlto); border-color: var(--bordeFuerte);
   animation-duration: var(--dur-rapida);
 }
 
@@ -326,7 +327,7 @@ input.interruptor:checked::after { transform: translateX(14px); background: var(
 .etiqueta3d.oculta { opacity: 0; visibility: hidden; }
 
 /* ---- Tarjeta del satélite ------------------------------------------------- */
-.tarjeta { left: 50%; top: 100px; transform: translateX(-50%); width: min(400px, calc(100% - 32px)); padding: 16px 18px; z-index: 5; }
+.tarjeta { left: 50%; top: 100px; transform: translateX(-50%); width: min(400px, calc(100% - 32px)); padding: 16px 18px; z-index: 5; background: var(--panelAlto); border-color: var(--bordeFuerte); }
 .tarjeta h2 { font-size: var(--texto-titulo); margin-right: 36px; }
 .tarjeta .coordenadas { font-family: var(--fuente-mono); font-size: var(--texto-pequeno); color: var(--acentoSuave); margin: 4px 0 12px; }
 .tarjeta .cerrar { position: absolute; top: 10px; right: 10px; }
