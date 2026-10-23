@@ -22,7 +22,7 @@ npm install
 | Orden | Qué hace |
 |---|---|
 | `npm run dev` | Abre la visualización 3D en http://localhost:5173 (carga `results/run-referencia.json`) |
-| `npm test` | Ejecuta las 63 pruebas automáticas (Vitest) |
+| `npm test` | Ejecuta las 73 pruebas automáticas (Vitest) |
 | `npm run experimentos` | Ejecuta **todos** los experimentos (~4 min): regenera `results/*.json`, `results/*.csv` y `docs/03-pruebas.md` |
 | `npm run evolucionar` | Ejecuta una evolución desde la terminal (ver opciones abajo) |
 | `npm run verificar` | Tipado + pruebas + experimentos: **todo con una sola orden** |
@@ -112,7 +112,8 @@ Justificación completa y supuestos (S1–S10): [docs/01-definicion-del-problema
 |---|---|
 | Las pruebas pasan y los experimentos se reproducen con una orden | `npm run verificar` |
 | Ninguna solución inválida se muestra como válida (CLI y UI) | `tests/evaluacion.test.ts` (reglas de Deb), `tests/estadoVista.test.ts` (chip de la UI) y la verificación independiente de 318 ejecuciones en docs/03 |
-| La visualización muestra exactamente el run de referencia | La UI recalcula la aptitud al cargar ("✓ Verificado"); `tests/referencia.test.ts` vuelve a ejecutar la semilla 42 y la compara con `results/run-referencia.json` |
+| La visualización muestra exactamente el run de referencia | La UI recalcula la aptitud al cargar ("✓ Verificado"); `tests/referencia.test.ts` vuelve a ejecutar la semilla 42 y la compara con `results/run-referencia.json`; `tests/coordenadas.test.ts` comprueba que cada satélite, huella y zona se dibuja en su coordenada exacta del globo |
+| Los escenarios rápidos de la UI reproducen los experimentos | `tests/presets.test.ts`: «Inicial» = run de referencia, «Inviable» = P6 (b) idéntico, «Difícil» y «Espacio reducido ×4» se comportan como P6 (a) y P5 |
 | 7 pruebas obligatorias + al menos 1 propia | P1–P7 + P8 (contra azar), P9 (ablación del cruce), P10 (sensibilidad) y P11 (cambio de condiciones) en docs/03 |
 | Decisiones justificadas y supuestos declarados | docs/01 (supuestos S1–S10) y docs/04 §6 (limitaciones) |
 | Historial de git coherente | `git log --oneline` |

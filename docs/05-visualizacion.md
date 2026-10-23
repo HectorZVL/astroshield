@@ -21,6 +21,10 @@ Cuando se pulsa **Evolucionar**, el algoritmo corre en un **Web Worker** con el 
 
 La prueba automática `tests/referencia.test.ts` vuelve a ejecutar la semilla 42 y comprueba que el resultado sea idéntico al archivo que carga la UI.
 
+Cada escenario rápido fija las condiciones **y la semilla** de una ejecución documentada en docs/03 ([presets.ts](../src/app/presets.ts)): «Inicial» = P1 (semilla 42), «Espacio reducido ×4» = P5 con factor 4 (semilla 1), «Difícil: Yucatán» = P6 (a) (semilla 1) e «Inviable» = P6 (b) (semilla 1). Lo comprueba `tests/presets.test.ts`.
+
+`tests/coordenadas.test.ts` comprueba que lo dibujado corresponde a los datos: la conversión lat/lon → 3D de la escena es la misma del núcleo, cada satélite del run de referencia queda en su coordenada exacta, la textura del globo coincide con esa conversión (las costas están donde dicen sus coordenadas) y las huellas y zonas se dibujan con el radio angular del modelo.
+
 ## Qué distingue (requisitos del enunciado)
 
 | Requisito | Cómo se ve |
