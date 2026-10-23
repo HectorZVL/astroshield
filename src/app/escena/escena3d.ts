@@ -32,6 +32,9 @@ export class Escena3D {
   private globo: Globo;
   private sol: THREE.DirectionalLight;
   private aux = { a: new THREE.Vector3(), b: new THREE.Vector3() };
+  private tamano = { w: 1, h: 1 };
+  /** Desplazamiento del centro de proyección (px) para centrar el globo en el hueco entre paneles. */
+  private encuadre = { x: 0, y: 0, objX: 0, objY: 0 };
   alSeleccionar: (s: Seleccion) => void = () => {};
 
   constructor(
@@ -81,10 +84,33 @@ export class Escena3D {
     // Con tamaño 0 (pestaña o panel oculto) WebGL crea framebuffers vacíos y
     // llena la consola de advertencias; se espera al siguiente resize con tamaño real.
     if (w < 1 || h < 1) return;
+    this.tamano = { w, h };
     this.camara.aspect = w / h;
-    this.camara.updateProjectionMatrix();
+    this.aplicarEncuadre();
     this.renderer.setSize(w, h);
     this.etiquetas.setSize(w, h);
+  }
+
+  /**
+   * Centra el globo en el punto (cx, cy) de la pantalla, o en el centro con `null`.
+   * Solo mueve el centro de la proyección (no la cámara ni los datos); el clic y las
+   * etiquetas siguen funcionando porque usan la misma matriz de proyección.
+   */
+  centrarEn(punto: { x: number; y: number } | null): void {
+    this.encuadre.objX = punto ? this.tamano.w / 2 - punto.x : 0;
+    this.encuadre.objY = punto ? this.tamano.h / 2 - punto.y : 0;
+    if (!this.movimiento()) {
+      this.encuadre.x = this.encuadre.objX;
+      this.encuadre.y = this.encuadre.objY;
+      this.aplicarEncuadre();
+    }
+  }
+
+  private aplicarEncuadre(): void {
+    const { w, h } = this.tamano;
+    if (Math.abs(this.encuadre.x) < 0.5 && Math.abs(this.encuadre.y) < 0.5) this.camara.clearViewOffset();
+    else this.camara.setViewOffset(w, h, this.encuadre.x, this.encuadre.y, w, h);
+    this.camara.updateProjectionMatrix();
   }
 
   private configurarClic(): void {
@@ -115,6 +141,14 @@ export class Escena3D {
   private cuadro(): void {
     const dt = Math.min(0.05, this.reloj.getDelta());
     const mov = this.movimiento();
+    const e = this.encuadre;
+    if (e.x !== e.objX || e.y !== e.objY) {
+      // El globo se desliza suavemente al plegar o desplegar un panel.
+      const k = mov ? Math.min(1, dt * 7) : 1;
+      e.x = Math.abs(e.objX - e.x) < 0.5 ? e.objX : e.x + (e.objX - e.x) * k;
+      e.y = Math.abs(e.objY - e.y) < 0.5 ? e.objY : e.y + (e.objY - e.y) * k;
+      this.aplicarEncuadre();
+    }
     this.control.actualizar();
     this.capas.actualizar(dt, mov, this.camara);
     if (mov) this.estrellas.rotation.y += dt * 0.003;

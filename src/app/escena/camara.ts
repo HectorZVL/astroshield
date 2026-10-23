@@ -38,13 +38,23 @@ export class ControlCamara {
 
   /** Entrada: desde lejos hacia la vista inicial, sobre América. */
   entrada(): void {
-    const final = aVector3({ lat: 18, lon: -80 }, 3.6);
+    const final = aVector3({ lat: 18, lon: -80 }, this.distanciaInicial());
     if (!this.movimiento()) {
       this.camara.position.copy(final);
       return;
     }
     this.camara.position.copy(aVector3({ lat: 40, lon: -170 }, 14));
     this.vuelo = { desde: this.camara.position.clone(), hasta: final, inicio: performance.now(), duracion: 2800 };
+  }
+
+  /**
+   * Distancia para que el globo quepa a lo ancho: en pantallas verticales (teléfono)
+   * el campo horizontal es estrecho y a 3.6 radios el globo se recortaba.
+   */
+  private distanciaInicial(): number {
+    const mitadV = THREE.MathUtils.degToRad(this.camara.fov / 2);
+    const mitadH = Math.atan(Math.tan(mitadV) * this.camara.aspect);
+    return Math.min(this.controles.maxDistance, Math.max(3.6, 1.12 / Math.sin(Math.min(mitadV, mitadH))));
   }
 
   /** Vuela hasta tener `p` en el centro de la vista, a la distancia `distancia`. */

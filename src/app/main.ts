@@ -468,7 +468,22 @@ $('panel-izq').addEventListener(
 function plegar(boton: HTMLButtonElement, plegado: boolean): void {
   boton.closest('.superficie')!.classList.toggle('plegado', plegado);
   boton.setAttribute('aria-expanded', String(!plegado));
+  encuadrar();
 }
+
+/** Centra el globo en el hueco que dejan los paneles (en teléfono el HUD se desplaza encima). */
+function encuadrar(): void {
+  if (!escena3d) return;
+  if (window.innerWidth <= 860) return escena3d.centrarEn(null);
+  const caja = (sel: string) => document.querySelector(sel)!.getBoundingClientRect();
+  const izq = document.querySelector('.panel-izq.plegado') ? 0 : caja('.panel-izq').right;
+  const der = document.querySelector('.panel-der.plegado') ? window.innerWidth : caja('.panel-der').left;
+  const arriba = caja('.barra').bottom;
+  const dock = caja('.dock');
+  // Se tolera que el dock tape la parte baja del globo: centrar en el hueco completo lo haría diminuto.
+  escena3d.centrarEn({ x: (izq + der) / 2, y: (arriba + dock.top + dock.height * 0.45) / 2 });
+}
+window.addEventListener('resize', encuadrar);
 document.querySelectorAll<HTMLButtonElement>('[data-plegar]').forEach((b) =>
   b.addEventListener('click', () => plegar(b, b.getAttribute('aria-expanded') === 'true')),
 );
@@ -492,3 +507,4 @@ document.addEventListener('keydown', (ev) => {
 estado.verificacion = verificarRun(estado.run);
 renderPanel();
 render({ escenario: true });
+encuadrar();
