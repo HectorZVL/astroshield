@@ -1,15 +1,13 @@
-// Render 3D: renderer WebGL, posprocesado con bloom moderado, etiquetas HTML
-// y selección por clic. No conoce el algoritmo: recibe datos y los dibuja.
+// Render 3D: renderer WebGL, luz lateral suave, etiquetas HTML y selección por
+// clic. No conoce el algoritmo: recibe datos y los dibuja.
+// Sin posprocesado (antes había bloom): el estilo no usa brillos y así se
+// ahorra un pase completo de render por cuadro.
 import * as THREE from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { paleta } from '../tema';
 import { ControlCamara } from './camara';
 import { CapasEscena } from './capas';
-import { crearEstrellas, crearGlobo } from './globo';
+import { crearEstrellas, crearGlobo, type Globo } from './globo';
 
 export function hayWebGL(): boolean {
   try {
@@ -28,11 +26,12 @@ export class Escena3D {
   readonly camara = new THREE.PerspectiveCamera(42, 1, 0.01, 200);
   readonly capas = new CapasEscena();
   readonly control: ControlCamara;
-  private composer: EffectComposer;
-  private bloom: UnrealBloomPass;
   private etiquetas = new CSS2DRenderer();
   private reloj = new THREE.Clock();
   private estrellas: THREE.Points;
+  private globo: Globo;
+  private sol: THREE.DirectionalLight;
+  private aux = { a: new THREE.Vector3(), b: new THREE.Vector3() };
   alSeleccionar: (s: Seleccion) => void = () => {};
 
   constructor(
@@ -52,25 +51,22 @@ export class Escena3D {
     this.etiquetas.domElement.style.pointerEvents = 'none';
 
     this.escena.background = new THREE.Color(paleta.fondo);
-    this.escena.add(new THREE.AmbientLight(paleta.luzAmbiente, 0.55));
-    const sol = new THREE.DirectionalLight(paleta.luzSol, 1.6);
-    sol.position.set(4, 2.5, 3);
-    // La luz acompaña a la cámara para que el lado visible del globo siempre esté iluminado.
-    this.camara.add(sol);
+    // Cielo cálido y suelo frío: el lado en sombra conserva detalle (nunca queda negro).
+    this.escena.add(new THREE.HemisphereLight(paleta.luzCielo, paleta.luzSuelo, 0.9));
+    this.escena.add(new THREE.AmbientLight(paleta.luzAmbiente, 0.25));
+    this.sol = new THREE.DirectionalLight(paleta.luzSol, 2.1);
+    // El sol acompaña a la cámara, de lado: lo que se mira siempre está iluminado
+    // y el terminador queda visible en el borde izquierdo del globo.
+    this.sol.position.set(5, 2.2, 1.6);
+    this.camara.add(this.sol);
     this.escena.add(this.camara);
-    this.escena.add(crearGlobo());
+    this.globo = crearGlobo();
+    this.escena.add(this.globo.grupo);
     this.estrellas = crearEstrellas();
     this.escena.add(this.estrellas);
     this.escena.add(this.capas.raiz);
 
     this.control = new ControlCamara(this.camara, this.renderer.domElement, movimiento);
-
-    this.composer = new EffectComposer(this.renderer);
-    this.composer.addPass(new RenderPass(this.escena, this.camara));
-    // Bloom moderado: solo brillan las costas, las huellas y los elementos emisivos.
-    this.bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.55, 0.45, 0.62);
-    this.composer.addPass(this.bloom);
-    this.composer.addPass(new OutputPass());
 
     this.configurarClic();
     window.addEventListener('resize', () => this.redimensionar());
@@ -82,14 +78,12 @@ export class Escena3D {
   private redimensionar(): void {
     const w = this.contenedor.clientWidth || window.innerWidth;
     const h = this.contenedor.clientHeight || window.innerHeight;
-    // Con tamaño 0 (pestaña o panel oculto) el bloom crea framebuffers vacíos y WebGL
+    // Con tamaño 0 (pestaña o panel oculto) WebGL crea framebuffers vacíos y
     // llena la consola de advertencias; se espera al siguiente resize con tamaño real.
     if (w < 1 || h < 1) return;
     this.camara.aspect = w / h;
     this.camara.updateProjectionMatrix();
     this.renderer.setSize(w, h);
-    this.composer.setSize(w, h);
-    this.bloom.setSize(w, h);
     this.etiquetas.setSize(w, h);
   }
 
@@ -123,9 +117,14 @@ export class Escena3D {
     const mov = this.movimiento();
     this.control.actualizar();
     this.capas.actualizar(dt, mov, this.camara);
-    if (mov) this.estrellas.rotation.y += dt * 0.004;
+    if (mov) this.estrellas.rotation.y += dt * 0.003;
     if (this.renderer.domElement.width < 1 || this.renderer.domElement.height < 1) return;
-    this.composer.render();
+    // Dirección del sol en espacio de vista para el color de la atmósfera.
+    this.camara.updateMatrixWorld();
+    const { a, b } = this.aux;
+    this.sol.getWorldPosition(a).sub(this.sol.target.getWorldPosition(b)).normalize().transformDirection(this.camara.matrixWorldInverse);
+    this.globo.solVista.value.copy(a);
+    this.renderer.render(this.escena, this.camara);
     this.etiquetas.render(this.escena, this.camara);
   }
 }

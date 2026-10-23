@@ -35,14 +35,16 @@ export const paleta = {
   // Globo
   oceanoProfundo: '#0e1f2a',
   oceano: '#173242',
+  oceanoSomero: '#2f6470',
   tierraHielo: '#c9c6bd',
   tierraTemplada: '#56654a',
   tierraArida: '#8e7c58',
   tierraTropical: '#47643f',
   costa: '#e9dfcf',
   reticula: '#e9dfcf',
-  atmosferaDia: '#f2b57a',
-  atmosferaNoche: '#5f8fb0',
+  atmosferaDia: '#b9d3e3',
+  atmosferaOcaso: '#f2a15f',
+  atmosferaNoche: '#3d5f7a',
   estrellas: '#f1e6d6',
   // Escena: luces y materiales del satélite
   luzAmbiente: '#cfd6dc',
