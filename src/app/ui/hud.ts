@@ -44,7 +44,7 @@ export function esqueleto(): string {
     <div class="marca">${logo}<div><h1>AstroShield</h1><p class="subtitulo" id="origen"></p></div></div>
     <div class="indicadores" id="metricas"></div>
     <div class="estado" id="chip"></div>
-    <button class="boton fantasma boton-detalles" id="boton-detalles" aria-expanded="false" aria-controls="detalles">${iconos.detalles}<span>Detalles del run</span></button>
+    <button class="boton fantasma boton-detalles" id="boton-detalles" aria-label="Detalles del run" aria-expanded="false" aria-controls="detalles">${iconos.detalles}<span>Detalles del run</span></button>
   </header>
   <section class="superficie detalles oculto" id="detalles" aria-label="Detalles del run"></section>
   <aside class="superficie panel-izq" id="panel-lateral" aria-label="Escenario y parámetros">
