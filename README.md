@@ -124,7 +124,7 @@ Justificación completa y supuestos (S1–S10): [docs/01-definicion-del-problema
 | Carlos Daniel Cocom García | [@cocom288](https://github.com/cocom288) |
 | Saúl Alejandro Rendón Cocom | [@Elitesou1](https://github.com/Elitesou1) |
 | Ángel Fernando Ocampo García | [@fernandoagg](https://github.com/fernandoagg) |
-| hectorzvl13 | [@hectorzvl13](https://github.com/hectorzvl13) |
+| Héctor (HectorZVL) | [@HectorZVL](https://github.com/HectorZVL) |
 
 Reparto propuesto para la demostración: [docs/06-guia-defensa.md](docs/06-guia-defensa.md#propuesta-de-reparto-para-la-demostración).
 

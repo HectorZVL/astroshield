@@ -115,4 +115,4 @@ Es una propuesta: el equipo puede reasignar las partes. Lo importante es que cad
 | Carlos Daniel Cocom García | Modelo y restricciones: representación, cobertura, aptitud, cota F*, reglas de Deb; demo del preset «Inviable» y de mover una zona (chip INVÁLIDA) | docs/01, `evaluacion.ts`, `comparacion.ts`, `factibilidad.ts` |
 | Saúl Alejandro Rendón Cocom | Operadores evolutivos; demo de la línea de tiempo y de la vista Comparar | `ag.ts`, docs/02 |
 | Ángel Fernando Ocampo García | Pruebas y análisis: P7, P8 y P9; correr `npm test` y `npm run experimentos` | `experiments/run-all.ts`, docs/03, docs/04 |
-| hectorzvl13 | Visualización: cómo los datos llegan al globo; cambiar un color en `tema.ts` | `src/app/*`, docs/05 |
+| Héctor (HectorZVL) | Visualización: cómo los datos llegan al globo; cambiar un color en `tema.ts` | `src/app/*`, docs/05 |
