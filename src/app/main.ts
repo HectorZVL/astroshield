@@ -10,7 +10,7 @@ import { agregarZona, clonarEscenario, escenarioInicial } from '../core/escenari
 import { evaluarEn } from '../core/evaluacion';
 import type { Factibilidad } from '../core/factibilidad';
 import { distancia } from '../core/geo';
-import type { Configuracion, Escenario, EstadoSolucion, Evaluacion, ParametrosAG, Prioridad, RegistroGeneracion, ResultadoEjecucion, ZonaProhibida } from '../core/tipos';
+import type { Configuracion, Escenario, EstadoSolucion, Evaluacion, ParametrosAG, Prioridad, RegistroGeneracion, ResultadoEjecucion, Violacion, ZonaProhibida } from '../core/tipos';
 import { Escena3D, hayWebGL } from './escena/escena3d';
 import { estadoParaMostrar } from './estadoVista';
 import { crearPreset, type NombrePreset } from './presets';
@@ -148,7 +148,7 @@ function renderAvisoConfig(ev: Evaluacion): void {
     partes.push(
       `<div class="aviso ${ev.valida ? 'verde' : 'rojo'}"><b>Condiciones modificadas.</b> La configuración mostrada se obtuvo con las condiciones anteriores. Reevaluada ahora: <b>${estadoDeConfiguracion(ev)}</b>${
         ev.valida ? ' (sigue cumpliendo todas las restricciones).' : ':'
-      }${ev.violaciones.length ? `<ul>${ev.violaciones.slice(0, 8).map((v) => `<li>S${v.satelite + 1} invade ${esc(nombreZona(v.contra))} por ${v.magnitud.toFixed(2)}°</li>`).join('')}${ev.violaciones.length > 8 ? `<li>… y ${ev.violaciones.length - 8} más</li>` : ''}</ul>` : ''} Pulsa <b>Evolucionar</b> para adaptar la constelación.</div>`,
+      }${ev.violaciones.length ? `<ul>${ev.violaciones.slice(0, 8).map((v) => `<li>${describirViolacion(v)}</li>`).join('')}${ev.violaciones.length > 8 ? `<li>… y ${ev.violaciones.length - 8} más</li>` : ''}</ul>` : ''} Pulsa <b>Evolucionar</b> para adaptar la constelación.</div>`,
     );
   } else if (!ev.valida) {
     partes.push(`<div class="aviso rojo"><b>${ev.violaciones.length} violaciones</b> (violación total ${ev.violacionTotal.toFixed(2)}°).${estado.run.estado === 'INVIABLE' ? ' El escenario resultó inviable: no se encontró ninguna configuración válida.' : ''}</div>`);
@@ -162,6 +162,15 @@ function renderAvisoConfig(ev: Evaluacion): void {
 
 function nombreZona(id: string): string {
   return [...estado.escenario.desechos, ...estado.escenario.ocupadas].find((z) => z.id === id)?.nombre ?? id;
+}
+
+/** Texto de una violación según su tipo (la separación es entre dos satélites, no una zona). */
+function describirViolacion(v: Violacion): string {
+  const m = `${v.magnitud.toFixed(2)}°`;
+  const s = `S${v.satelite + 1}`;
+  if (v.tipo === 'separacion') return `${s} y ${esc(v.contra.replace('satélite ', 'S'))} están ${m} por debajo de la separación mínima`;
+  if (v.tipo === 'ocupada') return `${s} invade ${m} la exclusión de ${esc(nombreZona(v.contra))}`;
+  return `${s} está ${m} dentro de la zona de desechos ${esc(nombreZona(v.contra))}`;
 }
 
 function renderPanel(): void {
@@ -204,7 +213,7 @@ function mostrarSatelite(i: number): void {
     <div class="mono">lat ${s.lat.toFixed(3)}° · lon ${s.lon.toFixed(3)}°</div>
     <div style="margin-top:6px">Cubre completamente: <b>${cubre.length ? esc(cubre.join(', ')) : 'ninguna región'}</b></div>
     ${cercana ? `<div class="tenue">Zona prohibida más cercana: ${esc(cercana.z.nombre)} (margen ${cercana.m.toFixed(2)}°)</div>` : ''}
-    ${viol.length ? `<div class="aviso rojo">${viol.map((v) => `${v.tipo} contra ${esc(nombreZona(v.contra))}: ${v.magnitud.toFixed(2)}°`).join('<br>')}</div>` : '<div class="aviso verde">Cumple todas las restricciones.</div>'}`;
+    ${viol.length ? `<div class="aviso rojo">${viol.map((v) => describirViolacion(v)).join('<br>')}</div>` : '<div class="aviso verde">Cumple todas las restricciones.</div>'}`;
   t.classList.remove('oculto');
   t.querySelector('.cerrar')!.addEventListener('click', () => t.classList.add('oculto'));
 }
