@@ -6,15 +6,16 @@ El enunciado pide declarar si se usaron herramientas de IA, para qué y qué ver
 
 - **Claude Code** (agente de programación de Anthropic, modelo Claude Opus 5.5), usado desde la aplicación de escritorio.
 
-## Para qué se usó
+## Para qué se usó, por apartado
 
-Se usó como asistente de ingeniería sobre un encargo detallado del equipo (stack, rúbrica, nivel visual, reglas de Git y criterios de aceptación). La IA:
-
-1. Propuso el modelo (representación, cobertura, aptitud, restricciones) y lo documentó con su justificación en `docs/01`.
-2. Escribió el código del núcleo (`src/core`), los experimentos (`experiments/`), las pruebas (`tests/`) y la visualización (`src/app`).
-3. Ejecutó las pruebas y los experimentos. Generó `docs/03-pruebas.md` **automáticamente a partir de los resultados**, sin escribir números a mano.
-4. Redactó la documentación (docs/02, 04, 05, 06 y este archivo) citando los resultados reales.
-5. Hizo los commits del historial, uno por tarea lógica.
+| Apartado | Uso de la IA |
+|---|---|
+| Entregable 1 — Definición del problema | Propuesta y redacción del modelo (representación, cobertura, aptitud, restricciones, parámetros) y de su justificación en `docs/01` |
+| Entregable 2 — Implementación | Generación del código del núcleo (`src/core`) y de la CLI (`experiments/cli.ts`) |
+| Entregable 3 — Pruebas | Diseño y código de las pruebas automáticas (`tests/`) y de los experimentos (`experiments/run-all.ts`). `docs/03-pruebas.md` se genera **automáticamente a partir de los resultados**, sin números escritos a mano |
+| Entregable 4 — Análisis | Redacción de `docs/04-analisis.md` citando los resultados reales de `results/` |
+| Entregable 5 — Visualización | Generación del código de la visualización 3D y del HUD (`src/app`) |
+| Entregable 6 — Documentación | Redacción del README, la guía de defensa (`docs/06`), la explicación didáctica (`docs/02`) y este archivo |
 
 ## Verificaciones realizadas
 
@@ -45,7 +46,3 @@ Se documentan porque muestran que las verificaciones tuvieron efecto:
 - Leer docs/01 y docs/02 y poder explicar cada decisión **sin** el documento delante (la guía docs/06 ayuda).
 - Ejecutar `npm run verificar` en su propia máquina.
 - Cambiar al menos un parámetro (por ejemplo `--sigma 1`) y comprobar que el efecto coincide con lo que dice P10.
-
-## Autoría de los commits
-
-Los commits se hicieron desde la sesión de Claude Code con la identidad de git del dueño del repositorio (`hectorzvl13`). Cada mensaje incluye la línea `Co-Authored-By: Claude`, que declara la participación de la IA. Las fechas son las reales de la sesión de trabajo; no se modificaron.
