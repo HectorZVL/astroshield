@@ -400,9 +400,14 @@ function evolucionar(): void {
       renderPanel();
       render({ animar: true, escenario: true });
     } else if (m.tipo === 'error') {
+      // Se vuelve a mostrar el run anterior completo (línea de tiempo y gráfica incluidas).
+      worker?.terminate();
+      worker = null;
       estado.ejecutando = false;
+      estado.generacion = estado.run.historial.length - 1;
       renderPanel();
-      $('aviso-factibilidad').innerHTML = `<div class="aviso rojo">Error: ${esc(m.mensaje)}</div>`;
+      render({ animar: true });
+      $('aviso-factibilidad').innerHTML = `<div class="aviso rojo">No se pudo evolucionar: ${esc(m.mensaje)}</div>`;
     }
   };
   worker.postMessage({ tipo: 'evolucionar', escenario, parametros: p, semillasIniciales: semillas } satisfies MensajeAlWorker);
