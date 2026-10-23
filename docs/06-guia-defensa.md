@@ -108,10 +108,11 @@ Sí. Ver [AI_USAGE.md](../AI_USAGE.md): para qué se usó, qué se verificó y q
 
 ## Propuesta de reparto para la demostración
 
+Es una propuesta: el equipo puede reasignar las partes. Lo importante es que cada integrante domine la suya y pueda responder las preguntas de las otras.
+
 | Integrante | Parte a explicar y demostrar | Archivos clave |
 |---|---|---|
-| 1 | Modelo: representación, cobertura, aptitud, cota F* | docs/01, `evaluacion.ts` |
-| 2 | Restricciones y Deb; demo del preset «Inviable» y de mover una zona (chip INVÁLIDA) | `comparacion.ts`, `factibilidad.ts` |
-| 3 | Operadores evolutivos; demo de la línea de tiempo y de la vista Comparar | `ag.ts`, docs/02 |
-| 4 | Pruebas y análisis: P7, P8 y P9; correr `npm test` y `npm run experimentos` | `experiments/run-all.ts`, docs/03, docs/04 |
-| 5 | Visualización: cómo los datos llegan al globo; cambiar un color en `tema.ts` | `src/app/*` |
+| Carlos Daniel Cocom García | Modelo y restricciones: representación, cobertura, aptitud, cota F*, reglas de Deb; demo del preset «Inviable» y de mover una zona (chip INVÁLIDA) | docs/01, `evaluacion.ts`, `comparacion.ts`, `factibilidad.ts` |
+| Saúl Alejandro Rendón Cocom | Operadores evolutivos; demo de la línea de tiempo y de la vista Comparar | `ag.ts`, docs/02 |
+| Ángel Fernando Ocampo García | Pruebas y análisis: P7, P8 y P9; correr `npm test` y `npm run experimentos` | `experiments/run-all.ts`, docs/03, docs/04 |
+| hectorzvl13 | Visualización: cómo los datos llegan al globo; cambiar un color en `tema.ts` | `src/app/*`, docs/05 |
