@@ -16,7 +16,7 @@ import { estadoParaMostrar } from './estadoVista';
 import { crearPreset, type NombrePreset } from './presets';
 import { aplicarTemaCSS } from './tema';
 import { GraficaEvolucion } from './ui/grafica';
-import { chip, esc, esqueleto, metricas, origen, panelEscenario, tablaRegiones, type DatosBarra } from './ui/hud';
+import { chip, detalles, esc, esqueleto, iconos, metricas, origen, panelEscenario, tablaRegiones, type DatosBarra } from './ui/hud';
 import type { MensajeAlWorker, MensajeDelWorker } from './worker';
 
 aplicarTemaCSS();
@@ -42,6 +42,10 @@ const estado = {
   factibilidad: REF.factibilidad as Factibilidad | null,
   caliente: false,
   reproduciendo: 0,
+  /** Secciones plegables del panel de escenario que el usuario dejó abiertas. */
+  seccionesAbiertas: new Set(['presets', 'algoritmo']),
+  /** Último estado del chip, para animar solo cuando cambia. */
+  chipAnterior: null as EstadoSolucion | null,
 };
 
 // ---- Construcción del HUD ---------------------------------------------------
@@ -59,7 +63,7 @@ if (hayWebGL()) {
 } else {
   const aviso = document.createElement('div');
   aviso.className = 'sin-webgl';
-  aviso.innerHTML = `<div class="vidrio"><h2>Tu navegador no tiene WebGL</h2><p class="tenue">No se puede dibujar el globo 3D. Los datos de la ejecución, la tabla de regiones y la gráfica siguen disponibles. Prueba con un navegador actualizado o activa la aceleración por hardware.</p></div>`;
+  aviso.innerHTML = `<div class="superficie"><h2>Este navegador no puede mostrar el globo 3D</h2><p class="tenue">No hay WebGL disponible. Los datos de la ejecución, la lista de regiones y la gráfica siguen funcionando. Prueba con un navegador actualizado o activa la aceleración por hardware.</p></div>`;
   $('escena').appendChild(aviso);
 }
 
@@ -97,12 +101,8 @@ function render(opciones: { animar?: boolean; escenario?: boolean } = {}): void 
   const { chip: c, contexto } = estadoChip(ev);
   const run = estado.run;
   const datos: DatosBarra = {
-    origen:
-      estado.origen === 'referencia'
-        ? '<b>Run de referencia</b> · results/run-referencia.json'
-        : estado.ejecutando
-          ? '<b>Evolucionando en vivo…</b> (Web Worker)'
-          : '<b>Run en vivo</b> · calculado en este navegador',
+    origen: estado.origen === 'referencia' ? 'Run de referencia' : estado.ejecutando ? 'Evolucionando en vivo…' : 'Run en vivo',
+    fuente: estado.origen === 'referencia' ? 'results/run-referencia.json' : 'Calculado en este navegador (Web Worker)',
     verificacion: estado.verificacion,
     p: estado.ejecutando ? estado.parametros : run.parametros,
     ev,
@@ -115,15 +115,19 @@ function render(opciones: { animar?: boolean; escenario?: boolean } = {}): void 
   $('origen').innerHTML = origen(datos);
   $('metricas').innerHTML = metricas(datos);
   $('chip').innerHTML = chip(datos);
+  // Microinteracción: el chip «late» una vez cuando cambia de estado (decorativo).
+  if (estado.chipAnterior !== null && estado.chipAnterior !== c && movimiento) $('chip').querySelector('.chip')?.classList.add('cambio');
+  estado.chipAnterior = c;
+  $('detalles').innerHTML = detalles(datos);
   $('tabla-regiones').innerHTML = tablaRegiones(ev);
-  $('resumen-regiones').textContent = `${ev.regionesCubiertas}/${ev.regionesActivas} cubiertas`;
+  $('resumen-regiones').textContent = `${ev.regionesCubiertas} de ${ev.regionesActivas} cubiertas`;
   renderAvisoConfig(ev);
 
   const h = historialActual();
   linea.max = String(Math.max(0, h.length - 1));
   linea.value = String(Math.min(estado.generacion, h.length - 1));
   linea.disabled = estado.vista === 'inicial' || estado.ejecutando;
-  $('etiqueta-gen').textContent = estado.vista === 'inicial' ? 'gen 0 (inicial)' : `gen ${Math.min(estado.generacion, h.length - 1)} / ${estado.ejecutando ? estado.parametros.generaciones : h.length - 1}`;
+  $('etiqueta-gen').textContent = estado.vista === 'inicial' ? 'Generación 0 (inicial)' : `Generación ${Math.min(estado.generacion, h.length - 1)} de ${estado.ejecutando ? estado.parametros.generaciones : h.length - 1}`;
   grafica.fijar(h, estado.ejecutando ? estado.parametros.generaciones : Math.max(1, run.historial.length - 1), (estado.ejecutando ? estado.parametros : run.parametros).poblacion, escenarioEsInicial(estado.escenario) ? REF.cotaTeorica : null);
   grafica.marcar(estado.vista === 'inicial' ? 0 : Math.min(estado.generacion, h.length - 1));
   document.querySelectorAll<HTMLButtonElement>('#vista button').forEach((b) => b.classList.toggle('activo', b.dataset.vista === estado.vista));
@@ -146,12 +150,12 @@ function renderAvisoConfig(ev: Evaluacion): void {
   const partes: string[] = [];
   if (escenarioModificado()) {
     partes.push(
-      `<div class="aviso ${ev.valida ? 'verde' : 'rojo'}"><b>Condiciones modificadas.</b> La configuración mostrada se obtuvo con las condiciones anteriores. Reevaluada ahora: <b>${estadoDeConfiguracion(ev)}</b>${
+      `<div class="aviso ${ev.valida ? 'exito' : 'error'}"><b>Condiciones modificadas.</b> La configuración mostrada se obtuvo con las condiciones anteriores. Reevaluada ahora: <b>${estadoDeConfiguracion(ev)}</b>${
         ev.valida ? ' (sigue cumpliendo todas las restricciones).' : ':'
       }${ev.violaciones.length ? `<ul>${ev.violaciones.slice(0, 8).map((v) => `<li>${describirViolacion(v)}</li>`).join('')}${ev.violaciones.length > 8 ? `<li>… y ${ev.violaciones.length - 8} más</li>` : ''}</ul>` : ''} Pulsa <b>Evolucionar</b> para adaptar la constelación.</div>`,
     );
   } else if (!ev.valida) {
-    partes.push(`<div class="aviso rojo"><b>${ev.violaciones.length} violaciones</b> (violación total ${ev.violacionTotal.toFixed(2)}°).${estado.run.estado === 'INVIABLE' ? ' El escenario resultó inviable: no se encontró ninguna configuración válida.' : ''}</div>`);
+    partes.push(`<div class="aviso error"><b>${ev.violaciones.length} violaciones</b> (violación total ${ev.violacionTotal.toFixed(2)}°).${estado.run.estado === 'INVIABLE' ? ' El escenario resultó inviable: no se encontró ninguna configuración válida.' : ''}</div>`);
   }
   if (ev.valida && ev.regionesCubiertas < ev.regionesActivas) {
     const faltan = ev.regiones.filter((r) => r.estado === 'parcial' || r.estado === 'no cubierta').map((r) => r.nombre);
@@ -174,7 +178,7 @@ function describirViolacion(v: Violacion): string {
 }
 
 function renderPanel(): void {
-  $('panel-izq').innerHTML = panelEscenario(estado.escenario, estado.parametros, estado.ejecutando, estado.caliente);
+  $('panel-izq').innerHTML = panelEscenario(estado.escenario, estado.parametros, estado.ejecutando, estado.caliente, estado.seccionesAbiertas);
   renderFactibilidad();
 }
 
@@ -182,7 +186,7 @@ function renderFactibilidad(): void {
   const f = estado.factibilidad;
   const el = document.getElementById('aviso-factibilidad');
   if (!el) return;
-  el.innerHTML = f ? `<div class="aviso ${f.factibleDemostrado ? 'verde' : 'rojo'}">${esc(f.mensaje)}</div>` : '';
+  el.innerHTML = f ? `<div class="aviso ${f.factibleDemostrado ? 'exito' : 'error'}">${esc(f.mensaje)}</div>` : '';
 }
 
 // ---- Verificación del run cargado -------------------------------------------
@@ -190,7 +194,7 @@ function verificarRun(r: ResultadoEjecucion): { ok: boolean; texto: string } {
   // Se recalcula la aptitud desde cero en el navegador y se compara con la guardada.
   const ev = evaluarEn(r.final.config, r.escenario);
   const ok = Math.abs(ev.fitness - r.final.eval.fitness) < 1e-9 && ev.valida === r.final.eval.valida;
-  return { ok, texto: ok ? `✓ Verificado: aptitud recalculada = guardada (${ev.fitness.toFixed(5)})` : '✗ La aptitud recalculada NO coincide con la guardada' };
+  return { ok, texto: ok ? `La aptitud recalculada en el navegador coincide con la guardada (${ev.fitness.toFixed(5)})` : 'La aptitud recalculada NO coincide con la guardada' };
 }
 
 // ---- Interacciones ----------------------------------------------------------
@@ -208,12 +212,15 @@ function mostrarSatelite(i: number): void {
   const cercana = zonas.map((z) => ({ z, m: distancia(s, z) - z.radioGrados })).sort((a, b) => a.m - b.m)[0];
   const viol = ev.violaciones.filter((v) => v.satelite === i || v.contra === `satélite ${i + 1}`);
   const t = $('tarjeta');
-  t.innerHTML = `<button class="cerrar" aria-label="Cerrar">✕</button>
-    <h2 class="titulo-panel"><span>Satélite <b>S${i + 1}</b></span></h2>
-    <div class="mono">lat ${s.lat.toFixed(3)}° · lon ${s.lon.toFixed(3)}°</div>
-    <div style="margin-top:6px">Cubre completamente: <b>${cubre.length ? esc(cubre.join(', ')) : 'ninguna región'}</b></div>
-    ${cercana ? `<div class="tenue">Zona prohibida más cercana: ${esc(cercana.z.nombre)} (margen ${cercana.m.toFixed(2)}°)</div>` : ''}
-    ${viol.length ? `<div class="aviso rojo">${viol.map((v) => describirViolacion(v)).join('<br>')}</div>` : '<div class="aviso verde">Cumple todas las restricciones.</div>'}`;
+  const coord = (v: number, pos: string, neg: string) => `${Math.abs(v).toFixed(3)}° ${v >= 0 ? pos : neg}`;
+  t.innerHTML = `<button class="boton icono cerrar" aria-label="Cerrar">${iconos.cerrar}</button>
+    <h2>Satélite S${i + 1}</h2>
+    <p class="coordenadas">${coord(s.lat, 'N', 'S')} · ${coord(s.lon, 'E', 'O')}</p>
+    <dl class="lista-detalles">
+      <div><dt>Cubre por completo</dt><dd>${cubre.length ? esc(cubre.join(', ')) : 'Ninguna región'}</dd></div>
+      ${cercana ? `<div><dt>Restricción más cercana</dt><dd>${esc(cercana.z.nombre)}, a ${cercana.m.toFixed(2)}° del borde</dd></div>` : ''}
+    </dl>
+    ${viol.length ? `<div class="aviso error">${viol.map((v) => describirViolacion(v)).join('<br>')}</div>` : '<div class="aviso exito">Cumple todas las restricciones.</div>'}`;
   t.classList.remove('oculto');
   t.querySelector('.cerrar')!.addEventListener('click', () => t.classList.add('oculto'));
 }
@@ -312,11 +319,11 @@ $('panel-izq').addEventListener('click', (ev) => {
 });
 
 $('tabla-regiones').addEventListener('click', (ev) => {
-  const fila = (ev.target as HTMLElement).closest<HTMLElement>('tr[data-region]');
+  const fila = (ev.target as HTMLElement).closest<HTMLElement>('[data-region]');
   if (fila) volarARegion(fila.dataset.region!);
 });
 $('tabla-regiones').addEventListener('keydown', (ev) => {
-  const fila = (ev.target as HTMLElement).closest<HTMLElement>('tr[data-region]');
+  const fila = (ev.target as HTMLElement).closest<HTMLElement>('[data-region]');
   if (fila && (ev.key === 'Enter' || ev.key === ' ')) {
     ev.preventDefault();
     volarARegion(fila.dataset.region!);
@@ -348,7 +355,7 @@ botonPlay.addEventListener('click', () => {
   if (estado.reproduciendo) return pararReproduccion();
   if (estado.vista === 'inicial') estado.vista = 'final';
   if (estado.generacion >= estado.run.historial.length - 1) estado.generacion = 0;
-  botonPlay.textContent = '❚❚';
+  botonPlay.innerHTML = iconos.pausar;
   botonPlay.setAttribute('aria-label', 'Pausar');
   estado.reproduciendo = window.setInterval(() => {
     if (estado.generacion >= estado.run.historial.length - 1) return pararReproduccion();
@@ -359,7 +366,7 @@ botonPlay.addEventListener('click', () => {
 function pararReproduccion(): void {
   clearInterval(estado.reproduciendo);
   estado.reproduciendo = 0;
-  botonPlay.textContent = '▶';
+  botonPlay.innerHTML = iconos.reproducir;
   botonPlay.setAttribute('aria-label', 'Reproducir generaciones');
 }
 
@@ -416,7 +423,7 @@ function evolucionar(): void {
       estado.generacion = estado.run.historial.length - 1;
       renderPanel();
       render({ animar: true });
-      $('aviso-factibilidad').innerHTML = `<div class="aviso rojo">No se pudo evolucionar: ${esc(m.mensaje)}</div>`;
+      $('aviso-factibilidad').innerHTML = `<div class="aviso error">No se pudo evolucionar: ${esc(m.mensaje)}</div>`;
     }
   };
   worker.postMessage({ tipo: 'evolucionar', escenario, parametros: p, semillasIniciales: semillas } satisfies MensajeAlWorker);
@@ -444,6 +451,42 @@ function cargarReferencia(): void {
   renderPanel();
   render({ animar: true, escenario: true });
 }
+
+// ---- Paneles: plegar, detalles del run y secciones ---------------------------
+// 'toggle' no burbujea: se escucha en captura para recordar qué secciones quedan abiertas.
+$('panel-izq').addEventListener(
+  'toggle',
+  (ev) => {
+    const d = ev.target as HTMLDetailsElement;
+    if (!d.dataset.seccion) return;
+    if (d.open) estado.seccionesAbiertas.add(d.dataset.seccion);
+    else estado.seccionesAbiertas.delete(d.dataset.seccion);
+  },
+  true,
+);
+
+function plegar(boton: HTMLButtonElement, plegado: boolean): void {
+  boton.closest('.superficie')!.classList.toggle('plegado', plegado);
+  boton.setAttribute('aria-expanded', String(!plegado));
+}
+document.querySelectorAll<HTMLButtonElement>('[data-plegar]').forEach((b) =>
+  b.addEventListener('click', () => plegar(b, b.getAttribute('aria-expanded') === 'true')),
+);
+// En pantallas medianas el panel de escenario empieza plegado para dejar ver el globo.
+if (window.innerWidth > 860 && window.innerWidth <= 1280) plegar(document.querySelector<HTMLButtonElement>('#panel-lateral [data-plegar]')!, true);
+
+const botonDetalles = $<HTMLButtonElement>('boton-detalles');
+botonDetalles.addEventListener('click', () => {
+  const abrir = botonDetalles.getAttribute('aria-expanded') !== 'true';
+  botonDetalles.setAttribute('aria-expanded', String(abrir));
+  $('detalles').classList.toggle('oculto', !abrir);
+});
+document.addEventListener('keydown', (ev) => {
+  if (ev.key !== 'Escape') return;
+  $('tarjeta').classList.add('oculto');
+  botonDetalles.setAttribute('aria-expanded', 'false');
+  $('detalles').classList.add('oculto');
+});
 
 // ---- Arranque ---------------------------------------------------------------
 estado.verificacion = verificarRun(estado.run);
