@@ -1,0 +1,42 @@
+{
+ "margenDesechos": {
+  "n": 31,
+  "media": 25.824923579681705,
+  "desviacion": 6.563509445271379,
+  "minimo": 14.931917019441343,
+  "maximo": 38.55468788438386,
+  "mediana": 26.632333808645996
+ },
+ "configuracionesConViolacion": 0,
+ "invalidosGeneracion0": {
+  "n": 30,
+  "media": 17.333333333333332,
+  "desviacion": 4.163331998932266,
+  "minimo": 10,
+  "maximo": 25,
+  "mediana": 17
+ },
+ "trampa": {
+  "invadenConRestriccion": 0,
+  "invadenSinRestriccion": 3,
+  "japonCubiertaCon": 10,
+  "japonCubiertaSin": 10,
+  "distanciaMinCon": {
+   "n": 10,
+   "media": 14.451137490785266,
+   "desviacion": 1.3478230590837024,
+   "minimo": 12.09955904149355,
+   "maximo": 16.643425836249214,
+   "mediana": 13.989218473248645
+  },
+  "distanciaMinSin": {
+   "n": 10,
+   "media": 12.697211626873774,
+   "desviacion": 2.7725618980776865,
+   "minimo": 8.803221203659204,
+   "maximo": 16.912815259205203,
+   "mediana": 12.989021833358802
+  },
+  "validasCon": 10
+ }
+}

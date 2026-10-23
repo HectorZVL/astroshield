@@ -1,0 +1,76 @@
+{
+ "veredictos": [
+  {
+   "id": "P1",
+   "prueba": "Escenario inicial",
+   "pasa": true,
+   "resumen": "VÁLIDA, 6/6 regiones cubiertas, F = 1.07692."
+  },
+  {
+   "id": "P2",
+   "prueba": "Evolución",
+   "pasa": true,
+   "resumen": "la mejor aptitud mejora en las 30 ejecuciones y nunca disminuye."
+  },
+  {
+   "id": "P3",
+   "prueba": "Zonas restringidas",
+   "pasa": true,
+   "resumen": "0 invasiones en 31 configuraciones finales; con la zona trampa activa, 0/10 invasiones (sin ella, 3/10)."
+  },
+  {
+   "id": "P4",
+   "prueba": "Posiciones ocupadas",
+   "pasa": true,
+   "resumen": "0 invasiones en 31 configuraciones finales; con los objetos sobre regiones, 0/10 invasiones (sin ellos, 6/10)."
+  },
+  {
+   "id": "P5",
+   "prueba": "Espacio reducido",
+   "pasa": true,
+   "resumen": "con espacio libre de 97.3 % a 41.2 %, ninguna solución inválida se reporta como válida; la cobertura media baja de 100.00 % a 38.46 %."
+  },
+  {
+   "id": "P6",
+   "prueba": "Condición difícil e inviable",
+   "pasa": true,
+   "resumen": "difícil: 10/10 válidas y 0 falsas \"satisfactorias\"; inviable: 5/5 reportadas INVIABLE."
+  },
+  {
+   "id": "P7",
+   "prueba": "Variación de la ejecución",
+   "pasa": true,
+   "resumen": "30/30 válidas; 28/30 alcanzan F*; F = 1.07590 ± 0.00390."
+  },
+  {
+   "id": "P8",
+   "prueba": "Propia: AG contra búsqueda aleatoria",
+   "pasa": true,
+   "resumen": "AG F = 1.0759 contra aleatoria F = 0.9385; p = < 1e-6."
+  },
+  {
+   "id": "P9",
+   "prueba": "Propia: ablación del cruce alineado",
+   "pasa": true,
+   "resumen": "prueba descriptiva; con alineación 28/30 alcanzan F* (gen. media 46.1), sin alineación 20/30 (gen. media 61.4)."
+  },
+  {
+   "id": "P10",
+   "prueba": "Propia: sensibilidad",
+   "pasa": true,
+   "resumen": "prueba descriptiva; mejor σ: σ = 6°, mejor N: N = 80."
+  },
+  {
+   "id": "P11",
+   "prueba": "Cambio de condiciones",
+   "pasa": true,
+   "resumen": "2/7 cambios invalidan la configuración anterior; todas las reevoluciones terminan VÁLIDAS."
+  }
+ ],
+ "verificacion": {
+  "revisadas": 318,
+  "inconsistencias": []
+ },
+ "cotaTeorica": 1.0769230769230769,
+ "tiempoTotalSegundos": 241.1
+}

@@ -1,0 +1,106 @@
+{
+ "dificil": {
+  "validas": 10,
+  "satisfactorias": 0,
+  "fraccionYucatan": {
+   "n": 10,
+   "media": 0.6405405405405405,
+   "desviacion": 0.07324496080784809,
+   "minimo": 0.5675675675675675,
+   "maximo": 0.7837837837837838,
+   "mediana": 0.6351351351351351
+  },
+  "cobertura": {
+   "n": 10,
+   "media": 0.9170478170478169,
+   "desviacion": 0.016902683263349597,
+   "minimo": 0.9002079002079001,
+   "maximo": 0.9501039501039501,
+   "mediana": 0.9158004158004158
+  },
+  "otrasCubiertas": {
+   "n": 10,
+   "media": 5,
+   "desviacion": 0,
+   "minimo": 5,
+   "maximo": 5,
+   "mediana": 5
+  }
+ },
+ "inviable": {
+  "factibilidad": {
+   "puntosMalla": 20000,
+   "puntosLibres": 7,
+   "fraccionLibre": 0.00035,
+   "factibleDemostrado": false,
+   "testigo": null,
+   "mensaje": "Posiblemente inviable: solo caben 2 de 8 satélites con separación ≥ 3° en el espacio libre (0.03 %)."
+  },
+  "estados": [
+   "INVIABLE",
+   "INVIABLE",
+   "INVIABLE",
+   "INVIABLE",
+   "INVIABLE"
+  ],
+  "validosEnTodaLaEjecucion": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "violacionInicial": [
+   457.6838681015578,
+   445.75963771082104,
+   497.12086174222907,
+   437.65208420885835,
+   416.0324643987413
+  ],
+  "violacionFinal": [
+   11.008451582048131,
+   10.524453772237568,
+   11.089337858038366,
+   11.106358983364272,
+   10.93313782102277
+  ],
+  "violacionesPorTipo": {
+   "desechos": 6,
+   "separacion": 4
+  },
+  "configuracionMenorViolacion": [
+   {
+    "lat": -1.1470187971637062,
+    "lon": 179.3508797906611
+   },
+   {
+    "lat": 0.4611033665696064,
+    "lon": -178.45658584930447
+   },
+   {
+    "lat": -0.9014258324940263,
+    "lon": -176.07256365158787
+   },
+   {
+    "lat": -3.318605265509221,
+    "lon": -178.01481979962955
+   },
+   {
+    "lat": 3.6774134760475317,
+    "lon": -178.80833757579296
+   },
+   {
+    "lat": 2.46659990213807,
+    "lon": 178.41772546525726
+   },
+   {
+    "lat": -0.22946354934486596,
+    "lon": 176.89014097750305
+   },
+   {
+    "lat": -3.4266007051905847,
+    "lon": 178.75464768673407
+   }
+  ]
+ }
+}

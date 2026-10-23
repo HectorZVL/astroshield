@@ -1,0 +1,350 @@
+[
+ {
+  "nombre": "Se apaga la zona Atlántico Norte",
+  "antes": 1.0769230769230769,
+  "reevaluada": {
+   "estado": "VÁLIDA",
+   "fitness": 1.0769230769230769,
+   "cubiertas": 6,
+   "activas": 6,
+   "violaciones": []
+  },
+  "caliente": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0769230769230769,
+    "desviacion": 0,
+    "minimo": 1.0769230769230769,
+    "maximo": 1.0769230769230769,
+    "mediana": 1.0769230769230769
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 0,
+    "desviacion": 0,
+    "minimo": 0,
+    "maximo": 0,
+    "mediana": 0
+   }
+  },
+  "frio": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0707692307692307,
+    "desviacion": 0.008426500884694833,
+    "minimo": 1.0615384615384615,
+    "maximo": 1.0769230769230769,
+    "mediana": 1.0769230769230769
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 4.6,
+    "desviacion": 1.51657508881031,
+    "minimo": 3,
+    "maximo": 6,
+    "mediana": 5
+   }
+  }
+ },
+ {
+  "nombre": "Australia pasa a prioridad Alta",
+  "antes": 1.0769230769230769,
+  "reevaluada": {
+   "estado": "VÁLIDA",
+   "fitness": 1.0666666666666667,
+   "cubiertas": 6,
+   "activas": 6,
+   "violaciones": []
+  },
+  "caliente": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0733333333333333,
+    "desviacion": 0,
+    "minimo": 1.0733333333333333,
+    "maximo": 1.0733333333333333,
+    "mediana": 1.0733333333333333
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 0,
+    "desviacion": 0,
+    "minimo": 0,
+    "maximo": 0,
+    "mediana": 0
+   }
+  },
+  "frio": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0733333333333333,
+    "desviacion": 0,
+    "minimo": 1.0733333333333333,
+    "maximo": 1.0733333333333333,
+    "mediana": 1.0733333333333333
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 5.4,
+    "desviacion": 0.5477225575051662,
+    "minimo": 5,
+    "maximo": 6,
+    "mediana": 5
+   }
+  }
+ },
+ {
+  "nombre": "Japón deja de ser región de interés",
+  "antes": 1.0769230769230769,
+  "reevaluada": {
+   "estado": "VÁLIDA",
+   "fitness": 1.0909090909090908,
+   "cubiertas": 5,
+   "activas": 5,
+   "violaciones": []
+  },
+  "caliente": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0981818181818181,
+    "desviacion": 0.004065578140908784,
+    "minimo": 1.0909090909090908,
+    "maximo": 1.1,
+    "mediana": 1.1
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 0,
+    "desviacion": 0,
+    "minimo": 0,
+    "maximo": 0,
+    "mediana": 0
+   }
+  },
+  "frio": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0945454545454545,
+    "desviacion": 0.004979295977319785,
+    "minimo": 1.0909090909090908,
+    "maximo": 1.1,
+    "mediana": 1.0909090909090908
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 5.2,
+    "desviacion": 1.0954451150103321,
+    "minimo": 4,
+    "maximo": 7,
+    "mediana": 5
+   }
+  }
+ },
+ {
+  "nombre": "Objeto A se mueve sobre el Sahel (15°, 0°)",
+  "antes": 1.0769230769230769,
+  "reevaluada": {
+   "estado": "VÁLIDA",
+   "fitness": 1.0769230769230769,
+   "cubiertas": 6,
+   "activas": 6,
+   "violaciones": []
+  },
+  "caliente": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0769230769230769,
+    "desviacion": 0,
+    "minimo": 1.0769230769230769,
+    "maximo": 1.0769230769230769,
+    "mediana": 1.0769230769230769
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 0,
+    "desviacion": 0,
+    "minimo": 0,
+    "maximo": 0,
+    "mediana": 0
+   }
+  },
+  "frio": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0707692307692307,
+    "desviacion": 0.008426500884694833,
+    "minimo": 1.0615384615384615,
+    "maximo": 1.0769230769230769,
+    "mediana": 1.0769230769230769
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 6.6,
+    "desviacion": 2.8809720581775866,
+    "minimo": 3,
+    "maximo": 10,
+    "mediana": 6
+   }
+  }
+ },
+ {
+  "nombre": "Objeto A sobre el Sahel con exclusión ampliada a 15°",
+  "antes": 1.0769230769230769,
+  "reevaluada": {
+   "estado": "INVÁLIDA",
+   "fitness": 1.0769230769230769,
+   "cubiertas": 6,
+   "activas": 6,
+   "violaciones": [
+    "S6 ocupada (objeto-a, 1.99°)"
+   ]
+  },
+  "caliente": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0738461538461537,
+    "desviacion": 0.00688020916153779,
+    "minimo": 1.0615384615384615,
+    "maximo": 1.0769230769230769,
+    "mediana": 1.0769230769230769
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 6.2,
+    "desviacion": 2.16794833886788,
+    "minimo": 4,
+    "maximo": 9,
+    "mediana": 7
+   }
+  },
+  "frio": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0646153846153845,
+    "desviacion": 0.00688020916153779,
+    "minimo": 1.0615384615384615,
+    "maximo": 1.0769230769230769,
+    "mediana": 1.0615384615384615
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 6.8,
+    "desviacion": 3.420526275297414,
+    "minimo": 3,
+    "maximo": 12,
+    "mediana": 6
+   }
+  }
+ },
+ {
+  "nombre": "Nueva zona de desechos de 10° sobre Japón",
+  "antes": 1.0769230769230769,
+  "reevaluada": {
+   "estado": "VÁLIDA",
+   "fitness": 1.0769230769230769,
+   "cubiertas": 6,
+   "activas": 6,
+   "violaciones": []
+  },
+  "caliente": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0769230769230769,
+    "desviacion": 0,
+    "minimo": 1.0769230769230769,
+    "maximo": 1.0769230769230769,
+    "mediana": 1.0769230769230769
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 0,
+    "desviacion": 0,
+    "minimo": 0,
+    "maximo": 0,
+    "mediana": 0
+   }
+  },
+  "frio": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0738461538461537,
+    "desviacion": 0.00688020916153779,
+    "minimo": 1.0615384615384615,
+    "maximo": 1.0769230769230769,
+    "mediana": 1.0769230769230769
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 7,
+    "desviacion": 2.23606797749979,
+    "minimo": 6,
+    "maximo": 11,
+    "mediana": 6
+   }
+  }
+ },
+ {
+  "nombre": "Nueva zona de 15° entre Yucatán y California",
+  "antes": 1.0769230769230769,
+  "reevaluada": {
+   "estado": "INVÁLIDA",
+   "fitness": 1.0769230769230769,
+   "cubiertas": 6,
+   "activas": 6,
+   "violaciones": [
+    "S1 desechos (nueva-golfo, 10.83°)",
+    "S8 desechos (nueva-golfo, 13.75°)"
+   ]
+  },
+  "caliente": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0461538461538462,
+    "desviacion": 0,
+    "minimo": 1.0461538461538462,
+    "maximo": 1.0461538461538462,
+    "mediana": 1.0461538461538462
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 6.6,
+    "desviacion": 1.1401754250991378,
+    "minimo": 5,
+    "maximo": 8,
+    "mediana": 7
+   }
+  },
+  "frio": {
+   "fitness": {
+    "n": 5,
+    "media": 1.0461538461538462,
+    "desviacion": 0,
+    "minimo": 1.0461538461538462,
+    "maximo": 1.0461538461538462,
+    "mediana": 1.0461538461538462
+   },
+   "validas": 5,
+   "genSatisf": {
+    "n": 5,
+    "media": 7.2,
+    "desviacion": 0.8366600265340756,
+    "minimo": 6,
+    "maximo": 8,
+    "mediana": 7
+   }
+  }
+ }
+]

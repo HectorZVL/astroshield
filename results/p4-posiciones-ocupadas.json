@@ -1,0 +1,67 @@
+{
+ "margenObjetos": {
+  "n": 31,
+  "media": 20.614580762644326,
+  "desviacion": 8.342044671351754,
+  "minimo": 4.154292034011291,
+  "maximo": 32.40319440516889,
+  "mediana": 22.342227679031527
+ },
+ "configuracionesConViolacion": 0,
+ "radioPrueba": 12,
+ "movidos": {
+  "invadenCon": 0,
+  "invadenSin": 6,
+  "satsDentroCon": 0,
+  "satsDentroSin": 9,
+  "distanciaMinCon": {
+   "n": 10,
+   "media": 13.448011524365336,
+   "desviacion": 1.2613839024230162,
+   "minimo": 12.0496123492987,
+   "maximo": 15.853139284001465,
+   "mediana": 13.013514316775648
+  },
+  "distanciaMinSin": {
+   "n": 10,
+   "media": 10.66021707938379,
+   "desviacion": 3.1298859919976856,
+   "minimo": 6.723795122798312,
+   "maximo": 15.408186942644942,
+   "mediana": 10.064792651933342
+  },
+  "cubiertasCon": {
+   "n": 10,
+   "media": 6,
+   "desviacion": 0,
+   "minimo": 6,
+   "maximo": 6,
+   "mediana": 6
+  },
+  "cubiertasSin": {
+   "n": 10,
+   "media": 6,
+   "desviacion": 0,
+   "minimo": 6,
+   "maximo": 6,
+   "mediana": 6
+  },
+  "validasCon": 10,
+  "fitnessCon": {
+   "n": 10,
+   "media": 1.0738461538461537,
+   "desviacion": 0.006486723405473576,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  },
+  "fitnessSin": {
+   "n": 10,
+   "media": 1.0738461538461537,
+   "desviacion": 0.006486723405473576,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  }
+ }
+}

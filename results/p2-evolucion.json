@@ -1,0 +1,370 @@
+{
+ "puntos": [
+  0,
+  1,
+  2,
+  3,
+  5,
+  10,
+  20,
+  30,
+  50,
+  75,
+  100,
+  150
+ ],
+ "referencia": [
+  {
+   "generacion": 0,
+   "mejor": 0.9251851579418822,
+   "media": 0.3470240058976769,
+   "peor": 0.12513962832378872,
+   "mediaValidos": 0.3449819676960806,
+   "validos": 61,
+   "diversidad": 35.60051539858905,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 0.9230769230769231,
+   "mejorRegionesCubiertas": 5
+  },
+  {
+   "generacion": 1,
+   "mejor": 0.9251851579418822,
+   "media": 0.45389049054339764,
+   "peor": 0.14679527585209406,
+   "mediaValidos": 0.4528619325769078,
+   "validos": 78,
+   "diversidad": 32.513365339141934,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 0.9230769230769231,
+   "mejorRegionesCubiertas": 5
+  },
+  {
+   "generacion": 2,
+   "mejor": 0.9483318576608958,
+   "media": 0.5638131859010809,
+   "peor": 0.2700472021347661,
+   "mediaValidos": 0.5668342122279528,
+   "validos": 78,
+   "diversidad": 30.757113647699448,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 0.9230769230769231,
+   "mejorRegionesCubiertas": 5
+  },
+  {
+   "generacion": 3,
+   "mejor": 0.9548834065504943,
+   "media": 0.6651410611848887,
+   "peor": 0.2871422599476745,
+   "mediaValidos": 0.6651962545282207,
+   "validos": 79,
+   "diversidad": 28.726721053787816,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 0.9147609147609148,
+   "mejorRegionesCubiertas": 3
+  },
+  {
+   "generacion": 5,
+   "mejor": 1,
+   "media": 0.8449254377536652,
+   "peor": 0.47158103211944163,
+   "mediaValidos": 0.8473934783209952,
+   "validos": 76,
+   "diversidad": 19.977207247082497,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 1,
+   "mejorRegionesCubiertas": 6
+  },
+  {
+   "generacion": 10,
+   "mejor": 1.0384615384615385,
+   "media": 0.9771005124505395,
+   "peor": 0.6729937819707655,
+   "mediaValidos": 0.9807171317185003,
+   "validos": 78,
+   "diversidad": 15.051609036757565,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 1,
+   "mejorRegionesCubiertas": 6
+  },
+  {
+   "generacion": 20,
+   "mejor": 1.0769230769230769,
+   "media": 1.0303471084375788,
+   "peor": 0.8535121692463975,
+   "mediaValidos": 1.0303362847880497,
+   "validos": 78,
+   "diversidad": 9.425507202392641,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 1,
+   "mejorRegionesCubiertas": 6
+  },
+  {
+   "generacion": 30,
+   "mejor": 1.0769230769230769,
+   "media": 1.0451674090341536,
+   "peor": 0.9127644851415988,
+   "mediaValidos": 1.045692950679845,
+   "validos": 76,
+   "diversidad": 8.833644001138305,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 1,
+   "mejorRegionesCubiertas": 6
+  },
+  {
+   "generacion": 50,
+   "mejor": 1.0769230769230769,
+   "media": 1.0531636850225932,
+   "peor": 0.8855896562140899,
+   "mediaValidos": 1.053639282468932,
+   "validos": 78,
+   "diversidad": 8.131744898814864,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 1,
+   "mejorRegionesCubiertas": 6
+  },
+  {
+   "generacion": 75,
+   "mejor": 1.0769230769230769,
+   "media": 1.0449640332735377,
+   "peor": 0.8523927923897561,
+   "mediaValidos": 1.0476860569541622,
+   "validos": 76,
+   "diversidad": 8.152338682077792,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 1,
+   "mejorRegionesCubiertas": 6
+  },
+  {
+   "generacion": 100,
+   "mejor": 1.0769230769230769,
+   "media": 1.0491274072881729,
+   "peor": 0.8772808624750519,
+   "mediaValidos": 1.0499197596048722,
+   "validos": 77,
+   "diversidad": 8.714671886126151,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 1,
+   "mejorRegionesCubiertas": 6
+  },
+  {
+   "generacion": 150,
+   "mejor": 1.0769230769230769,
+   "media": 1.0501720896195355,
+   "peor": 0.8483642304175459,
+   "mediaValidos": 1.052687981000398,
+   "validos": 79,
+   "diversidad": 9.279314528163088,
+   "mejorValida": true,
+   "mejorViolacion": 0,
+   "mejorCobertura": 1,
+   "mejorRegionesCubiertas": 6
+  }
+ ],
+ "media30": [
+  {
+   "n": 30,
+   "media": 0.7232029643907646,
+   "desviacion": 0.06170848309388555,
+   "minimo": 0.6402451333306522,
+   "maximo": 0.8524486422381682,
+   "mediana": 0.7033018726106326
+  },
+  {
+   "n": 30,
+   "media": 0.7964585353072396,
+   "desviacion": 0.06545268220806316,
+   "minimo": 0.6737543379612558,
+   "maximo": 0.8977050745839761,
+   "mediana": 0.8115805736541704
+  },
+  {
+   "n": 30,
+   "media": 0.8730924636570058,
+   "desviacion": 0.05117187872841681,
+   "minimo": 0.7703171335411084,
+   "maximo": 0.9945902264352445,
+   "mediana": 0.8715473620569905
+  },
+  {
+   "n": 30,
+   "media": 0.9215744282201827,
+   "desviacion": 0.03664394749722841,
+   "minimo": 0.8566759234778722,
+   "maximo": 1,
+   "mediana": 0.9144509460811605
+  },
+  {
+   "n": 30,
+   "media": 0.9903413138346518,
+   "desviacion": 0.020587939270179854,
+   "minimo": 0.9322621736252878,
+   "maximo": 1.0188914871587287,
+   "mediana": 0.99368534453583
+  },
+  {
+   "n": 30,
+   "media": 1.0326096827495905,
+   "desviacion": 0.010232380260003813,
+   "minimo": 1.0153846153846153,
+   "maximo": 1.0538461538461539,
+   "mediana": 1.0384615384615385
+  },
+  {
+   "n": 30,
+   "media": 1.0589743589743592,
+   "desviacion": 0.00933043745943265,
+   "minimo": 1.0307692307692307,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0615384615384615
+  },
+  {
+   "n": 30,
+   "media": 1.0664102564102564,
+   "desviacion": 0.010395825236302246,
+   "minimo": 1.0384615384615385,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0615384615384615
+  },
+  {
+   "n": 30,
+   "media": 1.0715384615384616,
+   "desviacion": 0.007862831393781433,
+   "minimo": 1.0538461538461539,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  },
+  {
+   "n": 30,
+   "media": 1.073846153846154,
+   "desviacion": 0.006259047725730536,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  },
+  {
+   "n": 30,
+   "media": 1.0748717948717947,
+   "desviacion": 0.0053191677483347575,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  },
+  {
+   "n": 30,
+   "media": 1.0758974358974358,
+   "desviacion": 0.003903202026191715,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  }
+ ],
+ "mediaPoblacion30": [
+  {
+   "n": 30,
+   "media": 0.368697182341094,
+   "desviacion": 0.017698676637002413,
+   "minimo": 0.3228245830368321,
+   "maximo": 0.39834644787605,
+   "mediana": 0.36839876026442875
+  },
+  {
+   "n": 30,
+   "media": 0.481488566629071,
+   "desviacion": 0.0293476832483169,
+   "minimo": 0.4189110515609122,
+   "maximo": 0.5415555342498017,
+   "mediana": 0.4867415861567489
+  },
+  {
+   "n": 30,
+   "media": 0.5921102497532756,
+   "desviacion": 0.027464797938399153,
+   "minimo": 0.5375666081344248,
+   "maximo": 0.6490095082260331,
+   "mediana": 0.5938814783667059
+  },
+  {
+   "n": 30,
+   "media": 0.6818384725582541,
+   "desviacion": 0.03244351922010522,
+   "minimo": 0.6123823390715532,
+   "maximo": 0.7480101361556034,
+   "mediana": 0.6862337889988561
+  },
+  {
+   "n": 30,
+   "media": 0.8203004807062597,
+   "desviacion": 0.026895513087221944,
+   "minimo": 0.7753996607382517,
+   "maximo": 0.874571576298085,
+   "mediana": 0.8139297905035163
+  },
+  {
+   "n": 30,
+   "media": 0.9697085284222644,
+   "desviacion": 0.014261598438307037,
+   "minimo": 0.9391082811501075,
+   "maximo": 0.9958056457281994,
+   "mediana": 0.9683447822998699
+  },
+  {
+   "n": 30,
+   "media": 1.02524624822599,
+   "desviacion": 0.010290918008949207,
+   "minimo": 0.9978791911045821,
+   "maximo": 1.045208660295118,
+   "mediana": 1.027134815047984
+  },
+  {
+   "n": 30,
+   "media": 1.0385654316062602,
+   "desviacion": 0.008784751085579821,
+   "minimo": 1.0109834807692155,
+   "maximo": 1.052729242617978,
+   "mediana": 1.0382432807043607
+  },
+  {
+   "n": 30,
+   "media": 1.044417408698046,
+   "desviacion": 0.00833319953705533,
+   "minimo": 1.026014340921703,
+   "maximo": 1.056160324196508,
+   "mediana": 1.0455573246509648
+  },
+  {
+   "n": 30,
+   "media": 1.0493268883478681,
+   "desviacion": 0.007664584614159983,
+   "minimo": 1.033078965721415,
+   "maximo": 1.0592897331716544,
+   "mediana": 1.0513638615374106
+  },
+  {
+   "n": 30,
+   "media": 1.048583569745453,
+   "desviacion": 0.006318785941556087,
+   "minimo": 1.0335961024957228,
+   "maximo": 1.0586890913974216,
+   "mediana": 1.0504825391823691
+  },
+  {
+   "n": 30,
+   "media": 1.051022467737069,
+   "desviacion": 0.006423733515999641,
+   "minimo": 1.0297541231057568,
+   "maximo": 1.060415527947589,
+   "mediana": 1.0517678540866942
+  }
+ ]
+}

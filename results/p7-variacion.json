@@ -1,0 +1,445 @@
+{
+ "semillas": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30
+ ],
+ "fitness": {
+  "n": 30,
+  "media": 1.0758974358974358,
+  "desviacion": 0.003903202026191715,
+  "minimo": 1.0615384615384615,
+  "maximo": 1.0769230769230769,
+  "mediana": 1.0769230769230769
+ },
+ "cobertura": {
+  "n": 30,
+  "media": 1,
+  "desviacion": 0,
+  "minimo": 1,
+  "maximo": 1,
+  "mediana": 1
+ },
+ "redundancia": {
+  "n": 30,
+  "media": 0.7589743589743595,
+  "desviacion": 0.03903202026191731,
+  "minimo": 0.6153846153846154,
+  "maximo": 0.7692307692307693,
+  "mediana": 0.7692307692307693
+ },
+ "regionesCubiertas": {
+  "n": 30,
+  "media": 6,
+  "desviacion": 0,
+  "minimo": 6,
+  "maximo": 6,
+  "mediana": 6
+ },
+ "generacionSatisfactoria": {
+  "n": 30,
+  "media": 6.066666666666666,
+  "desviacion": 1.6174337556830538,
+  "minimo": 3,
+  "maximo": 9,
+  "mediana": 6.5
+ },
+ "generacionCota": {
+  "n": 28,
+  "media": 46.107142857142854,
+  "desviacion": 28.486955150675787,
+  "minimo": 20,
+  "maximo": 124,
+  "mediana": 38.5
+ },
+ "alcanzanCota": 28,
+ "sobreCota": 0,
+ "tiempoMs": {
+  "n": 30,
+  "media": 749.5,
+  "desviacion": 15.773723239222445,
+  "minimo": 719,
+  "maximo": 797,
+  "mediana": 746
+ },
+ "diversidadFinal": {
+  "n": 30,
+  "media": 8.628668644158553,
+  "desviacion": 0.8989799055955177,
+  "minimo": 6.845591129642706,
+  "maximo": 11.282683295979762,
+  "mediana": 8.439386432481419
+ },
+ "distanciaEntreFinales": {
+  "n": 435,
+  "media": 10.405164881179477,
+  "desviacion": 2.1057355948435212,
+  "minimo": 5.576039623601087,
+  "maximo": 18.13341881810699,
+  "mediana": 10.1202219697525
+ },
+ "redundancia_por_region": {
+  "Península de Yucatán": 30,
+  "Amazonía brasileña": 30,
+  "California": 30,
+  "Sahel": 16,
+  "Japón": 12
+ },
+ "porSemilla": [
+  {
+   "semilla": 1,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 52
+  },
+  {
+   "semilla": 2,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 5,
+   "genCota": 64
+  },
+  {
+   "semilla": 3,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 39
+  },
+  {
+   "semilla": 4,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 4,
+   "genCota": 52
+  },
+  {
+   "semilla": 5,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 4,
+   "genCota": 20
+  },
+  {
+   "semilla": 6,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 5,
+   "genCota": 28
+  },
+  {
+   "semilla": 7,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 9,
+   "genCota": 38
+  },
+  {
+   "semilla": 8,
+   "fitness": 1.0615384615384615,
+   "cobertura": 1,
+   "redundancia": 0.6153846153846154,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 8,
+   "genCota": -1
+  },
+  {
+   "semilla": 9,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 8,
+   "genCota": 20
+  },
+  {
+   "semilla": 10,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 50
+  },
+  {
+   "semilla": 11,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 21
+  },
+  {
+   "semilla": 12,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 5,
+   "genCota": 45
+  },
+  {
+   "semilla": 13,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 6,
+   "genCota": 25
+  },
+  {
+   "semilla": 14,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 3,
+   "genCota": 23
+  },
+  {
+   "semilla": 15,
+   "fitness": 1.0615384615384615,
+   "cobertura": 1,
+   "redundancia": 0.6153846153846154,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 5,
+   "genCota": -1
+  },
+  {
+   "semilla": 16,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 91
+  },
+  {
+   "semilla": 17,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 5,
+   "genCota": 72
+  },
+  {
+   "semilla": 18,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 21
+  },
+  {
+   "semilla": 19,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 4,
+   "genCota": 110
+  },
+  {
+   "semilla": 20,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 6,
+   "genCota": 23
+  },
+  {
+   "semilla": 21,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 4,
+   "genCota": 30
+  },
+  {
+   "semilla": 22,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 29
+  },
+  {
+   "semilla": 23,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 29
+  },
+  {
+   "semilla": 24,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 8,
+   "genCota": 124
+  },
+  {
+   "semilla": 25,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 6,
+   "genCota": 24
+  },
+  {
+   "semilla": 26,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 4,
+   "genCota": 46
+  },
+  {
+   "semilla": 27,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 8,
+   "genCota": 25
+  },
+  {
+   "semilla": 28,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 4,
+   "genCota": 50
+  },
+  {
+   "semilla": 29,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 7,
+   "genCota": 94
+  },
+  {
+   "semilla": 30,
+   "fitness": 1.0769230769230769,
+   "cobertura": 1,
+   "redundancia": 0.7692307692307693,
+   "regiones": 6,
+   "estado": "VÁLIDA",
+   "genSatisfactoria": 8,
+   "genCota": 46
+  }
+ ],
+ "diagnosticoNoAlcanzan": [
+  {
+   "semilla": 8,
+   "fitness": 1.0615384615384615,
+   "duplicadas": [
+    "Península de Yucatán",
+    "Amazonía brasileña",
+    "California"
+   ],
+   "compartidos": 1,
+   "soloYucatan": 1,
+   "soloCalifornia": 1,
+   "aporteMinimo": 0.01538461538461533
+  },
+  {
+   "semilla": 15,
+   "fitness": 1.0615384615384615,
+   "duplicadas": [
+    "Península de Yucatán",
+    "Amazonía brasileña",
+    "California"
+   ],
+   "compartidos": 1,
+   "soloYucatan": 1,
+   "soloCalifornia": 1,
+   "aporteMinimo": 0.01538461538461533
+  }
+ ]
+}

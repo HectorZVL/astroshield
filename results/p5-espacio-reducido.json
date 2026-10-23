@@ -1,0 +1,242 @@
+[
+ {
+  "factor": 1,
+  "radios": [
+   12,
+   10,
+   8
+  ],
+  "fraccionLibre": 0.97265,
+  "factible": true,
+  "validas": 10,
+  "satisfactorias": 10,
+  "cobertura": {
+   "n": 10,
+   "media": 1,
+   "desviacion": 0,
+   "minimo": 1,
+   "maximo": 1,
+   "mediana": 1
+  },
+  "regiones": {
+   "n": 10,
+   "media": 6,
+   "desviacion": 0,
+   "minimo": 6,
+   "maximo": 6,
+   "mediana": 6
+  },
+  "fitness": {
+   "n": 10,
+   "media": 1.0753846153846154,
+   "desviacion": 0.004865042554105182,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  },
+  "referenciaSigueValida": true,
+  "referenciaViolaciones": 0,
+  "noCubiertas": []
+ },
+ {
+  "factor": 2,
+  "radios": [
+   24,
+   20,
+   16
+  ],
+  "fraccionLibre": 0.9034,
+  "factible": true,
+  "validas": 10,
+  "satisfactorias": 10,
+  "cobertura": {
+   "n": 10,
+   "media": 1,
+   "desviacion": 0,
+   "minimo": 1,
+   "maximo": 1,
+   "mediana": 1
+  },
+  "regiones": {
+   "n": 10,
+   "media": 6,
+   "desviacion": 0,
+   "minimo": 6,
+   "maximo": 6,
+   "mediana": 6
+  },
+  "fitness": {
+   "n": 10,
+   "media": 1.0753846153846154,
+   "desviacion": 0.004865042554105182,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  },
+  "referenciaSigueValida": true,
+  "referenciaViolaciones": 0,
+  "noCubiertas": []
+ },
+ {
+  "factor": 3,
+  "radios": [
+   36,
+   30,
+   24
+  ],
+  "fraccionLibre": 0.80405,
+  "factible": true,
+  "validas": 10,
+  "satisfactorias": 10,
+  "cobertura": {
+   "n": 10,
+   "media": 1,
+   "desviacion": 0,
+   "minimo": 1,
+   "maximo": 1,
+   "mediana": 1
+  },
+  "regiones": {
+   "n": 10,
+   "media": 6,
+   "desviacion": 0,
+   "minimo": 6,
+   "maximo": 6,
+   "mediana": 6
+  },
+  "fitness": {
+   "n": 10,
+   "media": 1.0753846153846154,
+   "desviacion": 0.004865042554105183,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  },
+  "referenciaSigueValida": false,
+  "referenciaViolaciones": 1,
+  "noCubiertas": []
+ },
+ {
+  "factor": 4,
+  "radios": [
+   48,
+   40,
+   32
+  ],
+  "fraccionLibre": 0.68175,
+  "factible": true,
+  "validas": 10,
+  "satisfactorias": 10,
+  "cobertura": {
+   "n": 10,
+   "media": 1,
+   "desviacion": 0,
+   "minimo": 1,
+   "maximo": 1,
+   "mediana": 1
+  },
+  "regiones": {
+   "n": 10,
+   "media": 6,
+   "desviacion": 0,
+   "minimo": 6,
+   "maximo": 6,
+   "mediana": 6
+  },
+  "fitness": {
+   "n": 10,
+   "media": 1.0723076923076922,
+   "desviacion": 0.007431475254456096,
+   "minimo": 1.0615384615384615,
+   "maximo": 1.0769230769230769,
+   "mediana": 1.0769230769230769
+  },
+  "referenciaSigueValida": false,
+  "referenciaViolaciones": 2,
+  "noCubiertas": []
+ },
+ {
+  "factor": 5,
+  "radios": [
+   60,
+   50,
+   40
+  ],
+  "fraccionLibre": 0.5387,
+  "factible": true,
+  "validas": 10,
+  "satisfactorias": 0,
+  "cobertura": {
+   "n": 10,
+   "media": 0.9821205821205823,
+   "desviacion": 0.0020085068255286816,
+   "minimo": 0.9792099792099792,
+   "maximo": 0.9833679833679834,
+   "mediana": 0.9833679833679834
+  },
+  "regiones": {
+   "n": 10,
+   "media": 5,
+   "desviacion": 0,
+   "minimo": 5,
+   "maximo": 5,
+   "mediana": 5
+  },
+  "fitness": {
+   "n": 10,
+   "media": 1.0430646397104182,
+   "desviacion": 0.006995689018387116,
+   "minimo": 1.029838156062744,
+   "maximo": 1.0529553111672942,
+   "mediana": 1.043111081542405
+  },
+  "referenciaSigueValida": false,
+  "referenciaViolaciones": 5,
+  "noCubiertas": [
+   "Sahel"
+  ]
+ },
+ {
+  "factor": 6,
+  "radios": [
+   72,
+   60,
+   48
+  ],
+  "fraccionLibre": 0.412,
+  "factible": true,
+  "validas": 10,
+  "satisfactorias": 0,
+  "cobertura": {
+   "n": 10,
+   "media": 0.38461538461538464,
+   "desviacion": 0,
+   "minimo": 0.38461538461538464,
+   "maximo": 0.38461538461538464,
+   "mediana": 0.38461538461538464
+  },
+  "regiones": {
+   "n": 10,
+   "media": 3,
+   "desviacion": 0,
+   "minimo": 3,
+   "maximo": 3,
+   "mediana": 3
+  },
+  "fitness": {
+   "n": 10,
+   "media": 0.5751636577833735,
+   "desviacion": 0.006810843629648745,
+   "minimo": 0.5705027462783271,
+   "maximo": 0.5883873657815328,
+   "mediana": 0.57257590693095
+  },
+  "referenciaSigueValida": false,
+  "referenciaViolaciones": 8,
+  "noCubiertas": [
+   "Península de Yucatán",
+   "Amazonía brasileña",
+   "Sahel"
+  ]
+ }
+]
