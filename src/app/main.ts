@@ -13,6 +13,7 @@ import type { Factibilidad } from '../core/factibilidad';
 import { distancia } from '../core/geo';
 import type { Configuracion, Escenario, EstadoSolucion, Evaluacion, ParametrosAG, Prioridad, RegistroGeneracion, ResultadoEjecucion, ZonaProhibida } from '../core/tipos';
 import { Escena3D, hayWebGL } from './escena/escena3d';
+import { estadoParaMostrar } from './estadoVista';
 import { aplicarTemaCSS } from './tema';
 import { GraficaEvolucion } from './ui/grafica';
 import { chip, esc, esqueleto, metricas, origen, panelEscenario, tablaRegiones, type DatosBarra } from './ui/hud';
@@ -83,9 +84,10 @@ function esFinal(): boolean {
  */
 function estadoChip(ev: Evaluacion): { chip: EstadoSolucion; contexto: string } {
   const mod = escenarioModificado();
-  if (!mod && esFinal() && estado.run.estado === 'INVIABLE') return { chip: 'INVIABLE', contexto: 'Sin válidas · menor violación' };
+  const chip = estadoParaMostrar(ev, { escenarioModificado: mod, esFinal: esFinal(), estadoRun: estado.run.estado });
+  if (chip === 'INVIABLE') return { chip, contexto: 'Sin válidas · menor violación' };
   const que = estado.vista === 'inicial' ? 'Inicial' : esFinal() ? 'Final' : `Mejor gen. ${estado.generacion}`;
-  return { chip: estadoDeConfiguracion(ev), contexto: mod ? `${que} · reevaluada` : que };
+  return { chip, contexto: mod ? `${que} · reevaluada` : que };
 }
 
 // ---- Render -----------------------------------------------------------------
