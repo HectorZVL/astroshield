@@ -240,6 +240,8 @@ export class CapasEscena {
       transparent: true,
       depthWrite: false,
       side: THREE.DoubleSide,
+      // Una sola pasada: los discos transparentes de doble cara se dibujaban dos veces.
+      forceSinglePass: true,
     });
     const disco = new THREE.Mesh(discoGeodesico(z, z.radioGrados, 1.004, 10, 96), mat);
     const borde = linea(circuloGeodesico(z, z.radioGrados, 128, 1.005), color, z.activa ? 0.9 : 0.4);
@@ -331,8 +333,8 @@ export class CapasEscena {
     et.position.set(0, 0, -0.045);
     grupo.add(et);
     const anillo = new THREE.LineLoop(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.6 }));
-    const relleno = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.07, depthWrite: false, side: THREE.DoubleSide }));
-    const cono = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.025, depthWrite: false, side: THREE.DoubleSide }));
+    const relleno = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.07, depthWrite: false, side: THREE.DoubleSide, forceSinglePass: true }));
+    const cono = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.025, depthWrite: false, side: THREE.DoubleSide, forceSinglePass: true }));
     const estela = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: paleta.acentoSuave, transparent: true, opacity: 0 }));
     this.satGrupo.add(grupo, anillo, relleno, cono, estela);
     return { grupo, etiqueta: et, anillo, relleno, cono, estela, historialEstela: [], destino: { ...p }, desde: { ...desde }, actual: { ...desde } };
