@@ -56,7 +56,8 @@ export function destino(p: LatLon, rumbo: number, d: number): LatLon {
   const lo1 = p.lon * RAD;
   const b = rumbo * RAD;
   const dr = d * RAD;
-  const la2 = Math.asin(Math.sin(la1) * Math.cos(dr) + Math.cos(la1) * Math.sin(dr) * Math.cos(b));
+  const sinLat = Math.max(-1, Math.min(1, Math.sin(la1) * Math.cos(dr) + Math.cos(la1) * Math.sin(dr) * Math.cos(b)));
+  const la2 = Math.asin(sinLat);
   const lo2 =
     lo1 + Math.atan2(Math.sin(b) * Math.sin(dr) * Math.cos(la1), Math.cos(dr) - Math.sin(la1) * Math.sin(la2));
   return { lat: la2 * DEG, lon: normalizarLon(lo2 * DEG) };
