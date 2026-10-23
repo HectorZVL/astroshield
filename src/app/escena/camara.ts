@@ -13,10 +13,11 @@ export class ControlCamara {
   private vuelo: { desde: THREE.Vector3; hasta: THREE.Vector3; inicio: number; duracion: number } | null = null;
   alInteractuar: () => void = () => {};
 
+  /** `movimiento` se consulta en cada uso: si el usuario activa prefers-reduced-motion, se respeta al instante. */
   constructor(
     readonly camara: THREE.PerspectiveCamera,
     dom: HTMLElement,
-    private movimiento: boolean,
+    private movimiento: () => boolean,
   ) {
     this.controles = new OrbitControls(camara, dom);
     this.controles.enableDamping = true;
@@ -25,7 +26,7 @@ export class ControlCamara {
     this.controles.maxDistance = 9;
     this.controles.enablePan = false;
     this.controles.rotateSpeed = 0.6;
-    this.controles.autoRotate = movimiento;
+    this.controles.autoRotate = movimiento();
     this.controles.autoRotateSpeed = 0.45;
     // Al primer gesto del usuario se detiene la rotación automática y se cancela cualquier vuelo.
     this.controles.addEventListener('start', () => {
@@ -38,7 +39,7 @@ export class ControlCamara {
   /** Entrada: desde lejos hacia la vista inicial, sobre América. */
   entrada(): void {
     const final = aVector3({ lat: 18, lon: -80 }, 3.6);
-    if (!this.movimiento) {
+    if (!this.movimiento()) {
       this.camara.position.copy(final);
       return;
     }
@@ -50,7 +51,7 @@ export class ControlCamara {
   volarA(p: LatLon, distancia = 2.4): void {
     this.controles.autoRotate = false;
     const hasta = aVector3(p, distancia);
-    if (!this.movimiento) {
+    if (!this.movimiento()) {
       this.camara.position.copy(hasta);
       return;
     }
@@ -58,15 +59,18 @@ export class ControlCamara {
   }
 
   set rotacionAutomatica(v: boolean) {
-    this.controles.autoRotate = v && this.movimiento;
+    this.controles.autoRotate = v && this.movimiento();
   }
   get rotacionAutomatica(): boolean {
     return this.controles.autoRotate;
   }
 
   actualizar(): void {
+    const mov = this.movimiento();
+    if (!mov) this.controles.autoRotate = false;
     if (this.vuelo) {
-      const u = Math.min(1, (performance.now() - this.vuelo.inicio) / this.vuelo.duracion);
+      // Sin movimiento, un vuelo en curso termina de inmediato en su destino.
+      const u = mov ? Math.min(1, (performance.now() - this.vuelo.inicio) / this.vuelo.duracion) : 1;
       const e = suavizar(u);
       // Se interpola la dirección por la esfera (cuaternión, funciona incluso entre
       // puntos opuestos) y la distancia por separado: la cámara rodea el globo.

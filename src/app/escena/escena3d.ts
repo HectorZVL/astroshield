@@ -63,7 +63,7 @@ export class Escena3D {
     this.escena.add(this.estrellas);
     this.escena.add(this.capas.raiz);
 
-    this.control = new ControlCamara(this.camara, this.renderer.domElement, movimiento());
+    this.control = new ControlCamara(this.camara, this.renderer.domElement, movimiento);
 
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(new RenderPass(this.escena, this.camara));
@@ -82,6 +82,9 @@ export class Escena3D {
   private redimensionar(): void {
     const w = this.contenedor.clientWidth || window.innerWidth;
     const h = this.contenedor.clientHeight || window.innerHeight;
+    // Con tamaño 0 (pestaña o panel oculto) el bloom crea framebuffers vacíos y WebGL
+    // llena la consola de advertencias; se espera al siguiente resize con tamaño real.
+    if (w < 1 || h < 1) return;
     this.camara.aspect = w / h;
     this.camara.updateProjectionMatrix();
     this.renderer.setSize(w, h);
@@ -121,6 +124,7 @@ export class Escena3D {
     this.control.actualizar();
     this.capas.actualizar(dt, mov, this.camara);
     if (mov) this.estrellas.rotation.y += dt * 0.004;
+    if (this.renderer.domElement.width < 1 || this.renderer.domElement.height < 1) return;
     this.composer.render();
     this.etiquetas.render(this.escena, this.camara);
   }
