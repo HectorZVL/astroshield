@@ -14,7 +14,7 @@ El enunciado pide declarar si se usaron herramientas de IA, para qué y qué ver
 | Entregable 2 — Implementación | Generación del código del núcleo (`src/core`) y de la CLI (`experiments/cli.ts`) |
 | Entregable 3 — Pruebas | Diseño y código de las pruebas automáticas (`tests/`) y de los experimentos (`experiments/run-all.ts`). `docs/03-pruebas.md` se genera **automáticamente a partir de los resultados**, sin números escritos a mano |
 | Entregable 4 — Análisis | Redacción de `docs/04-analisis.md` citando los resultados reales de `results/` |
-| Entregable 5 — Visualización | Generación del código de la visualización 3D y del HUD (`src/app`) |
+| Entregable 5 — Visualización | Generación del código de la visualización 3D y del HUD (`src/app`), y su rediseño visual posterior («control de misión cálido»: tema, HUD, globo, gráfica y animaciones) |
 | Entregable 6 — Documentación | Redacción del README, la guía de defensa (`docs/06`), la explicación didáctica (`docs/02`) y este archivo |
 
 ## Verificaciones realizadas
@@ -43,6 +43,7 @@ Se documentan porque muestran que las verificaciones tuvieron efecto:
 8. **Semilla heredada entre escenarios rápidos.** En una revisión posterior se vio en el navegador que «Inicial» después de «Inviable» conservaba la semilla 1, así que «Evolucionar» ya no reproducía el run de referencia. Cada preset fija ahora la semilla de su ejecución documentada (`src/app/presets.ts`, probado en `tests/presets.test.ts`).
 9. **Correspondencia datos ↔ globo sin prueba automática.** Solo se había comprobado a ojo. Se agregó `tests/coordenadas.test.ts`, que compara la conversión de la escena con la del núcleo y con la textura del globo.
 10. **Detalles de la interfaz.** El texto «S1 invade satélite 2» para una separación insuficiente, una animación de los rayos que no tenía efecto, un error del Worker que dejaba la línea de tiempo bloqueada y la cámara que ignoraba un cambio de `prefers-reduced-motion` durante la sesión. Se corrigieron en commits `fix:` separados.
+11. **Costo de render del rediseño.** Al medir el rediseño (60 cuadros forzados con sincronización de GPU), salió más lento que la versión anterior: ~13.5 ms por cuadro. Al apagar capa por capa se vio que las huellas y los conos, transparentes y de doble cara, se dibujaban en dos pasadas. Con una sola pasada bajó a ~7.7 ms (~6.7 ms son el costo fijo de la medición).
 
 ## Lo que el equipo debe revisar por su cuenta
 
