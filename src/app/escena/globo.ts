@@ -138,7 +138,7 @@ function crearTexturas(W = 4096, H = 2048) {
   const r = rug.getContext('2d')!;
   r.fillStyle = conAlfa(tecnicos.blanco, 1);
   r.fillRect(0, 0, rug.width, rug.height);
-  r.fillStyle = conAlfa(tecnicos.negro, 0.55);
+  r.fillStyle = conAlfa(tecnicos.negro, 0.32);
   r.fillRect(0, 0, rug.width, rug.height);
   trazar(r, poligonos, rug.width, rug.height);
   r.fillStyle = conAlfa(tecnicos.blanco, 1);
