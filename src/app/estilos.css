@@ -277,13 +277,15 @@ input.interruptor:checked::after { transform: translateX(14px); background: var(
 
 /* ---- Dock: gráfica y línea de tiempo -------------------------------------- */
 .dock {
-  left: 344px; right: 352px; bottom: 16px; height: 248px;
+  left: 344px; right: 352px; bottom: 16px; height: 262px;
   padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 10px;
 }
 #hud:has(.panel-izq.plegado) .dock { left: 16px; }
-.dock .cabecera { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+/* Título y leyenda a la izquierda, selector de vista a la derecha. */
+.dock .cabecera { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; row-gap: 4px; align-items: center; }
+.dock .cabecera .segmentado { grid-column: 2; grid-row: 1 / span 2; }
 .dock h2 { font-size: var(--texto-grande); }
-.series { display: flex; gap: 14px; font-size: var(--texto-pequeno); color: var(--textoSuave); flex-wrap: wrap; flex: 1; }
+.series { display: flex; gap: 6px 14px; font-size: var(--texto-pequeno); color: var(--textoSuave); flex-wrap: wrap; grid-column: 1; }
 .series span { display: inline-flex; align-items: center; gap: 6px; }
 .series i { width: 16px; height: 3px; border-radius: 2px; display: inline-block; }
 .series i.discontinua { height: 0; border-top: 2px dashed; background: none; }
@@ -340,7 +342,7 @@ input.interruptor:checked::after { transform: translateX(14px); background: var(
 @media (max-width: 1280px) {
   .indicador { min-width: 92px; padding: 6px 10px; }
   .boton-detalles span { display: none; }
-  .panel-izq { bottom: 280px; }
+  .panel-izq { bottom: 294px; }
   .dock { left: 16px; right: 352px; }
 }
 @media (max-width: 1060px) {
@@ -365,6 +367,8 @@ input.interruptor:checked::after { transform: translateX(14px); background: var(
   .detalles { order: 2; position: relative !important; top: auto; right: auto; width: auto; }
   .panel-der { order: 3; margin-top: 46vh !important; }
   .dock { order: 4; height: 320px !important; }
+  .dock .cabecera { grid-template-columns: 1fr; }
+  .dock .cabecera .segmentado { grid-column: 1; grid-row: auto; justify-self: start; }
   .panel-izq { order: 5; }
   .panel-izq .panel-cuerpo { max-height: none; }
   .panel-pie { position: static; }
