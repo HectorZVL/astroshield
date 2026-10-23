@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import { feature } from 'topojson-client';
 import tierra50 from 'world-atlas/land-50m.json';
 import type { Topology, GeometryCollection } from 'topojson-specification';
-import { paleta } from '../tema';
+import { paleta, tecnicos } from '../tema';
 import { crearRng } from '../../core/rng';
 
 type Anillo = number[][];
@@ -108,7 +108,7 @@ function crearTexturas(W = 4096, H = 2048) {
   emision.width = W;
   emision.height = H;
   const e = emision.getContext('2d')!;
-  e.fillStyle = '#000';
+  e.fillStyle = tecnicos.negro;
   e.fillRect(0, 0, W, H);
   reticula(e, W, H, paleta.reticula, 1);
   e.drawImage(capa, 0, 0);
@@ -188,7 +188,7 @@ export function crearGlobo(): THREE.Group {
     new THREE.MeshStandardMaterial({
       map: mapa,
       emissiveMap: emision,
-      emissive: new THREE.Color('#ffffff'),
+      emissive: new THREE.Color(tecnicos.blanco),
       emissiveIntensity: 0.85,
       roughness: 0.9,
       metalness: 0.05,

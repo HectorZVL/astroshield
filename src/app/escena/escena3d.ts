@@ -52,8 +52,8 @@ export class Escena3D {
     this.etiquetas.domElement.style.pointerEvents = 'none';
 
     this.escena.background = new THREE.Color(paleta.fondo);
-    this.escena.add(new THREE.AmbientLight('#9fb6ff', 0.55));
-    const sol = new THREE.DirectionalLight('#ffffff', 1.6);
+    this.escena.add(new THREE.AmbientLight(paleta.luzAmbiente, 0.55));
+    const sol = new THREE.DirectionalLight(paleta.luzSol, 1.6);
     sol.position.set(4, 2.5, 3);
     // La luz acompaña a la cámara para que el lado visible del globo siempre esté iluminado.
     this.camara.add(sol);

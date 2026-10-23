@@ -9,7 +9,7 @@ import { emparejar } from '../../core/ag';
 import { destino, interpolar, kmAGrados } from '../../core/geo';
 import { crearRng } from '../../core/rng';
 import type { Configuracion, EstadoRegion, Escenario, Evaluacion, LatLon, ZonaProhibida } from '../../core/tipos';
-import { paleta, semantica } from '../tema';
+import { conAlfa, paleta, semantica, tecnicos } from '../tema';
 import { aVector3, circuloGeodesico, RADIO_SATELITES } from './coordenadas';
 
 const colorEstado: Record<EstadoRegion, string> = {
@@ -114,8 +114,8 @@ interface SateliteVisual {
 
 function modeloSatelite(color: string, escala = 1): THREE.Group {
   const g = new THREE.Group();
-  const metal = new THREE.MeshStandardMaterial({ color: '#c9d6ea', metalness: 0.8, roughness: 0.3, emissive: new THREE.Color(color), emissiveIntensity: 0.25 });
-  const panelMat = new THREE.MeshStandardMaterial({ color: '#0b1c3a', metalness: 0.4, roughness: 0.4, emissive: new THREE.Color(color), emissiveIntensity: 0.9 });
+  const metal = new THREE.MeshStandardMaterial({ color: paleta.metalSatelite, metalness: 0.8, roughness: 0.3, emissive: new THREE.Color(color), emissiveIntensity: 0.25 });
+  const panelMat = new THREE.MeshStandardMaterial({ color: paleta.panelSatelite, metalness: 0.4, roughness: 0.4, emissive: new THREE.Color(color), emissiveIntensity: 0.9 });
   const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.026), metal);
   const brazo = new THREE.Mesh(new THREE.CylinderGeometry(0.0012, 0.0012, 0.1, 6), metal);
   brazo.rotation.z = Math.PI / 2;
@@ -145,9 +145,10 @@ function texturaHalo(): THREE.Texture {
   c.width = c.height = 64;
   const x = c.getContext('2d')!;
   const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
-  g.addColorStop(0, 'rgba(255,255,255,1)');
-  g.addColorStop(0.25, 'rgba(255,255,255,0.45)');
-  g.addColorStop(1, 'rgba(255,255,255,0)');
+  // Máscara blanca: el color real lo pone el SpriteMaterial (tema).
+  g.addColorStop(0, conAlfa(tecnicos.blanco, 1));
+  g.addColorStop(0.25, conAlfa(tecnicos.blanco, 0.45));
+  g.addColorStop(1, conAlfa(tecnicos.blanco, 0));
   x.fillStyle = g;
   x.fillRect(0, 0, 64, 64);
   haloCache = new THREE.CanvasTexture(c);
