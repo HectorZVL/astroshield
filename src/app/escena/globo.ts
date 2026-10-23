@@ -82,14 +82,14 @@ function crearTexturas(W = 4096, H = 2048) {
   color.height = H;
   const c = color.getContext('2d')!;
   const grad = c.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, paleta.oceano);
-  grad.addColorStop(0.5, paleta.oceanoClaro);
-  grad.addColorStop(1, paleta.oceano);
+  grad.addColorStop(0, paleta.oceanoProfundo);
+  grad.addColorStop(0.5, paleta.oceano);
+  grad.addColorStop(1, paleta.oceanoProfundo);
   c.fillStyle = grad;
   c.fillRect(0, 0, W, H);
   reticula(c, W, H, paleta.reticula, 1.2);
   trazar(c, poligonos, W, H);
-  c.fillStyle = paleta.tierra;
+  c.fillStyle = paleta.tierraTemplada;
   c.fill('evenodd');
 
   // Puntos solo dentro de la tierra: se dibujan aparte y se recortan con la forma.
@@ -97,7 +97,7 @@ function crearTexturas(W = 4096, H = 2048) {
   capa.width = W;
   capa.height = H;
   const p = capa.getContext('2d')!;
-  puntos(p, W, H, paleta.puntosTierra, 9);
+  puntos(p, W, H, paleta.tierraArida, 9);
   p.globalCompositeOperation = 'destination-in';
   trazar(p, poligonos, W, H);
   p.fill('evenodd');
@@ -168,7 +168,7 @@ function materialAtmosfera(interior: boolean, potencia: number, intensidad: numb
     vertexShader: VERT_ATMOSFERA,
     fragmentShader: FRAG_ATMOSFERA,
     uniforms: {
-      uColor: { value: new THREE.Color(paleta.atmosfera) },
+      uColor: { value: new THREE.Color(paleta.atmosferaNoche) },
       uPotencia: { value: potencia },
       uIntensidad: { value: intensidad },
       uInterior: { value: interior ? 1 : 0 },
@@ -207,7 +207,7 @@ export function crearEstrellas(cantidad = 5000): THREE.Points {
   const pos = new Float32Array(cantidad * 3);
   const col = new Float32Array(cantidad * 3);
   const base = new THREE.Color(paleta.estrellas);
-  const tintes = [new THREE.Color(paleta.cian), new THREE.Color(paleta.violeta), new THREE.Color(paleta.ambar)];
+  const tintes = [new THREE.Color(paleta.acento), new THREE.Color(paleta.pizarra), new THREE.Color(paleta.miel)];
   for (let i = 0; i < cantidad; i++) {
     const z = rng.rango(-1, 1);
     const t = rng.rango(0, Math.PI * 2);
