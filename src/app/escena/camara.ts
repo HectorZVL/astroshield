@@ -10,7 +10,7 @@ const suavizar = (u: number) => 1 - Math.pow(1 - u, 3);
 
 export class ControlCamara {
   readonly controles: OrbitControls;
-  private vuelo: { desde: THREE.Vector3; hasta: THREE.Vector3; inicio: number; duracion: number } | null = null;
+  private vuelo: { a: THREE.Vector3; q: THREE.Quaternion; d0: number; d1: number; inicio: number; duracion: number } | null = null;
   alInteractuar: () => void = () => {};
 
   constructor(
@@ -35,6 +35,13 @@ export class ControlCamara {
     });
   }
 
+  private iniciarVuelo(hasta: THREE.Vector3, duracion: number): void {
+    const a = this.camara.position.clone().normalize();
+    const b = hasta.clone().normalize();
+    const q = new THREE.Quaternion().setFromUnitVectors(a, b);
+    this.vuelo = { a, q, d0: this.camara.position.length(), d1: hasta.length(), inicio: performance.now(), duracion };
+  }
+
   /** Entrada: desde lejos hacia la vista inicial, sobre América. */
   entrada(): void {
     const final = aVector3({ lat: 18, lon: -80 }, 3.6);
@@ -43,7 +50,7 @@ export class ControlCamara {
       return;
     }
     this.camara.position.copy(aVector3({ lat: 40, lon: -170 }, 14));
-    this.vuelo = { desde: this.camara.position.clone(), hasta: final, inicio: performance.now(), duracion: 2800 };
+    this.iniciarVuelo(final, 2800);
   }
 
   /** Vuela hasta tener `p` en el centro de la vista, a la distancia `distancia`. */
@@ -54,7 +61,7 @@ export class ControlCamara {
       this.camara.position.copy(hasta);
       return;
     }
-    this.vuelo = { desde: this.camara.position.clone(), hasta, inicio: performance.now(), duracion: 1300 };
+    this.iniciarVuelo(hasta, 1300);
   }
 
   set rotacionAutomatica(v: boolean) {
@@ -68,14 +75,10 @@ export class ControlCamara {
     if (this.vuelo) {
       const u = Math.min(1, (performance.now() - this.vuelo.inicio) / this.vuelo.duracion);
       const e = suavizar(u);
-      // Se interpola la dirección por la esfera (cuaternión, funciona incluso entre
-      // puntos opuestos) y la distancia por separado: la cámara rodea el globo.
-      const d0 = this.vuelo.desde.length();
-      const d1 = this.vuelo.hasta.length();
-      const a = this.vuelo.desde.clone().normalize();
-      const q = new THREE.Quaternion().setFromUnitVectors(a, this.vuelo.hasta.clone().normalize());
-      const dir = a.applyQuaternion(new THREE.Quaternion().slerp(q, e));
-      this.camara.position.copy(dir.multiplyScalar(d0 + (d1 - d0) * e));
+      // Se interpola la dirección por la esfera (cuaternión) y la distancia por separado.
+      const qInterp = new THREE.Quaternion().slerp(this.vuelo.q, e);
+      const dir = this.vuelo.a.clone().applyQuaternion(qInterp);
+      this.camara.position.copy(dir.multiplyScalar(this.vuelo.d0 + (this.vuelo.d1 - this.vuelo.d0) * e));
       if (u >= 1) this.vuelo = null;
     }
     this.controles.update();
