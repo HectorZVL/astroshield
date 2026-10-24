@@ -115,8 +115,8 @@ export interface RegistroGeneracion {
   mejor: number;
   media: number;
   peor: number;
-  /** Media de la aptitud solo entre configuraciones válidas (NaN si no hay). */
-  mediaValidos: number;
+  /** Media de la aptitud solo entre configuraciones válidas (null si no hay). */
+  mediaValidos: number | null;
   validos: number;
   diversidad: number;
   mejorValida: boolean;

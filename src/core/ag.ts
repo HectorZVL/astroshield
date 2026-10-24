@@ -137,7 +137,7 @@ function registrar(generacion: number, poblacion: Individuo[], mejor: Individuo)
     mejor: mejor.eval.fitness,
     media: fits.reduce((a, b) => a + b, 0) / fits.length,
     peor: Math.min(...fits),
-    mediaValidos: validos.length ? validos.reduce((s, x) => s + x.eval.fitness, 0) / validos.length : NaN,
+    mediaValidos: validos.length ? validos.reduce((s, x) => s + x.eval.fitness, 0) / validos.length : null,
     validos: validos.length,
     diversidad: diversidad(poblacion),
     mejorValida: mejor.eval.valida,
@@ -174,7 +174,8 @@ export class MotorEvolutivo {
     readonly p: ParametrosAG,
     opciones: OpcionesEvolucion = {},
   ) {
-    if (p.poblacion < 2) throw new Error('La población debe tener al menos 2 individuos');
+    if (!Number.isFinite(p.poblacion) || p.poblacion < 2) throw new Error('La población debe tener al menos 2 individuos');
+    if (!Number.isFinite(p.elitismo) || p.elitismo < 0) throw new Error('El elitismo debe ser mayor o igual a 0');
     if (p.elitismo >= p.poblacion) throw new Error('El elitismo debe ser menor que la población');
     this.ctx = preparar(escenario);
     this.rng = crearRng(p.semilla);

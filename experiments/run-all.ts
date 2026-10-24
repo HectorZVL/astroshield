@@ -85,7 +85,7 @@ const ref = correr(ESC, { semilla: SEMILLA_REF }, 'P1 referencia');
     ['generacion,mejor,media,peor,media_validos,validos,diversidad,mejor_valida,mejor_cobertura,mejor_regiones_cubiertas']
       .concat(
         ref.historial.map((h) =>
-          [h.generacion, h.mejor, h.media, h.peor, h.mediaValidos, h.validos, h.diversidad, h.mejorValida, h.mejorCobertura, h.mejorRegionesCubiertas].join(','),
+          [h.generacion, h.mejor, h.media, h.peor, h.mediaValidos ?? '', h.validos, h.diversidad, h.mejorValida, h.mejorCobertura, h.mejorRegionesCubiertas].join(','),
         ),
       )
       .join('\n'),
