@@ -473,10 +473,6 @@ export class CapasEscena {
       r.halo.visible = !!r.halo.userData.pulsar;
       (r.halo.material as THREE.LineBasicMaterial).opacity = pulsa ? 0.25 + 0.6 * (0.5 + 0.5 * Math.sin(t * 4)) : 0.6;
     }
-    for (const l of this.rayosGrupo.children as THREE.Line[]) {
-      const m = l.material as THREE.LineDashedMaterial & { dashOffset?: number };
-      if (movimiento) (m as unknown as { dashOffset: number }).dashOffset = -t * 0.06;
-    }
 
     // Etiquetas: se ocultan las que quedan detrás del globo.
     const dirCam = camara.position.clone().normalize();

@@ -21,7 +21,7 @@ El enunciado pide declarar si se usaron herramientas de IA, para qué y qué ver
 
 | Verificación | Cómo | Resultado |
 |---|---|---|
-| Pruebas unitarias del modelo | 63 pruebas en Vitest: geometría, cobertura, restricciones, reglas de Deb, operadores, reproducibilidad, inviabilidad y chip de la UI | Todas pasan (`npm test`) |
+| Pruebas unitarias del modelo | 73 pruebas en Vitest: geometría, cobertura, restricciones, reglas de Deb, operadores, reproducibilidad, inviabilidad, chip de la UI, escenarios rápidos y correspondencia datos ↔ globo | Todas pasan (`npm test`) |
 | Números de la documentación | docs/03 se genera desde `results/`; docs/04 y la guía citan esos archivos | Cada cifra se puede rastrear a un archivo de `results/` |
 | Reproducibilidad | `tests/referencia.test.ts` vuelve a ejecutar la semilla 42 y compara con el archivo que carga la UI | Idéntico |
 | Validez de lo reportado | Al terminar los experimentos, cada una de las 318 ejecuciones se reevalúa desde cero | 0 inconsistencias |
@@ -40,6 +40,9 @@ Se documentan porque muestran que las verificaciones tuvieron efecto:
 5. **Causa del óptimo local.** La primera explicación de por qué 2 semillas no llegaban a F* era una hipótesis. Se escribió un diagnóstico (aporte de cada satélite) y se reemplazó por la causa medida: 3 satélites para duplicar Yucatán y California en lugar de 2, y ningún satélite sobrante.
 6. **Afirmación de "todos los colores en un archivo".** Una búsqueda encontró colores escritos fuera de `tema.ts` (luces y materiales). Se movieron al tema.
 7. **Dependencias con vulnerabilidades.** Las versiones iniciales de Vite y Vitest tenían avisos de `npm audit`. Se actualizaron a Vite 7 y Vitest 4, con 0 vulnerabilidades.
+8. **Semilla heredada entre escenarios rápidos.** En una revisión posterior se vio en el navegador que «Inicial» después de «Inviable» conservaba la semilla 1, así que «Evolucionar» ya no reproducía el run de referencia. Cada preset fija ahora la semilla de su ejecución documentada (`src/app/presets.ts`, probado en `tests/presets.test.ts`).
+9. **Correspondencia datos ↔ globo sin prueba automática.** Solo se había comprobado a ojo. Se agregó `tests/coordenadas.test.ts`, que compara la conversión de la escena con la del núcleo y con la textura del globo.
+10. **Detalles de la interfaz.** El texto «S1 invade satélite 2» para una separación insuficiente, una animación de los rayos que no tenía efecto, un error del Worker que dejaba la línea de tiempo bloqueada y la cámara que ignoraba un cambio de `prefers-reduced-motion` durante la sesión. Se corrigieron en commits `fix:` separados.
 
 ## Lo que el equipo debe revisar por su cuenta
 

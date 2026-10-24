@@ -5,6 +5,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   base: './',
   worker: { format: 'es' },
+  // PostCSS vacío y explícito: sin esto Vite busca un postcss.config.js en las
+  // carpetas superiores y puede aplicar la configuración de otro proyecto.
+  css: { postcss: {} },
   build: {
     // Three.js va en su propio archivo (cambia poco y el navegador lo guarda en caché);
     // el resto pesa por las costas 1:50 m y el historial del run de referencia.
