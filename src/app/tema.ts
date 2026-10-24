@@ -1,11 +1,6 @@
-// ÚNICO lugar donde se definen colores, tipografía y tiempos de animación.
-// La escena 3D y la gráfica los usan directamente y el CSS los recibe como
-// variables (--fondo, --acento, --fuente-ui, …): cambiar algo aquí cambia
-// toda la aplicación.
-//
-// Dirección visual «control de misión cálido»: carbón cálido en lugar de azul
-// marino, texto color hueso, un solo acento (sol) para lo que se puede tocar y
-// colores con UN solo significado cada uno (ver `semantica`).
+// Colores, tipografía y tiempos de animación en un solo lugar.
+// `paleta` y `semantica` conservan la escena 3D actual; `paletaInterfaz` y
+// `semanticaGrafica` recuperan los colores del HUD anteriores al rediseño.
 
 export const paleta = {
   // Superficies (de más profunda a más elevada)
@@ -53,6 +48,46 @@ export const paleta = {
   luzSol: '#fff1de',
   metalSatelite: '#d8d0c4',
   panelSatelite: '#2a3a4a',
+} as const;
+
+/** Colores del HUD tomados del tema previo al rediseño (commit 33651f8). */
+export const paletaInterfaz = {
+  fondo: '#04060f',
+  panel: '#0a1024',
+  panelAlto: '#0a1838',
+  borde: '#1e2a4a',
+  bordeFuerte: '#1d4b7a',
+  texto: '#e6f1ff',
+  textoSuave: '#cfe3ff',
+  textoTenue: '#8aa0bf',
+  acento: '#22d3ee',
+  acentoSuave: '#3aa0ff',
+  verde: '#34d399',
+  ambar: '#fbbf24',
+  rojo: '#fb3b5c',
+  violeta: '#8b5cf6',
+} as const;
+
+/** Series de la gráfica: mismas asociaciones de color que en el HUD azul. */
+export const semanticaGrafica = {
+  mejor: paletaInterfaz.acento,
+  media: paletaInterfaz.violeta,
+  peor: paletaInterfaz.rojo,
+  validos: paletaInterfaz.verde,
+  cota: paletaInterfaz.ambar,
+} as const;
+
+/** Estados del HUD histórico; los colores de las capas 3D siguen en `semantica`. */
+export const semanticaInterfaz = {
+  regionCubierta: paletaInterfaz.verde,
+  regionParcial: paletaInterfaz.ambar,
+  regionNoCubierta: paletaInterfaz.rojo,
+  desechos: paletaInterfaz.rojo,
+  objetoOcupado: paletaInterfaz.ambar,
+  inactivo: paletaInterfaz.textoTenue,
+  valida: paletaInterfaz.verde,
+  invalida: paletaInterfaz.rojo,
+  inviable: paletaInterfaz.ambar,
 } as const;
 
 /**
@@ -113,10 +148,12 @@ export const semantica = {
   inviable: paleta.miel,
 } as const;
 
-/** Copia paleta, tipografía y duraciones a variables CSS en :root. */
+/** Aplica al CSS solo los colores del HUD; los materiales 3D leen `paleta`. */
 export function aplicarTemaCSS(raiz: HTMLElement = document.documentElement): void {
   for (const [k, v] of Object.entries(paleta)) raiz.style.setProperty(`--${k}`, v);
+  for (const [k, v] of Object.entries(paletaInterfaz)) raiz.style.setProperty(`--${k}`, v);
   for (const [k, v] of Object.entries(semantica)) raiz.style.setProperty(`--s-${k}`, v);
+  for (const [k, v] of Object.entries(semanticaInterfaz)) raiz.style.setProperty(`--s-${k}`, v);
   raiz.style.setProperty('--fuente-ui', tipografia.ui);
   raiz.style.setProperty('--fuente-mono', tipografia.mono);
   for (const [k, v] of Object.entries(tipografia.tamanos)) raiz.style.setProperty(`--texto-${k}`, `${v}px`);
