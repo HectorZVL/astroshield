@@ -64,7 +64,8 @@ svg { flex: none; }
 
 /* ---- Barra superior ------------------------------------------------------- */
 .barra {
-  top: 16px; left: 16px; right: 16px;
+  /* 90 % del ancho anterior (100 % menos 32 px), centrado en escritorio. */
+  top: 16px; left: 0; right: 0; width: calc(90% - 28.8px); margin-inline: auto;
   display: flex; align-items: center; gap: 20px;
   padding: 10px 14px 10px 16px;
   min-height: 68px;
