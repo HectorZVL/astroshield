@@ -52,7 +52,8 @@ export function mannWhitney(a: number[], b: number[]): { u: number; z: number; p
 }
 
 /** Función de distribución normal estándar (aproximación de Abramowitz-Stegun 7.1.26). */
-function normalCDF(x: number): number {
+export function normalCDF(x: number): number {
+  if (x < 0) return 1 - normalCDF(-x);
   const t = 1 / (1 + 0.3275911 * (x / Math.SQRT2));
   const y =
     1 -
