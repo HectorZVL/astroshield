@@ -41,6 +41,7 @@ export function mannWhitney(a: number[], b: number[]): { u: number; z: number; p
   }
   const n1 = a.length;
   const n2 = b.length;
+  if (n1 === 0 || n2 === 0) return { u: 0, z: 0, p: 1 };
   const r1 = todos.reduce((s, x, i) => (x.g === 0 ? s + rangos[i] : s), 0);
   const u = r1 - (n1 * (n1 + 1)) / 2;
   const mu = (n1 * n2) / 2;
