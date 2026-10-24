@@ -444,8 +444,7 @@ export class CapasEscena {
       (s.relleno.material as THREE.MeshBasicMaterial).opacity = 0.025 + 0.02 * pulso;
       if (movimiento && !this.transicion.activa) {
         s.onda.visible = true;
-        s.onda.geometry.dispose();
-        s.onda.geometry = new THREE.BufferGeometry().setFromPoints(circuloGeodesico(s.destino, this.semiAngulo * ((fase + i * 0.125) % 1), 48, 1.0045));
+        s.onda.geometry.setFromPoints(circuloGeodesico(s.destino, this.semiAngulo * ((fase + i * 0.125) % 1), 48, 1.0045));
         (s.onda.material as THREE.LineBasicMaterial).opacity = 0.55 * (1 - ((fase + i * 0.125) % 1));
       } else s.onda.visible = false;
     }
