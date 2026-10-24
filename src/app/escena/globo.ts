@@ -32,7 +32,32 @@ function trazar(ctx: CanvasRenderingContext2D, poligonos: Anillo[][], W: number,
   ctx.beginPath();
   for (const pol of poligonos) {
     for (const anillo of pol) {
-      anillo.forEach(([lon, lat], i) => (i === 0 ? ctx.moveTo(x(lon), y(lat)) : ctx.lineTo(x(lon), y(lat))));
+      if (!anillo.length) continue;
+      anillo.forEach(([lon, lat], i) => {
+        if (i === 0) {
+          ctx.moveTo(x(lon), y(lat));
+          return;
+        }
+        const [prevLon, prevLat] = anillo[i - 1];
+        const dLon = lon - prevLon;
+        if (dLon > 180) {
+          const denom = lon - 360 - prevLon;
+          const t = denom !== 0 ? (-180 - prevLon) / denom : 0;
+          const yMid = y(prevLat + t * (lat - prevLat));
+          ctx.lineTo(0, yMid);
+          ctx.moveTo(W, yMid);
+          ctx.lineTo(x(lon), y(lat));
+        } else if (dLon < -180) {
+          const denom = lon + 360 - prevLon;
+          const t = denom !== 0 ? (180 - prevLon) / denom : 0;
+          const yMid = y(prevLat + t * (lat - prevLat));
+          ctx.lineTo(W, yMid);
+          ctx.moveTo(0, yMid);
+          ctx.lineTo(x(lon), y(lat));
+        } else {
+          ctx.lineTo(x(lon), y(lat));
+        }
+      });
       ctx.closePath();
     }
   }
