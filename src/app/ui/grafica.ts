@@ -89,7 +89,8 @@ export class GraficaEvolucion {
     if (ancho <= 0 || alto <= 0) return;
 
     // Escala vertical: de 0 al máximo entre 1.1 y lo observado.
-    const yMax = Math.max(1.1, ...this.historial.map((h) => h.mejor)) * 1.02;
+    const maxObservado = this.historial.reduce((max, h) => Math.max(max, h.mejor), 1.1);
+    const yMax = maxObservado * 1.02;
     const X = (g: number) => a.izq + (g / this.total) * ancho;
     const Y = (v: number) => a.arr + alto - (Math.max(0, v) / yMax) * alto;
 
