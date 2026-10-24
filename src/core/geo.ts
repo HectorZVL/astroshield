@@ -87,6 +87,19 @@ export function interpolar(a: LatLon, b: LatLon, t: number): LatLon {
   const cos = Math.max(-1, Math.min(1, va[0] * vb[0] + va[1] * vb[1] + va[2] * vb[2]));
   const om = Math.acos(cos);
   if (om < 1e-9) return { ...a };
+  if (Math.PI - om < 1e-7) {
+    const orto: Vec3 = Math.abs(va[2]) < 0.9 ? [-va[1], va[0], 0] : [0, -va[2], va[1]];
+    const n = Math.hypot(orto[0], orto[1], orto[2]);
+    const u: Vec3 = [orto[0] / n, orto[1] / n, orto[2] / n];
+    const ang = t * Math.PI;
+    const cosAng = Math.cos(ang);
+    const sinAng = Math.sin(ang);
+    return desdeVector([
+      va[0] * cosAng + u[0] * sinAng,
+      va[1] * cosAng + u[1] * sinAng,
+      va[2] * cosAng + u[2] * sinAng,
+    ]);
+  }
   const s = Math.sin(om);
   const ka = Math.sin((1 - t) * om) / s;
   const kb = Math.sin(t * om) / s;

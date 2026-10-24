@@ -74,6 +74,19 @@ describe('geometría esférica', () => {
     expect(distancia(interpolar(a, b, 0.5), { lat: 0, lon: 45 })).toBeLessThan(1e-9);
   });
 
+  it('interpolar funciona correctamente entre puntos antípodas sin producir NaN', () => {
+    const a = { lat: 0, lon: 0 };
+    const b = { lat: 0, lon: 180 };
+    const p0 = interpolar(a, b, 0);
+    const p1 = interpolar(a, b, 1);
+    const pMedio = interpolar(a, b, 0.5);
+    expect(Number.isFinite(pMedio.lat)).toBe(true);
+    expect(Number.isFinite(pMedio.lon)).toBe(true);
+    expect(distancia(p0, a)).toBeLessThan(1e-6);
+    expect(distancia(p1, b)).toBeLessThan(1e-6);
+    expect(distancia(pMedio, a)).toBeCloseTo(90, 6);
+  });
+
   it('los puntos aleatorios son uniformes en la esfera (no se amontonan en polos)', () => {
     const rng = crearRng(11);
     let hemisferioNorte = 0;
