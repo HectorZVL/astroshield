@@ -4,7 +4,7 @@
 // - fracción del espacio libre (malla uniforme de puntos),
 // - un "testigo": 8 posiciones válidas encontradas con un método voraz.
 // Si hay testigo, el escenario es factible demostrado. Si no, es posiblemente inviable.
-import { evaluar, preparar } from './evaluacion';
+import { evaluar, preparar, violaciones } from './evaluacion';
 import { distancia, mallaFibonacci } from './geo';
 import type { Configuracion, Escenario } from './tipos';
 
@@ -25,7 +25,7 @@ export function analizarFactibilidad(escenario: Escenario, puntos = 20000): Fact
   const malla = mallaFibonacci(puntos);
 
   // Un punto es libre si un satélite colocado ahí no viola ninguna zona.
-  const libres = malla.filter((p) => evaluar([p], ctx).valida);
+  const libres = malla.filter((p) => violaciones([p], ctx).length === 0);
 
   // Voraz: recorre los puntos libres y toma cada uno que respete la separación.
   const testigo: Configuracion = [];
