@@ -1,22 +1,23 @@
 // Capas de la escena construidas a partir de los DATOS REALES del modelo:
 // cada posición, radio y estado sale del escenario y de la evaluación del núcleo.
-// Las animaciones (pulsos, partículas, estelas, transiciones) son decorativas:
-// nunca cambian una posición final ni un dato; al terminar una transición,
-// cada satélite queda exactamente en la coordenada de la configuración.
+// Las animaciones (transiciones, ondas, partículas) son decorativas y solo
+// ocurren cuando algo cambia: nunca cambian una posición final ni un dato; al
+// terminar una transición, cada satélite queda exactamente en la coordenada
+// de la configuración.
 import * as THREE from 'three';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { emparejar } from '../../core/ag';
 import { destino, interpolar, kmAGrados } from '../../core/geo';
 import { crearRng } from '../../core/rng';
 import type { Configuracion, EstadoRegion, Escenario, Evaluacion, LatLon, ZonaProhibida } from '../../core/tipos';
-import { conAlfa, paleta, semantica, tecnicos } from '../tema';
+import { conAlfa, duraciones, paleta, semantica, tecnicos } from '../tema';
 import { aVector3, circuloGeodesico, RADIO_SATELITES } from './coordenadas';
 
 const colorEstado: Record<EstadoRegion, string> = {
   cubierta: semantica.regionCubierta,
   parcial: semantica.regionParcial,
   'no cubierta': semantica.regionNoCubierta,
-  inactiva: paleta.textoTenue,
+  inactiva: semantica.inactivo,
 };
 
 /** Disco geodésico triangulado (anillos concéntricos) con atributos para shaders. */
@@ -50,26 +51,6 @@ function discoGeodesico(centro: LatLon, radioGrados: number, radio: number, anil
   return g;
 }
 
-const PUNTOS_ONDA = 48;
-
-function crearGeometriaOnda(): THREE.BufferGeometry {
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array((PUNTOS_ONDA + 1) * 3), 3));
-  return g;
-}
-
-function actualizarPuntosOnda(geo: THREE.BufferGeometry, centro: LatLon, radioGrados: number, radio = 1.0045): void {
-  const attr = geo.getAttribute('position') as THREE.BufferAttribute;
-  const arr = attr.array as Float32Array;
-  for (let k = 0; k <= PUNTOS_ONDA; k++) {
-    const p = aVector3(destino(centro, (360 * k) / PUNTOS_ONDA, radioGrados), radio);
-    arr[k * 3] = p.x;
-    arr[k * 3 + 1] = p.y;
-    arr[k * 3 + 2] = p.z;
-  }
-  attr.needsUpdate = true;
-}
-
 const linea = (pts: THREE.Vector3[], color: string, opacidad = 1, discontinua = false) => {
   const g = new THREE.BufferGeometry().setFromPoints(pts);
   const m = discontinua
@@ -88,7 +69,7 @@ function etiqueta(texto: string, clase: string, color: string): CSS2DObject {
   return new CSS2DObject(div);
 }
 
-// ---- Franjas de peligro (zonas de desechos) ---------------------------------
+// ---- Tramado de peligro (zonas de desechos), estático -----------------------
 const VERT_FRANJAS = /* glsl */ `
   attribute float aRadial;
   attribute float aAng;
@@ -101,15 +82,14 @@ const VERT_FRANJAS = /* glsl */ `
   }`;
 const FRAG_FRANJAS = /* glsl */ `
   uniform vec3 uColor;
-  uniform float uTiempo;
   uniform float uOpacidad;
   varying float vRadial;
   varying float vAng;
   void main() {
-    // Franjas diagonales que giran lentamente alrededor del centro de la zona.
-    float franja = step(0.5, fract(vAng * 36.0 + vRadial * 4.0 - uTiempo * 0.25));
-    float borde = smoothstep(0.86, 1.0, vRadial);
-    float a = (0.08 + 0.22 * franja) * (0.55 + 0.45 * vRadial) + borde * 0.55;
+    // Franjas diagonales suaves y un borde más marcado.
+    float franja = smoothstep(0.42, 0.5, fract(vAng * 36.0 + vRadial * 4.0)) * (1.0 - smoothstep(0.92, 1.0, fract(vAng * 36.0 + vRadial * 4.0)));
+    float borde = smoothstep(0.88, 1.0, vRadial);
+    float a = (0.1 + 0.2 * franja) * (0.6 + 0.4 * vRadial) + borde * 0.45;
     gl_FragColor = vec4(uColor, a * uOpacidad);
   }`;
 
@@ -117,11 +97,20 @@ interface ElementoAnimado {
   actualizar(t: number, dt: number, movimiento: boolean): void;
 }
 
+/** Onda que se expande una sola vez (cuando algo cambia). */
+interface Onda {
+  linea: THREE.LineLoop;
+  centro: LatLon;
+  radioMax: number;
+  inicio: number;
+  duracion: number;
+  opacidad: number;
+}
+
 interface SateliteVisual {
   grupo: THREE.Group;
   etiqueta: CSS2DObject;
   anillo: THREE.LineLoop;
-  onda: THREE.LineLoop;
   relleno: THREE.Mesh;
   cono: THREE.Mesh;
   estela: THREE.Line;
@@ -132,10 +121,10 @@ interface SateliteVisual {
   actual: LatLon;
 }
 
-function modeloSatelite(color: string, escala = 1): THREE.Group {
+function modeloSatelite(luz: string, escala = 1): THREE.Group {
   const g = new THREE.Group();
-  const metal = new THREE.MeshStandardMaterial({ color: paleta.metalSatelite, metalness: 0.8, roughness: 0.3, emissive: new THREE.Color(color), emissiveIntensity: 0.25 });
-  const panelMat = new THREE.MeshStandardMaterial({ color: paleta.panelSatelite, metalness: 0.4, roughness: 0.4, emissive: new THREE.Color(color), emissiveIntensity: 0.9 });
+  const metal = new THREE.MeshStandardMaterial({ color: paleta.metalSatelite, metalness: 0.25, roughness: 0.5, emissive: new THREE.Color(paleta.metalSatelite), emissiveIntensity: 0.18 });
+  const panelMat = new THREE.MeshStandardMaterial({ color: paleta.panelSatelite, metalness: 0.3, roughness: 0.45, emissive: new THREE.Color(luz), emissiveIntensity: 0.12 });
   const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.026), metal);
   const brazo = new THREE.Mesh(new THREE.CylinderGeometry(0.0012, 0.0012, 0.1, 6), metal);
   brazo.rotation.z = Math.PI / 2;
@@ -148,12 +137,12 @@ function modeloSatelite(color: string, escala = 1): THREE.Group {
   const antena = new THREE.Mesh(new THREE.ConeGeometry(0.008, 0.01, 16, 1, true), metal);
   antena.rotation.x = -Math.PI / 2;
   antena.position.z = 0.018;
-  const luz = new THREE.Mesh(new THREE.SphereGeometry(0.004, 8, 8), new THREE.MeshBasicMaterial({ color }));
-  luz.position.z = -0.016;
-  // Halo luminoso para que el satélite se distinga a cualquier distancia.
-  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: texturaHalo(), color, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending }));
-  halo.scale.setScalar(0.075);
-  g.add(cuerpo, brazo, p1, p2, antena, luz, halo);
+  const baliza = new THREE.Mesh(new THREE.SphereGeometry(0.005, 10, 10), new THREE.MeshBasicMaterial({ color: luz }));
+  baliza.position.z = -0.016;
+  // Halo cálido y discreto para distinguir el satélite a cualquier distancia.
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: texturaHalo(), color: luz, transparent: true, opacity: 0.55, depthWrite: false }));
+  halo.scale.setScalar(0.055);
+  g.add(cuerpo, brazo, p1, p2, antena, baliza, halo);
   g.scale.setScalar(1.7 * escala);
   return g;
 }
@@ -167,7 +156,7 @@ function texturaHalo(): THREE.Texture {
   const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
   // Máscara blanca: el color real lo pone el SpriteMaterial (tema).
   g.addColorStop(0, conAlfa(tecnicos.blanco, 1));
-  g.addColorStop(0.25, conAlfa(tecnicos.blanco, 0.45));
+  g.addColorStop(0.3, conAlfa(tecnicos.blanco, 0.35));
   g.addColorStop(1, conAlfa(tecnicos.blanco, 0));
   x.fillStyle = g;
   x.fillRect(0, 0, 64, 64);
@@ -186,18 +175,21 @@ export class CapasEscena {
   private satGrupo = new THREE.Group();
   private fantasmaGrupo = new THREE.Group();
   private rayosGrupo = new THREE.Group();
+  private ondasGrupo = new THREE.Group();
   private animados: ElementoAnimado[] = [];
+  private ondas: Onda[] = [];
   private sats: SateliteVisual[] = [];
-  private regionesVisual = new Map<string, { relleno: THREE.Mesh; borde: THREE.LineLoop; halo: THREE.LineLoop; punto: THREE.Mesh; etiqueta: CSS2DObject }>();
-  private transicion = { inicio: 0, duracion: 900, activa: false };
+  private regionesVisual = new Map<string, { relleno: THREE.Mesh; borde: THREE.LineLoop; halo: THREE.Line; punto: THREE.Mesh; etiqueta: CSS2DObject; centro: LatLon; rho: number; estado?: EstadoRegion }>();
+  private transicion = { inicio: 0, duracion: duraciones.transicion, activa: false };
   private semiAngulo = 20;
   private tiempo = 0;
+  private movimiento = true;
   /** Objetos sobre los que se puede hacer clic (regiones y satélites). */
   readonly clicables: THREE.Object3D[] = [];
   private etiquetasSat = true;
 
   constructor() {
-    this.raiz.add(this.escenarioGrupo, this.rayosGrupo, this.fantasmaGrupo, this.satGrupo);
+    this.raiz.add(this.escenarioGrupo, this.rayosGrupo, this.fantasmaGrupo, this.satGrupo, this.ondasGrupo);
   }
 
   // ---------------------------------------------------------------------------
@@ -212,26 +204,27 @@ export class CapasEscena {
 
     for (const r of esc.regiones) {
       const rho = kmAGrados(r.radioKm, esc.modelo.radioTierraKm);
-      const color = r.activa ? semantica.regionNoCubierta : paleta.textoTenue;
+      const color = r.activa ? semantica.regionNoCubierta : semantica.inactivo;
       const relleno = new THREE.Mesh(
         discoGeodesico(r, rho, 1.0025, 4, 48),
-        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.45, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.6, depthWrite: false }),
       );
       const borde = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(circuloGeodesico(r, rho, 64, 1.003)), new THREE.LineBasicMaterial({ color, transparent: true }));
-      const halo = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(circuloGeodesico(r, rho * 1.9, 64, 1.003)), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.5 }));
-      const punto = new THREE.Mesh(new THREE.SphereGeometry(0.009, 12, 12), new THREE.MeshBasicMaterial({ color }));
+      // Anillo exterior discontinuo: marca las regiones que NO están cubiertas (fijo, sin parpadeo).
+      const halo = linea(circuloGeodesico(r, rho * 2.2, 64, 1.003), color, 0.75, true);
+      const punto = new THREE.Mesh(new THREE.SphereGeometry(0.008, 12, 12), new THREE.MeshBasicMaterial({ color }));
       punto.position.copy(aVector3(r, 1.006));
       // Esfera invisible más grande para que el clic sea cómodo.
       const hit = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 8), new THREE.MeshBasicMaterial({ visible: false }));
       hit.position.copy(aVector3(r, 1.01));
       hit.userData = { tipo: 'region', id: r.id };
       this.clicables.push(hit);
-      const pin = linea([aVector3(r, 1.003), aVector3(r, 1.075)], color, 0.6);
+      const pin = linea([aVector3(r, 1.003), aVector3(r, 1.07)], color, 0.5);
       const et = etiqueta(r.nombre, 'region', color);
-      et.position.copy(aVector3(r, 1.085));
+      et.position.copy(aVector3(r, 1.08));
       et.userData.normal = aVector3(r, 1);
       this.escenarioGrupo.add(relleno, borde, halo, punto, hit, pin, et);
-      this.regionesVisual.set(r.id, { relleno, borde, halo, punto, etiqueta: et });
+      this.regionesVisual.set(r.id, { relleno, borde, halo, punto, etiqueta: et, centro: { lat: r.lat, lon: r.lon }, rho });
     }
 
     for (const z of esc.desechos) this.dibujarDesechos(z);
@@ -239,77 +232,75 @@ export class CapasEscena {
   }
 
   private dibujarDesechos(z: ZonaProhibida): void {
-    const color = z.activa ? semantica.desechos : paleta.textoTenue;
+    const color = z.activa ? semantica.desechos : semantica.inactivo;
     const mat = new THREE.ShaderMaterial({
       vertexShader: VERT_FRANJAS,
       fragmentShader: FRAG_FRANJAS,
-      uniforms: { uColor: { value: new THREE.Color(color) }, uTiempo: { value: 0 }, uOpacidad: { value: z.activa ? 1 : 0.35 } },
+      uniforms: { uColor: { value: new THREE.Color(color) }, uOpacidad: { value: z.activa ? 1 : 0.4 } },
       transparent: true,
       depthWrite: false,
       side: THREE.DoubleSide,
+      // Una sola pasada: los discos transparentes de doble cara se dibujaban dos veces.
+      forceSinglePass: true,
     });
     const disco = new THREE.Mesh(discoGeodesico(z, z.radioGrados, 1.004, 10, 96), mat);
-    const borde = linea(circuloGeodesico(z, z.radioGrados, 128, 1.005), color, z.activa ? 0.95 : 0.4);
+    const borde = linea(circuloGeodesico(z, z.radioGrados, 128, 1.005), color, z.activa ? 0.9 : 0.4);
     const et = etiqueta(`${z.nombre}${z.activa ? '' : ' (inactiva)'}`, 'zona', color);
     et.position.copy(aVector3(destino(z, 180, z.radioGrados), 1.03));
     et.userData.normal = aVector3(z, 1);
     this.escenarioGrupo.add(disco, borde, et);
 
-    // Partículas de desechos orbitando sobre la zona. El grupo se orienta con +Y
-    // hacia el centro de la zona; girarlo en Y hace orbitar las partículas alrededor del eje.
+    // Desechos flotando sobre la zona (decorativo). El grupo se orienta con +Y
+    // hacia el centro de la zona; girarlo en Y los hace derivar lentamente.
     const rng = crearRng(Math.round((z.lat + 91) * 1000 + z.lon));
-    const n = Math.round(40 + z.radioGrados * 5);
+    const n = Math.round(24 + z.radioGrados * 3);
     const pos = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
       const d = (Math.sqrt(rng.siguiente()) * z.radioGrados * Math.PI) / 180;
       const fi = rng.rango(0, Math.PI * 2);
-      const h = rng.rango(1.03, 1.2);
+      const h = rng.rango(1.03, 1.18);
       pos.set([h * Math.sin(d) * Math.cos(fi), h * Math.cos(d), h * Math.sin(d) * Math.sin(fi)], i * 3);
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const particulas = new THREE.Points(g, new THREE.PointsMaterial({ color, size: 0.012, transparent: true, opacity: z.activa ? 0.9 : 0.25, depthWrite: false, blending: THREE.AdditiveBlending }));
+    const particulas = new THREE.Points(g, new THREE.PointsMaterial({ color, size: 0.01, transparent: true, opacity: z.activa ? 0.7 : 0.2, depthWrite: false }));
     const eje = new THREE.Group();
     eje.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), aVector3(z, 1));
     const giro = new THREE.Group();
     giro.add(particulas);
     eje.add(giro);
     this.escenarioGrupo.add(eje);
-
     this.animados.push({
-      actualizar: (t, dt, mov) => {
-        mat.uniforms.uTiempo.value = mov ? t : 0;
-        if (mov) giro.rotation.y += dt * 0.12;
+      actualizar: (_t, dt, mov) => {
+        if (mov) giro.rotation.y += dt * 0.04;
       },
     });
   }
 
   private dibujarOcupada(z: ZonaProhibida): void {
-    const color = z.activa ? semantica.objetoOcupado : paleta.textoTenue;
+    const color = z.activa ? semantica.objetoOcupado : semantica.inactivo;
     const op = z.activa ? 1 : 0.35;
-    const relleno = new THREE.Mesh(discoGeodesico(z, z.radioGrados, 1.004, 4, 64), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.12 * op, depthWrite: false }));
+    const relleno = new THREE.Mesh(discoGeodesico(z, z.radioGrados, 1.004, 4, 64), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.16 * op, depthWrite: false }));
     const borde = linea(circuloGeodesico(z, z.radioGrados, 96, 1.005), color, 0.9 * op, true);
     const objeto = new THREE.Mesh(
-      new THREE.OctahedronGeometry(0.022),
-      new THREE.MeshStandardMaterial({ color, emissive: new THREE.Color(color), emissiveIntensity: 0.8 * op, metalness: 0.6, roughness: 0.35, transparent: true, opacity: op }),
+      new THREE.OctahedronGeometry(0.02),
+      new THREE.MeshStandardMaterial({ color, emissive: new THREE.Color(color), emissiveIntensity: 0.35 * op, metalness: 0.4, roughness: 0.4, transparent: true, opacity: op }),
     );
     objeto.position.copy(aVector3(z, RADIO_SATELITES));
     // Anillo de exclusión a la altura de los satélites: mismo radio angular que la zona.
     const radioAnillo = RADIO_SATELITES * Math.sin((z.radioGrados * Math.PI) / 180);
-    const anillo = new THREE.Mesh(new THREE.TorusGeometry(radioAnillo, 0.0025, 8, 96), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.85 * op }));
+    const anillo = new THREE.Mesh(new THREE.TorusGeometry(radioAnillo, 0.002, 8, 96), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.75 * op }));
     const soporte = new THREE.Group();
     orientar(soporte, z, RADIO_SATELITES * Math.cos((z.radioGrados * Math.PI) / 180));
     soporte.add(anillo);
-    const vertical = linea([aVector3(z, 1.005), aVector3(z, RADIO_SATELITES)], color, 0.45 * op, true);
+    const vertical = linea([aVector3(z, 1.005), aVector3(z, RADIO_SATELITES)], color, 0.4 * op, true);
     const et = etiqueta(`${z.nombre}${z.activa ? '' : ' (inactivo)'}`, 'zona', color);
     et.position.copy(aVector3(z, RADIO_SATELITES + 0.05));
     et.userData.normal = aVector3(z, 1);
     this.escenarioGrupo.add(relleno, borde, objeto, soporte, vertical, et);
     this.animados.push({
       actualizar: (_t, dt, mov) => {
-        if (!mov) return;
-        objeto.rotation.y += dt * 0.8;
-        anillo.rotation.z += dt * 0.4;
+        if (mov) objeto.rotation.y += dt * 0.3;
       },
     });
   }
@@ -324,7 +315,8 @@ export class CapasEscena {
     this.limpiar(this.satGrupo);
     for (let i = this.clicables.length - 1; i >= 0; i--) if (this.clicables[i].userData.tipo === 'satelite') this.clicables.splice(i, 1);
     this.sats = config.map((p, i) => this.crearSatelite(p, i, pareja && opciones.animar ? previos[pareja[i]] : p));
-    this.transicion = { inicio: performance.now(), duracion: 900, activa: !!pareja && opciones.animar };
+    const seMueve = !!pareja && opciones.animar && this.sats.some((s) => s.desde.lat !== s.destino.lat || s.desde.lon !== s.destino.lon);
+    this.transicion = { inicio: performance.now(), duracion: duraciones.transicion, activa: seMueve };
     if (!this.transicion.activa) this.sats.forEach((s) => this.colocarSatelite(s, s.destino));
     this.actualizarRegiones(ev);
     this.dibujarRayos(config, ev);
@@ -332,7 +324,7 @@ export class CapasEscena {
   }
 
   private crearSatelite(p: LatLon, i: number, desde: LatLon): SateliteVisual {
-    const grupo = modeloSatelite(semantica.satelite);
+    const grupo = modeloSatelite(semantica.luzSatelite);
     const hit = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 8), new THREE.MeshBasicMaterial({ visible: false }));
     hit.userData = { tipo: 'satelite', indice: i };
     grupo.add(hit);
@@ -340,13 +332,12 @@ export class CapasEscena {
     const et = etiqueta(`S${i + 1}`, 'sat', semantica.satelite);
     et.position.set(0, 0, -0.045);
     grupo.add(et);
-    const anillo = new THREE.LineLoop(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.9 }));
-    const onda = new THREE.LineLoop(crearGeometriaOnda(), new THREE.LineBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.5 }));
-    const relleno = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.04, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
-    const cono = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.018, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
-    const estela = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: semantica.satelite, transparent: true, opacity: 0 }));
-    this.satGrupo.add(grupo, anillo, onda, relleno, cono, estela);
-    return { grupo, etiqueta: et, anillo, onda, relleno, cono, estela, historialEstela: [], destino: { ...p }, desde: { ...desde }, actual: { ...desde } };
+    const anillo = new THREE.LineLoop(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.6 }));
+    const relleno = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.07, depthWrite: false, side: THREE.DoubleSide, forceSinglePass: true }));
+    const cono = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.025, depthWrite: false, side: THREE.DoubleSide, forceSinglePass: true }));
+    const estela = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: paleta.acentoSuave, transparent: true, opacity: 0 }));
+    this.satGrupo.add(grupo, anillo, relleno, cono, estela);
+    return { grupo, etiqueta: et, anillo, relleno, cono, estela, historialEstela: [], destino: { ...p }, desde: { ...desde }, actual: { ...desde } };
   }
 
   /** Dibuja el satélite y su huella en la posición `p` (puede ser intermedia en una transición). */
@@ -371,14 +362,18 @@ export class CapasEscena {
     for (const r of ev.regiones) {
       const v = this.regionesVisual.get(r.id);
       if (!v) continue;
-      const c = new THREE.Color(colorEstado[r.estado]);
+      const hex = colorEstado[r.estado];
+      const c = new THREE.Color(hex);
       (v.relleno.material as THREE.MeshBasicMaterial).color = c;
       (v.borde.material as THREE.LineBasicMaterial).color = c;
-      (v.halo.material as THREE.LineBasicMaterial).color = c;
+      (v.halo.material as THREE.LineDashedMaterial).color = c;
       (v.punto.material as THREE.MeshBasicMaterial).color = c;
-      v.halo.userData.pulsar = r.estado !== 'cubierta' && r.estado !== 'inactiva';
-      v.etiqueta.element.style.color = colorEstado[r.estado];
+      v.halo.visible = r.estado === 'parcial' || r.estado === 'no cubierta';
+      v.etiqueta.element.style.color = hex;
       v.etiqueta.element.textContent = `${r.nombre} · ${r.estado === 'inactiva' ? 'inactiva' : `${Math.round(r.fraccion * 100)} %`}`;
+      // Si la región cambió de estado, una onda de su nuevo color lo señala una vez.
+      if (v.estado !== undefined && v.estado !== r.estado && r.estado !== 'inactiva') this.lanzarOnda(v.centro, v.rho * 6, hex, 0.9);
+      v.estado = r.estado;
     }
   }
 
@@ -388,10 +383,10 @@ export class CapasEscena {
       if (r.estado === 'inactiva') continue;
       const centro = this.regionesVisual.get(r.id)?.punto.position;
       if (!centro) continue;
-      // Verde: satélites que cubren la región completa. Ámbar: el más cercano si solo es parcial.
+      // Verde agua: satélites que cubren la región completa. Miel: el más cercano si solo es parcial.
       const fuentes = r.satelitesCompletos.length ? r.satelitesCompletos : r.estado === 'parcial' ? [r.sateliteMasCercano] : [];
       for (const i of fuentes) {
-        const l = linea([aVector3(config[i], RADIO_SATELITES - 0.02), centro.clone()], r.satelitesCompletos.length ? semantica.rayo : semantica.regionParcial, 0.85, true);
+        const l = linea([aVector3(config[i], RADIO_SATELITES - 0.02), centro.clone()], r.satelitesCompletos.length ? semantica.rayo : semantica.regionParcial, 0.75, true);
         l.userData = { satelite: i };
         this.rayosGrupo.add(l);
       }
@@ -413,11 +408,19 @@ export class CapasEscena {
         }
       });
       orientar(m, q, RADIO_SATELITES);
-      const huella = linea(circuloGeodesico(q, this.semiAngulo, 96, 1.004), semantica.sateliteInicial, 0.35, true);
+      const huella = linea(circuloGeodesico(q, this.semiAngulo, 96, 1.004), semantica.sateliteInicial, 0.4, true);
       const arco: THREE.Vector3[] = [];
       for (let k = 0; k <= 48; k++) arco.push(aVector3(interpolar(q, p, k / 48), RADIO_SATELITES));
       this.fantasmaGrupo.add(m, huella, linea(arco, semantica.sateliteInicial, 0.8, true));
     });
+  }
+
+  /** Onda decorativa que crece desde `centro` hasta `radioMax` grados y se desvanece. */
+  private lanzarOnda(centro: LatLon, radioMax: number, color: string, opacidad: number): void {
+    if (!this.movimiento) return;
+    const l = new THREE.LineLoop(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0, depthWrite: false }));
+    this.ondasGrupo.add(l);
+    this.ondas.push({ linea: l, centro, radioMax, inicio: performance.now(), duracion: duraciones.transicion * 1.2, opacidad });
   }
 
   ponerEtiquetasSatelites(visibles: boolean): void {
@@ -428,6 +431,7 @@ export class CapasEscena {
   // Animación (decorativa).
   // ---------------------------------------------------------------------------
   actualizar(dt: number, movimiento: boolean, camara: THREE.Camera): void {
+    this.movimiento = movimiento;
     this.tiempo += dt;
     const t = this.tiempo;
     for (const a of this.animados) a.actualizar(t, dt, movimiento);
@@ -445,10 +449,14 @@ export class CapasEscena {
           if (s.historialEstela.length > 40) s.historialEstela.shift();
           s.estela.geometry.dispose();
           s.estela.geometry = new THREE.BufferGeometry().setFromPoints(s.historialEstela);
-          (s.estela.material as THREE.LineBasicMaterial).opacity = 0.75;
+          (s.estela.material as THREE.LineBasicMaterial).opacity = 0.55;
         }
       }
-      if (u >= 1) this.transicion.activa = false;
+      if (u >= 1) {
+        this.transicion.activa = false;
+        // Al llegar, cada huella «se asienta» con una onda suave.
+        for (const s of this.sats) this.lanzarOnda(s.destino, this.semiAngulo, semantica.huella, 0.45);
+      }
     } else {
       for (const s of this.sats) {
         const m = s.estela.material as THREE.LineBasicMaterial;
@@ -456,22 +464,22 @@ export class CapasEscena {
       }
     }
 
-    // Pulso de las huellas y onda que se expande desde el centro.
-    const fase = (t * 0.45) % 1;
-    for (const [i, s] of this.sats.entries()) {
-      const pulso = movimiento ? 0.65 + 0.35 * Math.sin(t * 2.4 + i) : 0.85;
-      (s.anillo.material as THREE.LineBasicMaterial).opacity = pulso;
-      (s.relleno.material as THREE.MeshBasicMaterial).opacity = 0.025 + 0.02 * pulso;
-      if (movimiento && !this.transicion.activa) {
-        s.onda.visible = true;
-        actualizarPuntosOnda(s.onda.geometry, s.destino, this.semiAngulo * ((fase + i * 0.125) % 1));
-        (s.onda.material as THREE.LineBasicMaterial).opacity = 0.55 * (1 - ((fase + i * 0.125) % 1));
-      } else s.onda.visible = false;
-    }
-    for (const r of this.regionesVisual.values()) {
-      const pulsa = r.halo.userData.pulsar && movimiento;
-      r.halo.visible = !!r.halo.userData.pulsar;
-      (r.halo.material as THREE.LineBasicMaterial).opacity = pulsa ? 0.25 + 0.6 * (0.5 + 0.5 * Math.sin(t * 4)) : 0.6;
+    // Ondas de un solo uso.
+    const ahora = performance.now();
+    for (let i = this.ondas.length - 1; i >= 0; i--) {
+      const o = this.ondas[i];
+      const u = (ahora - o.inicio) / o.duracion;
+      if (u >= 1 || !movimiento) {
+        this.ondasGrupo.remove(o.linea);
+        o.linea.geometry.dispose();
+        (o.linea.material as THREE.Material).dispose();
+        this.ondas.splice(i, 1);
+        continue;
+      }
+      const e = 1 - Math.pow(1 - u, 3);
+      o.linea.geometry.dispose();
+      o.linea.geometry = new THREE.BufferGeometry().setFromPoints(circuloGeodesico(o.centro, Math.max(0.05, o.radioMax * e), 64, 1.0045));
+      (o.linea.material as THREE.LineBasicMaterial).opacity = o.opacidad * (1 - u);
     }
 
     // Etiquetas: se ocultan las que quedan detrás del globo.

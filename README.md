@@ -8,6 +8,16 @@ Algoritmo evolutivo que diseña una constelación de **8 satélites** para obser
 
 Con la semilla de referencia (42), la mejor configuración es **VÁLIDA**, cubre las **6/6 regiones al 100 %** y alcanza **exactamente la cota teórica F\* = 1.07692**, es decir, es óptima para el criterio definido. En 30 semillas: 30/30 válidas y satisfactorias, y 28/30 en la cota. Contra búsqueda aleatoria con el mismo presupuesto, el AG gana con p < 10⁻⁶. Detalle en [docs/03-pruebas.md](docs/03-pruebas.md).
 
+## Capturas
+
+![AstroShield: globo 3D con la constelación final, regiones y gráfica de evolución](docs/capturas/escritorio.png)
+
+| Comparar inicial contra final | Escenario inviable | Teléfono |
+|---|---|---|
+| ![Vista Comparar con los detalles del run abiertos](docs/capturas/comparar.png) | ![Preset Inviable después de evolucionar: chip Inviable y violación 11.01°](docs/capturas/inviable.png) | ![Vista en teléfono](docs/capturas/movil.png) |
+
+Las capturas muestran datos reales: el run de referencia (semilla 42) y el preset «Inviable» evolucionado en el navegador, que reproduce la prueba P6. Diseño, colores y su significado: [docs/05-visualizacion.md](docs/05-visualizacion.md#diseño-y-personalización).
+
 ## Requisitos
 
 - Node.js 20 o superior (probado con Node 25.8) y npm.
@@ -22,7 +32,7 @@ npm install
 | Orden | Qué hace |
 |---|---|
 | `npm run dev` | Abre la visualización 3D en http://localhost:5173 (carga `results/run-referencia.json`) |
-| `npm test` | Ejecuta las 73 pruebas automáticas (Vitest) |
+| `npm test` | Ejecuta las 76 pruebas automáticas (Vitest) |
 | `npm run experimentos` | Ejecuta **todos** los experimentos (~4 min): regenera `results/*.json`, `results/*.csv` y `docs/03-pruebas.md` |
 | `npm run evolucionar` | Ejecuta una evolución desde la terminal (ver opciones abajo) |
 | `npm run verificar` | Tipado + pruebas + experimentos: **todo con una sola orden** |
@@ -69,10 +79,11 @@ astroshield/
 │   │   ├── busquedaAleatoria.ts  Línea base de comparación
 │   │   └── estadistica.ts    Media, desviación, Mann-Whitney
 │   └── app/                  Visualización (Vite + Three.js)
-│       ├── tema.ts           TODOS los colores (personalización)
+│       ├── tema.ts           TODOS los colores, fuentes y tiempos de animación (personalización)
 │       ├── main.ts           Estado de la app y conexión de datos
 │       ├── worker.ts         El algoritmo en un Web Worker
 │       ├── estadoVista.ts    Qué chip de estado se muestra (probado)
+│       ├── presets.ts        Escenarios rápidos = ejecuciones documentadas (probado)
 │       ├── escena/           Globo, capas 3D, cámara, render
 │       └── ui/               HUD y gráfica de evolución
 ├── experiments/
