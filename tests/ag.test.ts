@@ -123,6 +123,7 @@ describe('algoritmo evolutivo', () => {
   it('valida los parámetros', () => {
     expect(() => evolucionar(esc, { poblacion: 1 })).toThrow();
     expect(() => evolucionar(esc, { poblacion: 4, elitismo: 4 })).toThrow();
+    expect(() => evolucionar(esc, { poblacion: 10, elitismo: -1 })).toThrow();
   });
 });
 
@@ -145,6 +146,7 @@ describe('escenario inviable', () => {
     expect(r.estado).toBe('INVIABLE');
     expect(r.final.eval.valida).toBe(false);
     expect(r.historial.every((h) => h.validos === 0)).toBe(true);
+    expect(r.historial.every((h) => h.mediaValidos === null)).toBe(true);
     // La violación de la mejor baja con la evolución (busca "lo menos malo").
     expect(r.final.eval.violacionTotal).toBeLessThan(r.historial[0].mejorViolacion);
   });
@@ -164,6 +166,7 @@ describe('línea base y estadística', () => {
     expect(a.evaluaciones).toBe(780);
     expect(a.curva).toHaveLength(10);
     expect(a.mejor.eval.fitness).toBe(b.mejor.eval.fitness);
+    expect(() => busquedaAleatoria(esc, 0, 1)).toThrow(/mayor o igual a 1/);
   });
 
   it('resumir calcula media, desviación muestral, mínimo, máximo y mediana', () => {
@@ -180,5 +183,11 @@ describe('línea base y estadística', () => {
     const b = Array.from({ length: 20 }, (_, i) => i * 0.1);
     expect(mannWhitney(a, b).p).toBeLessThan(0.001);
     expect(mannWhitney(a, a).p).toBeGreaterThan(0.9);
+  });
+
+  it('Mann-Whitney maneja muestras vacías devolviendo p=1 sin NaN', () => {
+    expect(mannWhitney([], [1, 2, 3])).toEqual({ u: 0, z: 0, p: 1 });
+    expect(mannWhitney([1, 2], [])).toEqual({ u: 0, z: 0, p: 1 });
+    expect(mannWhitney([], [])).toEqual({ u: 0, z: 0, p: 1 });
   });
 });
