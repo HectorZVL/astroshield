@@ -111,6 +111,9 @@ export function agregarZona(e: Escenario, tipo: TipoZona, zona: ZonaProhibida): 
 
 /** Multiplica el radio de todas las zonas de desechos (espacio reducido). */
 export function escalarDesechos(e: Escenario, factor: number): Escenario {
+  if (factor <= 0 || !Number.isFinite(factor)) {
+    throw new Error('El factor de escala debe ser un número finito mayor a 0');
+  }
   const c = clonarEscenario(e);
   for (const z of c.desechos) z.radioGrados *= factor;
   return c;
