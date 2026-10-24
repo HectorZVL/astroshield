@@ -45,7 +45,9 @@ if (uno('escalar')) esc = escalarDesechos(esc, Number(uno('escalar')));
 for (const id of args.get('apagar') ?? []) esc = activarZona(esc, id, false);
 for (const par of args.get('prioridad') ?? []) {
   const [id, nivel] = par.split('=');
-  esc = cambiarPrioridad(esc, id, nivel as Prioridad);
+  if (id && nivel && ['Alta', 'Media', 'Normal'].includes(nivel)) {
+    esc = cambiarPrioridad(esc, id, nivel as Prioridad);
+  }
 }
 
 const num = (k: string, d: number) => (uno(k) !== undefined ? Number(uno(k)) : d);
