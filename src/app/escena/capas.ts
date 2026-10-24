@@ -50,6 +50,26 @@ function discoGeodesico(centro: LatLon, radioGrados: number, radio: number, anil
   return g;
 }
 
+const PUNTOS_ONDA = 48;
+
+function crearGeometriaOnda(): THREE.BufferGeometry {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array((PUNTOS_ONDA + 1) * 3), 3));
+  return g;
+}
+
+function actualizarPuntosOnda(geo: THREE.BufferGeometry, centro: LatLon, radioGrados: number, radio = 1.0045): void {
+  const attr = geo.getAttribute('position') as THREE.BufferAttribute;
+  const arr = attr.array as Float32Array;
+  for (let k = 0; k <= PUNTOS_ONDA; k++) {
+    const p = aVector3(destino(centro, (360 * k) / PUNTOS_ONDA, radioGrados), radio);
+    arr[k * 3] = p.x;
+    arr[k * 3 + 1] = p.y;
+    arr[k * 3 + 2] = p.z;
+  }
+  attr.needsUpdate = true;
+}
+
 const linea = (pts: THREE.Vector3[], color: string, opacidad = 1, discontinua = false) => {
   const g = new THREE.BufferGeometry().setFromPoints(pts);
   const m = discontinua
@@ -321,7 +341,7 @@ export class CapasEscena {
     et.position.set(0, 0, -0.045);
     grupo.add(et);
     const anillo = new THREE.LineLoop(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.9 }));
-    const onda = new THREE.LineLoop(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.5 }));
+    const onda = new THREE.LineLoop(crearGeometriaOnda(), new THREE.LineBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.5 }));
     const relleno = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.04, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
     const cono = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: semantica.huella, transparent: true, opacity: 0.018, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
     const estela = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: semantica.satelite, transparent: true, opacity: 0 }));
@@ -444,7 +464,7 @@ export class CapasEscena {
       (s.relleno.material as THREE.MeshBasicMaterial).opacity = 0.025 + 0.02 * pulso;
       if (movimiento && !this.transicion.activa) {
         s.onda.visible = true;
-        s.onda.geometry.setFromPoints(circuloGeodesico(s.destino, this.semiAngulo * ((fase + i * 0.125) % 1), 48, 1.0045));
+        actualizarPuntosOnda(s.onda.geometry, s.destino, this.semiAngulo * ((fase + i * 0.125) % 1));
         (s.onda.material as THREE.LineBasicMaterial).opacity = 0.55 * (1 - ((fase + i * 0.125) % 1));
       } else s.onda.visible = false;
     }
