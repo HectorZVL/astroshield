@@ -21,6 +21,9 @@ export function busquedaAleatoria(
   semilla: number,
   bloque = 78,
 ): ResultadoAleatorio {
+  if (!Number.isFinite(evaluaciones) || evaluaciones < 1) {
+    throw new Error('El número de evaluaciones debe ser un entero mayor o igual a 1');
+  }
   const ctx = preparar(escenario);
   const rng = crearRng(semilla);
   const n = escenario.modelo.numSatelites;
