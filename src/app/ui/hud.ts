@@ -60,8 +60,12 @@ export function esqueleto(): string {
     </div>
   </aside>
   <section class="superficie dock" aria-label="Evolución de la aptitud">
-    <div class="cabecera">
+    <div class="dock-titulo">
       <h2>Evolución de la aptitud</h2>
+      <button class="boton icono" data-plegar aria-expanded="true" aria-controls="dock-contenido" aria-label="Plegar gráfica de evolución">${iconos.plegar}</button>
+    </div>
+    <div class="dock-contenido" id="dock-contenido">
+      <div class="cabecera">
       <div class="series" aria-hidden="true">
         <span><i style="background:${semanticaGrafica.mejor}"></i>Mejor</span>
         <span><i style="background:${semanticaGrafica.media}"></i>Media</span>
@@ -72,12 +76,13 @@ export function esqueleto(): string {
       <div class="segmentado" role="group" aria-label="Configuración mostrada" id="vista">
         <button data-vista="inicial">Inicial</button><button data-vista="final" class="activo">Final</button><button data-vista="ambas">Comparar</button>
       </div>
-    </div>
-    <div class="grafica" id="grafica"></div>
-    <div class="tiempo">
-      <button class="boton icono redondo" id="reproducir" aria-label="Reproducir generaciones">${iconos.reproducir}</button>
-      <input type="range" id="linea-tiempo" min="0" max="150" value="150" aria-label="Generación mostrada" />
-      <span class="cifra" id="etiqueta-gen"></span>
+      </div>
+      <div class="grafica" id="grafica"></div>
+      <div class="tiempo">
+        <button class="boton icono redondo" id="reproducir" aria-label="Reproducir generaciones">${iconos.reproducir}</button>
+        <input type="range" id="linea-tiempo" min="0" max="150" value="150" aria-label="Generación mostrada" />
+        <span class="cifra" id="etiqueta-gen"></span>
+      </div>
     </div>
   </section>
   <div class="superficie tarjeta oculto" id="tarjeta" role="dialog" aria-label="Detalle del satélite"></div>`;
