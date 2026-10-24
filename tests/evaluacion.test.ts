@@ -177,6 +177,16 @@ describe('restricciones', () => {
     cambiarPrioridad(esc, 'japon', 'Alta');
     expect(JSON.stringify(esc)).toBe(copia);
   });
+
+  it('una zona con radio > 180° invalida cualquier punto de la esfera (incluyendo antípodas)', () => {
+    const global = agregarZona(esc, 'desechos', {
+      id: 'global', nombre: 'Global', lat: 0, lon: 0, radioGrados: 200, activa: true,
+    });
+    const antipoda = [{ lat: 0, lon: 180 }];
+    const e = evaluarEn(antipoda, global);
+    expect(e.valida).toBe(false);
+    expect(e.violaciones.some((v) => v.contra === 'global' && v.magnitud === 20)).toBe(true);
+  });
 });
 
 describe('reglas de Deb y estados', () => {

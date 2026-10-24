@@ -84,13 +84,16 @@ export function preparar(escenario: Escenario): Contexto {
       cosCompleta: m.semiAnguloHuella > rho ? Math.cos((m.semiAnguloHuella - rho) * RAD) : 2,
     };
   });
-  const prepZona = (z: ZonaProhibida, tipo: ZonaPreparada['tipo']): ZonaPreparada => ({
-    id: z.id,
-    tipo,
-    centro: aVector(z),
-    radio: z.radioGrados,
-    cosRadio: Math.cos(z.radioGrados * RAD),
-  });
+  const prepZona = (z: ZonaProhibida, tipo: ZonaPreparada['tipo']): ZonaPreparada => {
+    const rClamp = Math.min(180, Math.max(0, z.radioGrados));
+    return {
+      id: z.id,
+      tipo,
+      centro: aVector(z),
+      radio: z.radioGrados,
+      cosRadio: rClamp >= 180 ? -1 : Math.cos(rClamp * RAD),
+    };
+  };
   const zonas = [
     ...escenario.desechos.filter((z) => z.activa).map((z) => prepZona(z, 'desechos')),
     ...escenario.ocupadas.filter((z) => z.activa).map((z) => prepZona(z, 'ocupada')),
@@ -112,8 +115,9 @@ export function violaciones(config: Configuracion, ctx: Contexto, vecs?: Vec3[])
   const lista: Violacion[] = [];
   for (let i = 0; i < v.length; i++) {
     for (const z of ctx.zonas) {
-      // Producto punto > cos(radio)  <=>  distancia < radio.
-      if (punto(v[i], z.centro) > z.cosRadio) {
+      // Producto punto > cos(radio) <=> distancia < radio.
+      // Si la zona tiene radio >= 180°, abarca toda la esfera.
+      if (z.radio >= 180 || punto(v[i], z.centro) > z.cosRadio) {
         const mag = z.radio - angulo(v[i], z.centro);
         if (mag > EPS) lista.push({ tipo: z.tipo, satelite: i, contra: z.id, magnitud: mag });
       }
