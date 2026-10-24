@@ -165,8 +165,30 @@ function nombreZona(id: string): string {
 }
 
 function renderPanel(): void {
-  $('panel-izq').innerHTML = panelEscenario(estado.escenario, estado.parametros, estado.ejecutando, estado.caliente);
+  const panel = $('panel-izq');
+  const activo = document.activeElement as HTMLElement | null;
+  let selectorFoco: string | null = null;
+  if (activo && panel.contains(activo)) {
+    if (activo.dataset.zona && activo.dataset.campo) {
+      selectorFoco = `[data-zona="${activo.dataset.zona}"][data-campo="${activo.dataset.campo}"]`;
+    } else if (activo.dataset.param) {
+      selectorFoco = `[data-param="${activo.dataset.param}"]`;
+    } else if (activo.dataset.modelo) {
+      selectorFoco = `[data-modelo="${activo.dataset.modelo}"]`;
+    } else if (activo.dataset.regionActiva) {
+      selectorFoco = `[data-region-activa="${activo.dataset.regionActiva}"]`;
+    } else if (activo.dataset.prioridad) {
+      selectorFoco = `[data-prioridad="${activo.dataset.prioridad}"]`;
+    }
+  }
+
+  panel.innerHTML = panelEscenario(estado.escenario, estado.parametros, estado.ejecutando, estado.caliente);
   renderFactibilidad();
+
+  if (selectorFoco) {
+    const el = panel.querySelector<HTMLElement>(selectorFoco);
+    if (el) el.focus();
+  }
 }
 
 function renderFactibilidad(): void {
@@ -236,7 +258,10 @@ function editarZona(id: string, campo: string, valor: string | boolean): void {
   if (campo === 'activa') z.activa = valor as boolean;
   else {
     const n = Number(valor);
-    if (!Number.isFinite(n)) return;
+    if (!Number.isFinite(n) || String(valor).trim() === '') {
+      renderPanel();
+      return;
+    }
     const limites: Record<string, [number, number]> = { lat: [-90, 90], lon: [-180, 180], radioGrados: [0.5, 179] };
     const [a, b] = limites[campo];
     (z as unknown as Record<string, number>)[campo] = Math.max(a, Math.min(b, n));
@@ -262,18 +287,33 @@ $('panel-izq').addEventListener('change', (ev) => {
     return cambiarEscenario(e);
   }
   if (t.dataset.modelo) {
-    const n = Number(t.value);
-    if (!Number.isFinite(n) || n < 0) return;
-    const e = clonarEscenario(estado.escenario);
-    (e.modelo as unknown as Record<string, number>)[t.dataset.modelo] = n;
-    return cambiarEscenario(e);
+    const inp = t as HTMLInputElement;
+    const n = Number(inp.value);
+    const minVal = inp.min ? Number(inp.min) : 0;
+    const maxVal = inp.max ? Number(inp.max) : Infinity;
+    if (Number.isFinite(n) && inp.value.trim() !== '' && n >= minVal) {
+      const e = clonarEscenario(estado.escenario);
+      (e.modelo as unknown as Record<string, number>)[inp.dataset.modelo!] = Math.max(minVal, Math.min(maxVal, n));
+      return cambiarEscenario(e);
+    } else {
+      inp.value = String((estado.escenario.modelo as unknown as Record<string, number>)[inp.dataset.modelo!]);
+    }
   }
   if (t.dataset.param) {
     const k = t.dataset.param as keyof ParametrosAG;
     if (k === 'alinearCruce') estado.parametros.alinearCruce = t.value === '1';
     else {
-      const n = Number(t.value);
-      if (Number.isFinite(n)) (estado.parametros as unknown as Record<string, number>)[k] = n;
+      const inp = t as HTMLInputElement;
+      const n = Number(inp.value);
+      const minVal = inp.min ? Number(inp.min) : 0;
+      const maxVal = inp.max ? Number(inp.max) : Infinity;
+      if (Number.isFinite(n) && inp.value.trim() !== '') {
+        const clampeado = Math.max(minVal, Math.min(maxVal, n));
+        (estado.parametros as unknown as Record<string, number>)[k] = clampeado;
+        if (clampeado !== n) inp.value = String(clampeado);
+      } else {
+        inp.value = String(estado.parametros[k]);
+      }
     }
   }
 });
