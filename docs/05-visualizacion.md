@@ -73,24 +73,26 @@ El chip lo decide `estadoParaMostrar()` ([estadoVista.ts](../src/app/estadoVista
 
 ![Vista de escritorio](capturas/escritorio.png)
 
-Dirección visual **«control de misión cálido»**: superficies carbón cálido, texto color hueso, tipografía Manrope (IBM Plex Mono solo para coordenadas) y un único acento color sol para lo que se puede tocar. La idea es que se lea como un panel de trabajo humano y tranquilo, no como una consola de neón.
+La **interfaz recupera el azul del tema anterior al rediseño** (commit `33651f8`): fondo `#04060f`, paneles `#0a1024`, bordes `#1e2a4a`, texto `#e6f1ff` y acento cian `#22d3ee`. Se conservan la distribución actual y la tipografía Manrope (IBM Plex Mono para coordenadas). La Tierra, la iluminación, los satélites y las demás capas 3D mantienen su aspecto actual.
 
-Todos los colores, las fuentes y las duraciones de las animaciones están en un solo archivo: [`src/app/tema.ts`](../src/app/tema.ts). La escena 3D y la gráfica los leen directamente y el CSS los recibe como variables (`--acento`, `--s-regionCubierta`, `--fuente-ui`, `--dur-media`, …). `estilos.css` no tiene ningún color ni fuente escritos a mano.
+Los colores, las fuentes y las duraciones están en [`src/app/tema.ts`](../src/app/tema.ts). `paleta` y `semantica` siguen controlando la escena 3D; `paletaInterfaz`, `semanticaInterfaz` y `semanticaGrafica` controlan el HUD y la gráfica. El CSS recibe esos valores como variables (`--acento`, `--s-regionCubierta`, `--fuente-ui`, `--dur-media`, …).
 
-**Un color, un significado** (`semantica` en tema.ts):
+**Colores de la escena 3D y estados** (`semantica` en tema.ts):
 
 | Significado | Color |
 |---|---|
-| Satélites, botones y selección | Sol `#f28c3a` (baliza y acento) y hueso `#f3ece2` (cuerpo y huella) |
-| Región cubierta, rayo de cobertura, chip Válida | Verde agua `#3fb39b` |
-| Región parcial, cota F*, chip Inviable | Miel `#e6b450` |
-| Región sin cubrir, chip Inválida | Coral `#e8705f` |
+| Satélites y huellas | Sol `#f28c3a` (baliza) y hueso `#f3ece2` (cuerpo y huella) |
+| Región cubierta y rayo de cobertura | Verde agua `#3fb39b` |
+| Región parcial | Miel `#e6b450` |
+| Región sin cubrir | Coral `#e8705f` |
 | Zona de desechos | Frambuesa `#c4506a` |
 | Objeto ocupado | Lavanda `#a99be0` |
 | Satélite de la configuración inicial | Azul pizarra `#7fa7d9` |
-| Inactivo, peor aptitud | Gris cálido `#7a736a` |
+| Inactivo | Gris cálido `#7a736a` |
 
-La prioridad de las regiones **no** usa color (en la versión anterior el rojo significaba a la vez «prioridad alta», «no cubierta», «desechos» y «peor»): se distingue por el peso del texto.
+En el HUD, los estados y las series de la gráfica usan los colores históricos: verde `#34d399`, ámbar `#fbbf24`, rojo `#fb3b5c`, violeta `#8b5cf6` y cian `#22d3ee`. La prioridad de las regiones se sigue distinguiendo por el peso del texto.
+
+Las capturas de esta sección se tomaron antes del cambio de paleta del HUD y muestran sus colores cálidos anteriores.
 
 | Comparar inicial contra final | Escenario inviable | Teléfono |
 |---|---|---|

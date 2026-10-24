@@ -14,7 +14,7 @@ El enunciado pide declarar si se usaron herramientas de IA, para qué y qué ver
 | Entregable 2 — Implementación | Generación del código del núcleo (`src/core`) y de la CLI (`experiments/cli.ts`) |
 | Entregable 3 — Pruebas | Diseño y código de las pruebas automáticas (`tests/`) y de los experimentos (`experiments/run-all.ts`). `docs/03-pruebas.md` se genera **automáticamente a partir de los resultados**, sin números escritos a mano |
 | Entregable 4 — Análisis | Redacción de `docs/04-analisis.md` citando los resultados reales de `results/` |
-| Entregable 5 — Visualización | Generación del código de la visualización 3D y del HUD (`src/app`), y su rediseño visual posterior («control de misión cálido»: tema, HUD, globo, gráfica y animaciones) |
+| Entregable 5 — Visualización | Generación del código de la visualización 3D y del HUD (`src/app`), su rediseño visual y la recuperación posterior del azul histórico solo para la interfaz; el globo y los satélites conservan el rediseño |
 | Entregable 6 — Documentación | Redacción del README, la guía de defensa (`docs/06`), la explicación didáctica (`docs/02`) y este archivo |
 
 ## Verificaciones realizadas
