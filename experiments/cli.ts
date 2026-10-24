@@ -67,8 +67,12 @@ const p: ParametrosAG = {
   sigmaMutacion: num('sigma', PARAMETROS_BASE.sigmaMutacion),
   probMutacion: num('mutacion', PARAMETROS_BASE.probMutacion),
   probCruce: num('cruce', PARAMETROS_BASE.probCruce),
+  elitismo: num('elitismo', PARAMETROS_BASE.elitismo),
   alinearCruce: !args.has('sin-alinear'),
 };
+if (p.elitismo >= p.poblacion) {
+  p.elitismo = Math.max(0, p.poblacion - 1);
+}
 
 const fa = analizarFactibilidad(esc);
 console.log(`Factibilidad: ${fa.mensaje}`);
