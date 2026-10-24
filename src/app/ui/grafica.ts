@@ -2,7 +2,7 @@
 // mejor, media y peor aptitud por generación, número de válidos y la cota F*.
 // Muestra el historial REAL de la ejecución cargada o en curso.
 import type { RegistroGeneracion } from '../../core/tipos';
-import { conAlfa, paleta, semantica, tipografia } from '../tema';
+import { conAlfa, paletaInterfaz, semanticaGrafica, tipografia } from '../tema';
 
 export class GraficaEvolucion {
   private ctx: CanvasRenderingContext2D;
@@ -106,8 +106,8 @@ export class GraficaEvolucion {
     const base = a.arr + alto;
 
     c.font = `500 11px ${tipografia.ui}`;
-    c.fillStyle = paleta.textoTenue;
-    c.strokeStyle = paleta.borde;
+    c.fillStyle = paletaInterfaz.textoTenue;
+    c.strokeStyle = paletaInterfaz.borde;
     c.lineWidth = 1;
     for (const v of [0, 0.25, 0.5, 0.75, 1]) {
       c.beginPath();
@@ -124,7 +124,7 @@ export class GraficaEvolucion {
     }
 
     // Barras de válidos (fracción de la población, en la franja inferior).
-    c.fillStyle = conAlfa(semantica.validos, 0.2);
+    c.fillStyle = conAlfa(semanticaGrafica.validos, 0.2);
     const bw = Math.max(1, ancho / this.total);
     for (const h of this.historial) {
       const alt = (h.validos / this.poblacion) * alto * 0.3;
@@ -133,13 +133,13 @@ export class GraficaEvolucion {
 
     if (this.cota !== null) {
       c.setLineDash([5, 4]);
-      c.strokeStyle = semantica.cota;
+      c.strokeStyle = semanticaGrafica.cota;
       c.beginPath();
       c.moveTo(a.izq, Y(this.cota));
       c.lineTo(a.izq + ancho, Y(this.cota));
       c.stroke();
       c.setLineDash([]);
-      c.fillStyle = semantica.cota;
+      c.fillStyle = semanticaGrafica.cota;
       c.textAlign = 'left';
       c.fillText(`F* ${this.cota.toFixed(3)}`, a.izq + ancho + 6, Y(this.cota) + 4);
     }
@@ -161,8 +161,8 @@ export class GraficaEvolucion {
     // Área bajo la mejor: da peso a la serie principal sin brillos.
     if (this.historial.length) {
       const grad = c.createLinearGradient(0, a.arr, 0, base);
-      grad.addColorStop(0, conAlfa(semantica.mejor, 0.26));
-      grad.addColorStop(1, conAlfa(semantica.mejor, 0));
+      grad.addColorStop(0, conAlfa(semanticaGrafica.mejor, 0.26));
+      grad.addColorStop(1, conAlfa(semanticaGrafica.mejor, 0));
       c.fillStyle = grad;
       c.beginPath();
       trazar('mejor');
@@ -171,15 +171,15 @@ export class GraficaEvolucion {
       c.closePath();
       c.fill();
     }
-    serie('peor', semantica.peor, 1, true);
-    serie('media', semantica.media, 1.5);
-    serie('mejor', semantica.mejor, 2.4);
+    serie('peor', semanticaGrafica.peor, 1, true);
+    serie('media', semanticaGrafica.media, 1.5);
+    serie('mejor', semanticaGrafica.mejor, 2.4);
 
     const punto = (g: number, radio: number) => {
       const h = this.historial[g];
       if (!h) return;
-      c.fillStyle = semantica.mejor;
-      c.strokeStyle = paleta.panel;
+      c.fillStyle = semanticaGrafica.mejor;
+      c.strokeStyle = paletaInterfaz.panel;
       c.lineWidth = 2;
       c.beginPath();
       c.arc(X(h.generacion), Y(h.mejor), radio, 0, Math.PI * 2);
@@ -189,7 +189,7 @@ export class GraficaEvolucion {
     const vertical = (g: number, alfa: number) => {
       const h = this.historial[g];
       if (!h) return;
-      c.strokeStyle = conAlfa(paleta.texto, alfa);
+      c.strokeStyle = conAlfa(paletaInterfaz.texto, alfa);
       c.lineWidth = 1;
       c.beginPath();
       c.moveTo(Math.round(X(h.generacion)) + 0.5, a.arr);

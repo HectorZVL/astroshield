@@ -2,7 +2,7 @@
 // devuelven HTML. Ningún número se calcula aquí; todo viene de la evaluación.
 import type { NivelCalidad } from '../../core/comparacion';
 import type { Escenario, EstadoRegion, EstadoSolucion, Evaluacion, ParametrosAG, ZonaProhibida } from '../../core/tipos';
-import { semantica } from '../tema';
+import { semantica, semanticaGrafica, semanticaInterfaz } from '../tema';
 
 export const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -10,10 +10,10 @@ export const esc = (s: string) =>
 const claseChip: Record<EstadoSolucion, string> = { 'VÁLIDA': 'valida', 'INVÁLIDA': 'invalida', INVIABLE: 'inviable' };
 const textoChip: Record<EstadoSolucion, string> = { 'VÁLIDA': 'Válida', 'INVÁLIDA': 'Inválida', INVIABLE: 'Inviable' };
 const colorEstado: Record<EstadoRegion, string> = {
-  cubierta: semantica.regionCubierta,
-  parcial: semantica.regionParcial,
-  'no cubierta': semantica.regionNoCubierta,
-  inactiva: semantica.inactivo,
+  cubierta: semanticaInterfaz.regionCubierta,
+  parcial: semanticaInterfaz.regionParcial,
+  'no cubierta': semanticaInterfaz.regionNoCubierta,
+  inactiva: semanticaInterfaz.inactivo,
 };
 const textoEstado: Record<EstadoRegion, string> = { cubierta: 'Cubierta', parcial: 'Parcial', 'no cubierta': 'Sin cubrir', inactiva: 'Inactiva' };
 
@@ -63,11 +63,11 @@ export function esqueleto(): string {
     <div class="cabecera">
       <h2>Evolución de la aptitud</h2>
       <div class="series" aria-hidden="true">
-        <span><i style="background:${semantica.mejor}"></i>Mejor</span>
-        <span><i style="background:${semantica.media}"></i>Media</span>
-        <span><i class="discontinua" style="border-color:${semantica.peor}"></i>Peor</span>
-        <span><i class="bloque" style="background:${semantica.validos}"></i>Válidos</span>
-        <span><i class="discontinua" style="border-color:${semantica.cota}"></i>Cota F*</span>
+        <span><i style="background:${semanticaGrafica.mejor}"></i>Mejor</span>
+        <span><i style="background:${semanticaGrafica.media}"></i>Media</span>
+        <span><i class="discontinua" style="border-color:${semanticaGrafica.peor}"></i>Peor</span>
+        <span><i class="bloque" style="background:${semanticaGrafica.validos}"></i>Válidos</span>
+        <span><i class="discontinua" style="border-color:${semanticaGrafica.cota}"></i>Cota F*</span>
       </div>
       <div class="segmentado" role="group" aria-label="Configuración mostrada" id="vista">
         <button data-vista="inicial">Inicial</button><button data-vista="final" class="activo">Final</button><button data-vista="ambas">Comparar</button>
@@ -175,7 +175,7 @@ export function tablaRegiones(ev: Evaluacion): string {
 }
 
 function filaZona(z: ZonaProhibida, tipo: 'desechos' | 'ocupadas', borrable: boolean): string {
-  const color = tipo === 'desechos' ? semantica.desechos : semantica.objetoOcupado;
+  const color = tipo === 'desechos' ? semanticaInterfaz.desechos : semanticaInterfaz.objetoOcupado;
   const campo = (k: 'lat' | 'lon' | 'radioGrados', t: string, min: number, max: number) =>
     `<label>${t}<input type="number" step="0.5" min="${min}" max="${max}" value="${z[k]}" data-zona="${z.id}" data-campo="${k}" /></label>`;
   return `<div class="zona-item ${z.activa ? '' : 'apagada'}">
