@@ -41,7 +41,10 @@ let esc: Escenario = escenarioInicial();
 if (uno('escenario') === 'inviable') {
   esc = agregarZona(esc, 'desechos', { id: 'gigante', nombre: 'Zona gigante', lat: 0, lon: 0, radioGrados: 178, activa: true });
 }
-if (uno('escalar')) esc = escalarDesechos(esc, Number(uno('escalar')));
+if (uno('escalar')) {
+  const f = Number(uno('escalar'));
+  if (Number.isFinite(f) && f > 0) esc = escalarDesechos(esc, f);
+}
 for (const id of args.get('apagar') ?? []) esc = activarZona(esc, id, false);
 for (const par of args.get('prioridad') ?? []) {
   const [id, nivel] = par.split('=');
@@ -50,7 +53,12 @@ for (const par of args.get('prioridad') ?? []) {
   }
 }
 
-const num = (k: string, d: number) => (uno(k) !== undefined ? Number(uno(k)) : d);
+const num = (k: string, d: number) => {
+  const v = uno(k);
+  if (v === undefined) return d;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : d;
+};
 const p: ParametrosAG = {
   ...PARAMETROS_BASE,
   semilla: num('semilla', PARAMETROS_BASE.semilla),
