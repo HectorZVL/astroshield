@@ -417,7 +417,8 @@ function detener(): void {
   worker?.terminate();
   worker = null;
   estado.ejecutando = false;
-  estado.generacion = estado.run.historial.length - 1;
+  estado.historialVivo = [];
+  estado.generacion = Math.max(0, estado.run.historial.length - 1);
   renderPanel();
   render({ animar: true });
 }
