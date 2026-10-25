@@ -7,8 +7,8 @@ import { semantica, semanticaGrafica, semanticaInterfaz } from '../tema';
 export const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
-const claseChip: Record<EstadoSolucion, string> = { 'VÁLIDA': 'valida', 'INVÁLIDA': 'invalida', INVIABLE: 'inviable' };
-const textoChip: Record<EstadoSolucion, string> = { 'VÁLIDA': 'Válida', 'INVÁLIDA': 'Inválida', INVIABLE: 'Inviable' };
+const claseChip: Record<EstadoSolucion, string> = { 'VÁLIDA': 'valida', 'INVÁLIDA': 'invalida', SIN_VALIDA: 'sin-valida' };
+const textoChip: Record<EstadoSolucion, string> = { 'VÁLIDA': 'Válida', 'INVÁLIDA': 'Inválida', SIN_VALIDA: 'Sin válida encontrada' };
 const colorEstado: Record<EstadoRegion, string> = {
   cubierta: semanticaInterfaz.regionCubierta,
   parcial: semanticaInterfaz.regionParcial,

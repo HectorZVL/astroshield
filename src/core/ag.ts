@@ -150,6 +150,32 @@ function registrar(generacion: number, poblacion: Individuo[], mejor: Individuo)
 
 const esSatisfactoria = (x: Individuo) => x.eval.valida && x.eval.regionesCubiertas === x.eval.regionesActivas;
 
+/** Rechaza valores que los bucles convertirían implícitamente en otros parámetros. */
+function validarParametros(p: ParametrosAG): void {
+  const entero = (nombre: string, valor: number, minimo: number, maximo?: number) => {
+    if (!Number.isSafeInteger(valor) || valor < minimo || (maximo !== undefined && valor > maximo)) {
+      throw new Error(`${nombre} debe ser un entero ${maximo === undefined ? `mayor o igual a ${minimo}` : `entre ${minimo} y ${maximo}`}`);
+    }
+  };
+  entero('La población', p.poblacion, 2);
+  entero('Las generaciones', p.generaciones, 0);
+  entero('El torneo', p.torneo, 1);
+  entero('El elitismo', p.elitismo, 0);
+  entero('La semilla', p.semilla, 0, 0xffffffff);
+  if (p.elitismo >= p.poblacion) throw new Error('El elitismo debe ser menor que la población');
+  for (const [nombre, valor] of [
+    ['La probabilidad de cruce', p.probCruce],
+    ['La probabilidad de mutación', p.probMutacion],
+    ['La probabilidad de reinicio', p.probReinicio],
+  ] as const) {
+    if (!Number.isFinite(valor) || valor < 0 || valor > 1) throw new Error(`${nombre} debe estar entre 0 y 1`);
+  }
+  if (!Number.isFinite(p.sigmaMutacion) || p.sigmaMutacion <= 0) {
+    throw new Error('El paso de mutación debe ser mayor que 0');
+  }
+  if (typeof p.alinearCruce !== 'boolean') throw new Error('Cruce alineado debe ser booleano');
+}
+
 // ---- Motor -------------------------------------------------------------------
 
 /**
@@ -174,9 +200,7 @@ export class MotorEvolutivo {
     readonly p: ParametrosAG,
     opciones: OpcionesEvolucion = {},
   ) {
-    if (!Number.isFinite(p.poblacion) || p.poblacion < 2) throw new Error('La población debe tener al menos 2 individuos');
-    if (!Number.isFinite(p.elitismo) || p.elitismo < 0) throw new Error('El elitismo debe ser mayor o igual a 0');
-    if (p.elitismo >= p.poblacion) throw new Error('El elitismo debe ser menor que la población');
+    validarParametros(p);
     this.ctx = preparar(escenario);
     this.rng = crearRng(p.semilla);
     const n = escenario.modelo.numSatelites;

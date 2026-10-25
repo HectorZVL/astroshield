@@ -3,7 +3,7 @@
 // solo puede no encontrar solución. Este análisis aporta evidencia adicional:
 // - fracción del espacio libre (malla uniforme de puntos),
 // - un "testigo": 8 posiciones válidas encontradas con un método voraz.
-// Si hay testigo, el escenario es factible demostrado. Si no, es posiblemente inviable.
+// Si hay testigo, el escenario es factible demostrado. Si no, el muestreo no concluye.
 import { evaluar, preparar, violaciones } from './evaluacion';
 import { distancia, mallaFibonacci } from './geo';
 import type { Configuracion, Escenario } from './tipos';
@@ -42,7 +42,7 @@ export function analizarFactibilidad(escenario: Escenario, puntos = 20000): Fact
   if (factible) {
     mensaje = `Factible demostrado: existe al menos una configuración válida (espacio libre ${(fraccionLibre * 100).toFixed(1)} %).`;
   } else if (libres.length === 0) {
-    mensaje = 'Inviable: ningún punto de la malla está libre de restricciones.';
+    mensaje = `Sin puntos libres en la muestra de ${malla.length}: no se encontró un testigo de factibilidad; esto no demuestra inviabilidad.`;
   } else {
     mensaje = `Posiblemente inviable: solo caben ${testigo.length} de ${n} satélites con separación ≥ ${sep}° en el espacio libre (${(fraccionLibre * 100).toFixed(2)} %).`;
   }

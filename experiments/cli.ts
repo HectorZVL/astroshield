@@ -86,7 +86,7 @@ for (const h of r.historial.filter((_, i) => i % Math.max(1, Math.round(p.genera
 }
 
 // El estado sale de la misma función que usa la UI: no hay forma de que difieran.
-console.log(`\nESTADO: ${r.estado}${r.estado === 'INVIABLE' ? ' (no se encontró ninguna configuración válida; se muestra la de menor violación)' : ''}`);
+console.log(`\nESTADO: ${r.estado}${r.estado === 'SIN_VALIDA' ? ' (no se encontró ninguna configuración válida en esta ejecución; se muestra la de menor violación)' : ''}`);
 console.log(`Nivel: ${nivelDeCalidad(ev)} · F=${ev.fitness.toFixed(5)} · C=${(ev.cobertura * 100).toFixed(2)} % · R=${ev.redundancia.toFixed(4)} · regiones cubiertas ${ev.regionesCubiertas}/${ev.regionesActivas} · violación total ${ev.violacionTotal.toFixed(3)}°`);
 console.log('\nRegiones:');
 for (const x of ev.regiones) console.log(`  ${x.nombre.padEnd(24)} ${x.prioridad.padEnd(7)} ${(x.fraccion * 100).toFixed(1).padStart(6)} %  ${x.estado}  (satélites completos: ${x.satelitesCompletos.map((i) => 'S' + (i + 1)).join(', ') || '—'})`);

@@ -83,11 +83,11 @@
  "sobreCota": 0,
  "tiempoMs": {
   "n": 30,
-  "media": 749.5,
-  "desviacion": 15.773723239222445,
-  "minimo": 719,
-  "maximo": 797,
-  "mediana": 746
+  "media": 565.8,
+  "desviacion": 28.462195131861108,
+  "minimo": 525,
+  "maximo": 644,
+  "mediana": 565
  },
  "diversidadFinal": {
   "n": 30,

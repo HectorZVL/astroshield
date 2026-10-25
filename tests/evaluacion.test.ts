@@ -215,10 +215,10 @@ describe('reglas de Deb y estados', () => {
     expect(orden[0].fitness).toBe(0.7);
   });
 
-  it('estados: VÁLIDA / INVÁLIDA para configuraciones, INVIABLE para ejecuciones sin válidas', () => {
+  it('estados: VÁLIDA / INVÁLIDA para configuraciones, SIN_VALIDA para ejecuciones sin válidas', () => {
     expect(estadoDeConfiguracion(valida(1))).toBe('VÁLIDA');
     expect(estadoDeConfiguracion(invalida(1, 1))).toBe('INVÁLIDA');
-    expect(estadoDeEjecucion(invalida(1, 1))).toBe('INVIABLE');
+    expect(estadoDeEjecucion(invalida(1, 1))).toBe('SIN_VALIDA');
     expect(estadoDeEjecucion(valida(0))).toBe('VÁLIDA');
   });
 

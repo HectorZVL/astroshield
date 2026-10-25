@@ -68,7 +68,7 @@ Analogía: es como una competencia en la que primero se descalifica a quien romp
 
 **Consecuencias:**
 - Si existe al menos una constelación válida, la mejor reportada **siempre** es válida.
-- Si nunca aparece ninguna válida, la mejor reportada es la de menor violación y la ejecución se marca **INVIABLE** (prueba P6).
+- Si nunca aparece ninguna válida, la mejor reportada es la de menor violación y la ejecución se marca **SIN_VALIDA**. Es el resultado de la búsqueda, no una demostración de inviabilidad (prueba P6).
 - Las inválidas no se borran: pueden seguir teniendo hijos válidos. Simplemente pierden todos los torneos contra las válidas.
 
 ## 6. Los operadores, uno por uno
@@ -140,7 +140,7 @@ Toda la aleatoriedad sale de un único generador con semilla (mulberry32, [rng.t
 | `src/core/geo.ts` | Geometría sobre la esfera (distancias, destino, muestreo) |
 | `src/core/escenario.ts` | Datos del enunciado y funciones para cambiar condiciones |
 | `src/core/evaluacion.ts` | Cobertura, aptitud F y restricciones (violación V) |
-| `src/core/comparacion.ts` | Reglas de Deb y estados VÁLIDA / INVÁLIDA / INVIABLE |
+| `src/core/comparacion.ts` | Reglas de Deb y estados VÁLIDA / INVÁLIDA / SIN_VALIDA |
 | `src/core/ag.ts` | Algoritmo genético (operadores, motor, historial) |
 | `src/core/factibilidad.ts` | Análisis previo: espacio libre y testigo de factibilidad |
 | `src/core/busquedaAleatoria.ts` | Línea base para la prueba P8 |

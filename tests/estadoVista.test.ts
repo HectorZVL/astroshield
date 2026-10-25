@@ -19,7 +19,7 @@ describe('chip de estado de la interfaz', () => {
       const ev = evaluarEn(config, escenarios[i % 2]);
       for (const escenarioModificado of [true, false]) {
         for (const esFinal of [true, false]) {
-          for (const estadoRun of ['VÁLIDA', 'INVIABLE'] as EstadoSolucion[]) {
+          for (const estadoRun of ['VÁLIDA', 'SIN_VALIDA'] as EstadoSolucion[]) {
             const chip = estadoParaMostrar(ev, { escenarioModificado, esFinal, estadoRun });
             if (!ev.valida) expect(chip).not.toBe('VÁLIDA');
             else expect(chip).toBe('VÁLIDA');
@@ -31,12 +31,12 @@ describe('chip de estado de la interfaz', () => {
     expect(invalidasProbadas).toBeGreaterThan(50);
   });
 
-  it('INVIABLE solo aparece para la final de un run inviable, sin cambios de condiciones', () => {
+  it('SIN_VALIDA solo aparece para la final de un run sin válidas, sin cambios de condiciones', () => {
     const ev = evaluarEn([{ lat: 45, lon: -35 }], escenarioInicial());
     expect(ev.valida).toBe(false);
-    expect(estadoParaMostrar(ev, { escenarioModificado: false, esFinal: true, estadoRun: 'INVIABLE' })).toBe('INVIABLE');
-    expect(estadoParaMostrar(ev, { escenarioModificado: true, esFinal: true, estadoRun: 'INVIABLE' })).toBe('INVÁLIDA');
-    expect(estadoParaMostrar(ev, { escenarioModificado: false, esFinal: false, estadoRun: 'INVIABLE' })).toBe('INVÁLIDA');
+    expect(estadoParaMostrar(ev, { escenarioModificado: false, esFinal: true, estadoRun: 'SIN_VALIDA' })).toBe('SIN_VALIDA');
+    expect(estadoParaMostrar(ev, { escenarioModificado: true, esFinal: true, estadoRun: 'SIN_VALIDA' })).toBe('INVÁLIDA');
+    expect(estadoParaMostrar(ev, { escenarioModificado: false, esFinal: false, estadoRun: 'SIN_VALIDA' })).toBe('INVÁLIDA');
   });
 
   it('al cambiar condiciones, la misma configuración puede pasar de VÁLIDA a INVÁLIDA y volver', () => {

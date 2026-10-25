@@ -333,7 +333,7 @@ log('P6 inviable');
   };
   guardar('p6-inviable.json', res);
   const pasaA = res.dificil.validas === 10 && res.dificil.satisfactorias === 0;
-  const pasaB = ri.every((r) => r.estado === 'INVIABLE') && !fInv.factibleDemostrado;
+  const pasaB = ri.every((r) => r.estado === 'SIN_VALIDA') && !fInv.factibleDemostrado;
   const hv = r0.historial;
   secciones.push(`## P6 — Condición difícil e inviable
 
@@ -366,11 +366,11 @@ ${tabla(['Semilla', 'Estado reportado', 'Configuraciones válidas vistas en toda
 
 Evolución de la violación de la mejor (semilla 1): ${[0, 10, 25, 50, 100, 150].map((g) => `gen ${g}: ${f(hv[g].mejorViolacion, 2)}°`).join(' · ')}.
 
-La configuración de menor violación (semilla 1) tiene ${porTipo('desechos')} violaciones de zona y ${porTipo('separacion')} de separación. ${enCasquete} de sus 8 satélites están dentro del casquete libre. Los que invaden la zona entran en promedio ${f(penetracion.media, 2)}° (máximo ${f(penetracion.maximo, 2)}°), y ningún satélite está a más de ${f(lejania.maximo, 2)}° de (0°, 180°): la evolución los amontona alrededor del único espacio libre. Esa configuración se guarda en \`results/p6-inviable.json\`. La UI la reproduce con el preset «Inviable» (semilla 1, parámetros base) y la marca con el chip **INVIABLE**.
+La configuración de menor violación (semilla 1) tiene ${porTipo('desechos')} violaciones de zona y ${porTipo('separacion')} de separación. ${enCasquete} de sus 8 satélites están dentro del casquete libre. Los que invaden la zona entran en promedio ${f(penetracion.media, 2)}° (máximo ${f(penetracion.maximo, 2)}°), y ningún satélite está a más de ${f(lejania.maximo, 2)}° de (0°, 180°): la evolución los amontona alrededor del único espacio libre. Esa configuración se guarda en \`results/p6-inviable.json\`. La UI la reproduce con el preset «Inviable» (semilla 1, parámetros base) y la marca con el chip **Sin válida encontrada**.
 
-**Interpretación.** El sistema **detecta y reporta** la inviabilidad por dos vías independientes. La primera es el análisis de factibilidad: no encuentra testigo y el espacio libre es ${pct(fInv.fraccionLibre, 3)}. La segunda es el algoritmo: en ninguna generación aparece una configuración válida. No presenta nada como válido. Entrega la configuración de **menor violación**, marcada como INVIABLE, para que el usuario vea "qué tan lejos" está de cumplir. Como Deb compara las inválidas por violación, la violación de la mejor baja durante la evolución: el algoritmo hace lo único útil que puede hacer en un escenario sin solución. Límite: un AG no puede *demostrar* inviabilidad. La prueba de que no hay solución es el argumento geométrico (8 puntos a ≥ 3° no caben en un casquete de 2°), y el sistema se limita a reportar "posiblemente inviable".
+**Interpretación.** El análisis de factibilidad no encuentra un testigo en su malla (espacio libre muestreado: ${pct(fInv.fraccionLibre, 3)}), y el algoritmo no encuentra ninguna configuración válida en sus cinco ejecuciones. Son observaciones de búsqueda, no pruebas de inviabilidad. Se entrega la configuración de **menor violación** para mostrar qué tan lejos quedó de cumplir. Como Deb compara las inválidas por violación, esa magnitud baja durante la evolución. En este escenario concreto, la imposibilidad se justifica por separado con el argumento geométrico: 8 puntos a ≥ 3° no caben en un casquete de 2°.
 
-${veredicto('P6', 'Condición difícil e inviable', pasaA && pasaB, `difícil: ${res.dificil.validas}/10 válidas y 0 falsas "satisfactorias"; inviable: ${ri.filter((r) => r.estado === 'INVIABLE').length}/5 reportadas INVIABLE.`)}
+${veredicto('P6', 'Condición difícil e inviable', pasaA && pasaB, `difícil: ${res.dificil.validas}/10 válidas y 0 falsas "satisfactorias"; inviable: ${ri.filter((r) => r.estado === 'SIN_VALIDA').length}/5 sin válida encontrada.`)}
 `);
 }
 

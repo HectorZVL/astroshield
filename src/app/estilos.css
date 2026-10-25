@@ -103,7 +103,7 @@ svg { flex: none; }
 .chip::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
 .chip.valida { --c: var(--s-valida); }
 .chip.invalida { --c: var(--s-invalida); }
-.chip.inviable { --c: var(--s-inviable); }
+.chip.sin-valida { --c: var(--s-sinValida); }
 .chip.cambio { animation: latido 520ms cubic-bezier(.3, 1.6, .5, 1); }
 @keyframes latido { 40% { transform: scale(1.08); } }
 

@@ -21,7 +21,7 @@ El enunciado pide declarar si se usaron herramientas de IA, para qué y qué ver
 
 | Verificación | Cómo | Resultado |
 |---|---|---|
-| Pruebas unitarias del modelo | 76 pruebas en Vitest: geometría, cobertura, restricciones, reglas de Deb, operadores, reproducibilidad, inviabilidad, chip de la UI, escenarios rápidos y correspondencia datos ↔ globo | Todas pasan (`npm test`) |
+| Pruebas unitarias del modelo | 78 pruebas en Vitest: geometría, cobertura, restricciones, reglas de Deb, operadores, reproducibilidad, condiciones difíciles, chip de la UI, escenarios rápidos y correspondencia datos ↔ globo | Todas pasan (`npm test`) |
 | Números de la documentación | docs/03 se genera desde `results/`; docs/04 y la guía citan esos archivos | Cada cifra se puede rastrear a un archivo de `results/` |
 | Reproducibilidad | `tests/referencia.test.ts` vuelve a ejecutar la semilla 42 y compara con el archivo que carga la UI | Idéntico |
 | Validez de lo reportado | Al terminar los experimentos, cada una de las 318 ejecuciones se reevalúa desde cero | 0 inconsistencias |

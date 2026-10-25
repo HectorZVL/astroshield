@@ -70,10 +70,10 @@ Se distinguieron dos casos (P6, `p6-inviable.json`):
 **a) Objetivo inalcanzable, pero hay soluciones válidas** (zona de 21° sobre Yucatán). Todo satélite válido está a ≥ 21° del centro de Yucatán y la huella mide 20°, así que es geométricamente imposible verla completa. Resultado: 10/10 soluciones **VÁLIDAS**, 0/10 satisfactorias, Yucatán observada al 64.1 % en promedio (máximo 78.4 %) y las otras 5 regiones cubiertas. El sistema reporta el nivel *Aceptable* (no *Satisfactoria*) e indica qué región falta.
 
 **b) Restricciones insatisfacibles** (zona de 178° que deja libre un casquete de 2°, donde no caben 8 satélites a ≥ 3°):
-- El **análisis de factibilidad** lo detecta antes de evolucionar: "Posiblemente inviable: solo caben 2 de 8 satélites…", con 0.035 % de espacio libre.
-- El algoritmo no encuentra **ninguna** configuración válida en 5/5 ejecuciones, y las 5 se reportan **INVIABLE**.
+- El **análisis de factibilidad** no encuentra un testigo en su malla: "Posiblemente inviable: solo caben 2 de 8 satélites…", con 0.035 % de espacio libre muestreado. Por sí solo no demuestra que el escenario sea imposible.
+- El algoritmo no encuentra **ninguna** configuración válida en 5/5 ejecuciones, y las 5 se reportan **SIN_VALIDA**.
 - No se presenta nada como válido. Se entrega la configuración de **menor violación**: la violación baja de 457.68° en la generación 0 a 11.01° al final (semilla 1). Los satélites se amontonan alrededor del único espacio libre.
-- **Limitación honesta:** un algoritmo evolutivo no puede *demostrar* que no hay solución. La demostración es el argumento geométrico; el sistema dice "posiblemente inviable".
+- **Limitación honesta:** ni la malla ni el algoritmo evolutivo pueden *demostrar* que no hay solución. En este caso concreto, la demostración es el argumento geométrico; el sistema solo informa lo que encontró la búsqueda.
 
 ## 6. ¿Qué limitaciones tiene el criterio utilizado para evaluar las configuraciones?
 

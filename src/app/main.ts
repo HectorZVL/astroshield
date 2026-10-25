@@ -83,13 +83,13 @@ function esFinal(): boolean {
 
 /**
  * Estado del chip principal. La configuración se evalúa en las condiciones
- * ACTUALES con el núcleo; el único caso especial es INVIABLE, que es una
+ * ACTUALES con el núcleo; el único caso especial es SIN_VALIDA, que es una
  * propiedad de la ejecución (no se encontró ninguna válida), no de una configuración.
  */
 function estadoChip(ev: Evaluacion): { chip: EstadoSolucion; contexto: string } {
   const mod = escenarioModificado();
   const chip = estadoParaMostrar(ev, { escenarioModificado: mod, esFinal: esFinal(), estadoRun: estado.run.estado });
-  if (chip === 'INVIABLE') return { chip, contexto: 'Sin válidas · menor violación' };
+  if (chip === 'SIN_VALIDA') return { chip, contexto: 'En esta ejecución · menor violación' };
   const que = estado.vista === 'inicial' ? 'Inicial' : esFinal() ? 'Final' : `Mejor gen. ${estado.generacion}`;
   return { chip, contexto: mod ? `${que} · reevaluada` : que };
 }
@@ -155,7 +155,7 @@ function renderAvisoConfig(ev: Evaluacion): void {
       }${ev.violaciones.length ? `<ul>${ev.violaciones.slice(0, 8).map((v) => `<li>${describirViolacion(v)}</li>`).join('')}${ev.violaciones.length > 8 ? `<li>… y ${ev.violaciones.length - 8} más</li>` : ''}</ul>` : ''} Pulsa <b>Evolucionar</b> para adaptar la constelación.</div>`,
     );
   } else if (!ev.valida) {
-    partes.push(`<div class="aviso error"><b>${ev.violaciones.length} violaciones</b> (violación total ${ev.violacionTotal.toFixed(2)}°).${estado.run.estado === 'INVIABLE' ? ' El escenario resultó inviable: no se encontró ninguna configuración válida.' : ''}</div>`);
+    partes.push(`<div class="aviso error"><b>${ev.violaciones.length} violaciones</b> (violación total ${ev.violacionTotal.toFixed(2)}°).${estado.run.estado === 'SIN_VALIDA' ? ' No se encontró una configuración válida en esta ejecución; esto no demuestra que el escenario sea inviable.' : ''}</div>`);
   }
   if (ev.valida && ev.regionesCubiertas < ev.regionesActivas) {
     const faltan = ev.regiones.filter((r) => r.estado === 'parcial' || r.estado === 'no cubierta').map((r) => r.nombre);
@@ -318,7 +318,8 @@ $('panel-izq').addEventListener('change', (ev) => {
       const n = Number(inp.value);
       const minVal = inp.min ? Number(inp.min) : 0;
       const maxVal = inp.max ? Number(inp.max) : Infinity;
-      if (Number.isFinite(n) && inp.value.trim() !== '') {
+      const requiereEntero = k === 'semilla' || k === 'poblacion' || k === 'generaciones' || k === 'torneo' || k === 'elitismo';
+      if (Number.isFinite(n) && inp.value.trim() !== '' && (!requiereEntero || Number.isSafeInteger(n))) {
         const clampeado = Math.max(minVal, Math.min(maxVal, n));
         (estado.parametros as unknown as Record<string, number>)[k] = clampeado;
         if (clampeado !== n) inp.value = String(clampeado);

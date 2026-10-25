@@ -11,7 +11,7 @@
 | P3 | Zonas restringidas | ✅ PASA | 0 invasiones en 31 configuraciones finales; con la zona trampa activa, 0/10 invasiones (sin ella, 3/10). |
 | P4 | Posiciones ocupadas | ✅ PASA | 0 invasiones en 31 configuraciones finales; con los objetos sobre regiones, 0/10 invasiones (sin ellos, 6/10). |
 | P5 | Espacio reducido | ✅ PASA | con espacio libre de 97.3 % a 41.2 %, ninguna solución inválida se reporta como válida; la cobertura media baja de 100.00 % a 38.46 %. |
-| P6 | Condición difícil e inviable | ✅ PASA | difícil: 10/10 válidas y 0 falsas "satisfactorias"; inviable: 5/5 reportadas INVIABLE. |
+| P6 | Condición difícil e inviable | ✅ PASA | difícil: 10/10 válidas y 0 falsas "satisfactorias"; inviable: 5/5 sin válida encontrada. |
 | P7 | Variación de la ejecución | ✅ PASA | 30/30 válidas; 28/30 alcanzan F*; F = 1.07590 ± 0.00390. |
 | P8 | Propia: AG contra búsqueda aleatoria | ✅ PASA | AG F = 1.0759 contra aleatoria F = 0.9385; p = < 1e-6. |
 | P9 | Propia: ablación del cruce alineado | ✅ PASA | prueba descriptiva; con alineación 28/30 alcanzan F* (gen. media 46.1), sin alineación 20/30 (gen. media 61.4). |
@@ -21,7 +21,7 @@
 - P1–P7 son las 7 pruebas obligatorias del enunciado. P8, P9 y P10 son pruebas propias del equipo. P11 documenta el cambio de condiciones (sección 3.3).
 - **Verificación independiente:** cada una de las 318 ejecuciones de este documento se volvió a evaluar desde cero al terminar. Inconsistencias entre el estado reportado y la reevaluación: **0**. Ninguna solución inválida se reportó como válida.
 - Cota teórica usada: F* = 1 + 0.1 · 10/13 = 1.07692 (docs/01, sección 7).
-- Tiempo total de los experimentos: 241.1 s (Node v25.8.2).
+- Tiempo total de los experimentos: 212.4 s (Node v24.18.0).
 
 ## P1 — Escenario inicial
 
@@ -212,19 +212,19 @@ Se construyeron dos escenarios. Representan dos formas distintas de "no poder cu
 
 | Semilla | Estado reportado | Configuraciones válidas vistas en toda la ejecución | Violación de la mejor en gen. 0 | Violación de la mejor final |
 | --- | --- | --- | --- | --- |
-| 1 | **INVIABLE** | 0 | 457.68° | 11.01° |
-| 2 | **INVIABLE** | 0 | 445.76° | 10.52° |
-| 3 | **INVIABLE** | 0 | 497.12° | 11.09° |
-| 4 | **INVIABLE** | 0 | 437.65° | 11.11° |
-| 5 | **INVIABLE** | 0 | 416.03° | 10.93° |
+| 1 | **SIN_VALIDA** | 0 | 457.68° | 11.01° |
+| 2 | **SIN_VALIDA** | 0 | 445.76° | 10.52° |
+| 3 | **SIN_VALIDA** | 0 | 497.12° | 11.09° |
+| 4 | **SIN_VALIDA** | 0 | 437.65° | 11.11° |
+| 5 | **SIN_VALIDA** | 0 | 416.03° | 10.93° |
 
 Evolución de la violación de la mejor (semilla 1): gen 0: 457.68° · gen 10: 163.49° · gen 25: 52.37° · gen 50: 13.54° · gen 100: 11.19° · gen 150: 11.01°.
 
-La configuración de menor violación (semilla 1) tiene 6 violaciones de zona y 4 de separación. 2 de sus 8 satélites están dentro del casquete libre. Los que invaden la zona entran en promedio 1.58° (máximo 2.03°), y ningún satélite está a más de 4.03° de (0°, 180°): la evolución los amontona alrededor del único espacio libre. Esa configuración se guarda en `results/p6-inviable.json`. La UI la reproduce con el preset «Inviable» (semilla 1, parámetros base) y la marca con el chip **INVIABLE**.
+La configuración de menor violación (semilla 1) tiene 6 violaciones de zona y 4 de separación. 2 de sus 8 satélites están dentro del casquete libre. Los que invaden la zona entran en promedio 1.58° (máximo 2.03°), y ningún satélite está a más de 4.03° de (0°, 180°): la evolución los amontona alrededor del único espacio libre. Esa configuración se guarda en `results/p6-inviable.json`. La UI la reproduce con el preset «Inviable» (semilla 1, parámetros base) y la marca con el chip **Sin válida encontrada**.
 
-**Interpretación.** El sistema **detecta y reporta** la inviabilidad por dos vías independientes. La primera es el análisis de factibilidad: no encuentra testigo y el espacio libre es 0.035 %. La segunda es el algoritmo: en ninguna generación aparece una configuración válida. No presenta nada como válido. Entrega la configuración de **menor violación**, marcada como INVIABLE, para que el usuario vea "qué tan lejos" está de cumplir. Como Deb compara las inválidas por violación, la violación de la mejor baja durante la evolución: el algoritmo hace lo único útil que puede hacer en un escenario sin solución. Límite: un AG no puede *demostrar* inviabilidad. La prueba de que no hay solución es el argumento geométrico (8 puntos a ≥ 3° no caben en un casquete de 2°), y el sistema se limita a reportar "posiblemente inviable".
+**Interpretación.** El análisis de factibilidad no encuentra un testigo en su malla (espacio libre muestreado: 0.035 %), y el algoritmo no encuentra ninguna configuración válida en sus cinco ejecuciones. Son observaciones de búsqueda, no pruebas de inviabilidad. Se entrega la configuración de **menor violación** para mostrar qué tan lejos quedó de cumplir. Como Deb compara las inválidas por violación, esa magnitud baja durante la evolución. En este escenario concreto, la imposibilidad se justifica por separado con el argumento geométrico: 8 puntos a ≥ 3° no caben en un casquete de 2°.
 
-**Resultado de la prueba: ✅ PASA** — difícil: 10/10 válidas y 0 falsas "satisfactorias"; inviable: 5/5 reportadas INVIABLE.
+**Resultado de la prueba: ✅ PASA** — difícil: 10/10 válidas y 0 falsas "satisfactorias"; inviable: 5/5 sin válida encontrada.
 
 ---
 
@@ -244,7 +244,7 @@ La configuración de menor violación (semilla 1) tiene 6 violaciones de zona y 
 | Generación en que se alcanza F* (28 ejecuciones) | 46.1 | 28.5 | 20.0 | 124.0 | 38.5 |
 | Diversidad final (°) | 8.63 | 0.90 | 6.85 | 11.28 | 8.44 |
 | Distancia entre configuraciones finales (°, 435 pares) | 10.41 | 2.11 | 5.58 | 18.13 | 10.12 |
-| Tiempo por ejecución (ms) | 750 | 16 | 719 | 797 | 746 |
+| Tiempo por ejecución (ms) | 566 | 28 | 525 | 644 | 565 |
 
 Regiones que reciben redundancia (≥ 2 satélites completos), en número de ejecuciones: Península de Yucatán 30/30, Amazonía brasileña 30/30, California 30/30, Sahel 16/30, Japón 12/30.
 

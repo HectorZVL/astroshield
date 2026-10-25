@@ -34,7 +34,7 @@
    "id": "P6",
    "prueba": "Condición difícil e inviable",
    "pasa": true,
-   "resumen": "difícil: 10/10 válidas y 0 falsas \"satisfactorias\"; inviable: 5/5 reportadas INVIABLE."
+   "resumen": "difícil: 10/10 válidas y 0 falsas \"satisfactorias\"; inviable: 5/5 sin válida encontrada."
   },
   {
    "id": "P7",
@@ -72,5 +72,5 @@
   "inconsistencias": []
  },
  "cotaTeorica": 1.0769230769230769,
- "tiempoTotalSegundos": 241.1
+ "tiempoTotalSegundos": 212.4
 }

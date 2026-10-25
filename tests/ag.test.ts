@@ -20,6 +20,17 @@ function escenarioInviable(): Escenario {
   });
 }
 
+/** Existe una posición válida en un casquete demasiado pequeño para la malla. */
+function escenarioFactibleFueraDeMalla(): Escenario {
+  const e = escenarioInicial();
+  e.modelo.numSatelites = 1;
+  e.desechos = [];
+  e.ocupadas = [];
+  return agregarZona(e, 'desechos', {
+    id: 'casi-global', nombre: 'Casi global', lat: 0, lon: 0, radioGrados: 179.999, activa: true,
+  });
+}
+
 describe('operadores', () => {
   it('emparejar asigna cada satélite de A a uno distinto de B, el más cercano', () => {
     const a = [{ lat: 0, lon: 0 }, { lat: 0, lon: 90 }, { lat: 45, lon: 0 }];
@@ -124,6 +135,14 @@ describe('algoritmo evolutivo', () => {
     expect(() => evolucionar(esc, { poblacion: 1 })).toThrow();
     expect(() => evolucionar(esc, { poblacion: 4, elitismo: 4 })).toThrow();
     expect(() => evolucionar(esc, { poblacion: 10, elitismo: -1 })).toThrow();
+    for (const cambios of [
+      { poblacion: 4.5 }, { generaciones: 1.5 }, { torneo: 2.5 },
+      { elitismo: 1.5 }, { semilla: 42.5 },
+    ]) expect(() => evolucionar(esc, cambios)).toThrow(/entero/);
+    expect(() => evolucionar(esc, { generaciones: -1 })).toThrow();
+    expect(() => evolucionar(esc, { probCruce: 1.1 })).toThrow();
+    expect(() => evolucionar(esc, { probMutacion: -0.1 })).toThrow();
+    expect(() => evolucionar(esc, { sigmaMutacion: 0 })).toThrow();
   });
 });
 
@@ -135,20 +154,36 @@ describe('escenario inviable', () => {
     expect(f.mensaje).toMatch(/inviable/i);
   });
 
+  it('cero puntos libres en la malla no se presenta como prueba de inviabilidad', () => {
+    const e = escenarioFactibleFueraDeMalla();
+    const f = analizarFactibilidad(e);
+    expect(f.puntosLibres).toBe(0);
+    expect(evaluarEn([{ lat: 0, lon: 180 }], e).valida).toBe(true);
+    expect(f.mensaje).toMatch(/muestra/);
+    expect(f.mensaje).toMatch(/no demuestra inviabilidad/);
+  });
+
   it('el escenario inicial sí es factible demostrado y el testigo es válido', () => {
     const f = analizarFactibilidad(esc);
     expect(f.factibleDemostrado).toBe(true);
     expect(evaluarEn(f.testigo!, esc).valida).toBe(true);
   });
 
-  it('el AG reporta INVIABLE y entrega la configuración de menor violación', () => {
+  it('el AG reporta que no halló una válida y entrega la configuración de menor violación', () => {
     const r = evolucionar(escenarioInviable(), { ...rapido, semilla: 1 });
-    expect(r.estado).toBe('INVIABLE');
+    expect(r.estado).toBe('SIN_VALIDA');
     expect(r.final.eval.valida).toBe(false);
     expect(r.historial.every((h) => h.validos === 0)).toBe(true);
     expect(r.historial.every((h) => h.mediaValidos === null)).toBe(true);
     // La violación de la mejor baja con la evolución (busca "lo menos malo").
     expect(r.final.eval.violacionTotal).toBeLessThan(r.historial[0].mejorViolacion);
+  });
+
+  it('no encontrar una válida no implica que el escenario sea imposible', () => {
+    const e = escenarioFactibleFueraDeMalla();
+    const r = evolucionar(e, { poblacion: 4, generaciones: 0 });
+    expect(r.estado).toBe('SIN_VALIDA');
+    expect(evaluarEn([{ lat: 0, lon: 180 }], e).valida).toBe(true);
   });
 
   it('una zona sobre Yucatán más grande que la huella hace imposible cubrirla, pero la solución sigue siendo válida', () => {

@@ -14,9 +14,10 @@ Con la semilla de referencia (42), la mejor configuración es **VÁLIDA**, cubre
 
 | Comparar inicial contra final | Escenario inviable | Teléfono |
 |---|---|---|
-| ![Vista Comparar con los detalles del run abiertos](docs/capturas/comparar.png) | ![Preset Inviable después de evolucionar: chip Inviable y violación 11.01°](docs/capturas/inviable.png) | ![Vista en teléfono](docs/capturas/movil.png) |
+| ![Vista Comparar con los detalles del run abiertos](docs/capturas/comparar.png) | ![Captura anterior del preset Inviable: muestra el antiguo texto del chip; la versión actual indica Sin válida encontrada](docs/capturas/inviable.png) | ![Vista en teléfono](docs/capturas/movil.png) |
 
 Las capturas muestran datos reales: el run de referencia (semilla 42) y el preset «Inviable» evolucionado en el navegador, que reproduce la prueba P6. Diseño, colores y su significado: [docs/05-visualizacion.md](docs/05-visualizacion.md#diseño-y-personalización).
+La captura del preset se tomó antes de cambiar la etiqueta del estado; la interfaz actual muestra **«Sin válida encontrada»**.
 
 ## Requisitos
 
@@ -32,7 +33,7 @@ npm install
 | Orden | Qué hace |
 |---|---|
 | `npm run dev` | Abre la visualización 3D en http://localhost:5173 (carga `results/run-referencia.json`) |
-| `npm test` | Ejecuta las 76 pruebas automáticas (Vitest) |
+| `npm test` | Ejecuta las 78 pruebas automáticas (Vitest) |
 | `npm run experimentos` | Ejecuta **todos** los experimentos (~4 min): regenera `results/*.json`, `results/*.csv` y `docs/03-pruebas.md` |
 | `npm run evolucionar` | Ejecuta una evolución desde la terminal (ver opciones abajo) |
 | `npm run verificar` | Tipado + pruebas + experimentos: **todo con una sola orden** |
@@ -60,7 +61,7 @@ npm run evolucionar -- --escalar 5 --salida results/mi-run.json
 npm run evolucionar -- --ayuda
 ```
 
-La CLI imprime el estado (**VÁLIDA** o **INVIABLE**), la aptitud, la cobertura por región, las coordenadas de cada satélite y, si las hay, las violaciones. El estado sale de la misma función que usa la interfaz.
+La CLI imprime el estado (**VÁLIDA** o **SIN_VALIDA**), la aptitud, la cobertura por región, las coordenadas de cada satélite y, si las hay, las violaciones. **SIN_VALIDA** significa que esa ejecución no encontró una configuración válida; no demuestra que el escenario sea imposible. El estado sale de la misma función que usa la interfaz.
 
 ## Estructura del repositorio
 
@@ -73,7 +74,7 @@ astroshield/
 │   │   ├── geo.ts            Geometría esférica
 │   │   ├── escenario.ts      Datos del enunciado + cambios de condiciones
 │   │   ├── evaluacion.ts     Cobertura, aptitud y restricciones
-│   │   ├── comparacion.ts    Reglas de Deb y estados VÁLIDA/INVÁLIDA/INVIABLE
+│   │   ├── comparacion.ts    Reglas de Deb y estados VÁLIDA/INVÁLIDA/SIN_VALIDA
 │   │   ├── ag.ts             Algoritmo genético
 │   │   ├── factibilidad.ts   Análisis de espacio libre y testigo de factibilidad
 │   │   ├── busquedaAleatoria.ts  Línea base de comparación
@@ -112,7 +113,7 @@ astroshield/
 - **Cobertura:** cada satélite ve un casquete de **20°** (≈ órbita baja de 900 km con 10° de elevación mínima). Una región (disco de 300 km, 37 puntos de muestreo) está **cubierta** si todos sus puntos están dentro de alguna huella.
 - **Aptitud:** `F = C + 0.1·R + 0.5·G`. C es la cobertura ponderada por prioridad (Alta 3, Media 2, Normal 1), R la redundancia (regiones con 2 o más satélites completos) y G una guía de proximidad que solo actúa sobre regiones no cubiertas.
 - **Restricciones duras:** fuera de las zonas de desechos, fuera de las exclusiones de los objetos y separación mínima de 3° entre satélites.
-- **Manejo de restricciones:** reglas de factibilidad de Deb. Una configuración válida **siempre** le gana a una inválida. Si no se encuentra ninguna válida, el resultado se reporta como **INVIABLE**, con la configuración de menor violación.
+- **Manejo de restricciones:** reglas de factibilidad de Deb. Una configuración válida **siempre** le gana a una inválida. Si no se encuentra ninguna válida, el resultado se reporta como **SIN_VALIDA**, con la configuración de menor violación; no se afirma inviabilidad matemática.
 - **AG:** población 80, 150 generaciones, torneo 3, cruce uniforme **alineado** (pc 0.9), mutación gaussiana sobre la esfera (pm 0.25, σ 6°) más reinicio (0.02), elitismo 2.
 
 Justificación completa y supuestos (S1–S10): [docs/01-definicion-del-problema.md](docs/01-definicion-del-problema.md).

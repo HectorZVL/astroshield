@@ -126,7 +126,8 @@ export interface RegistroGeneracion {
   mejorConfig: Configuracion;
 }
 
-export type EstadoSolucion = 'VÁLIDA' | 'INVÁLIDA' | 'INVIABLE';
+/** SIN_VALIDA indica que la búsqueda no encontró una configuración válida; no demuestra inviabilidad. */
+export type EstadoSolucion = 'VÁLIDA' | 'INVÁLIDA' | 'SIN_VALIDA';
 
 export interface Individuo {
   config: Configuracion;

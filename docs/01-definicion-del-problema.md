@@ -108,7 +108,7 @@ Esta regla se usa en **todos** los lugares donde se elige: torneo, elitismo y "m
 
 **Por qué no penalizar la aptitud (F − λ·V):** con una penalización, el resultado depende de λ; si λ es pequeña, una configuración que invade una zona pero cubre más podría ganar. Las reglas de Deb no tienen parámetros que ajustar y garantizan la propiedad que pide el enunciado. Las configuraciones inválidas **no se descartan**: se conservan en la población porque pueden aportar material genético útil, pero pierden toda comparación contra las válidas.
 
-**Escenario inviable:** si al terminar no existe ninguna configuración válida, el sistema reporta **INVIABLE** y muestra la configuración de **menor violación**, marcada como tal. Además, antes de evolucionar se ejecuta un **análisis de factibilidad**: se recorre una malla de 20 000 puntos uniformes sobre la esfera, se calcula la fracción de espacio libre y se intenta colocar 8 satélites con un método voraz. Si lo logra, el escenario es *factible demostrado* (existe al menos un testigo). Si no, se reporta *posiblemente inviable*. Un algoritmo evolutivo no puede demostrar inviabilidad, y el sistema lo dice así.
+**Ejecución sin solución válida encontrada:** si al terminar la búsqueda no apareció ninguna configuración válida, el sistema reporta **SIN_VALIDA** y muestra la configuración de **menor violación**. Además, antes de evolucionar se ejecuta un **análisis de factibilidad**: se recorre una malla de 20 000 puntos uniformes sobre la esfera, se calcula la fracción de espacio libre y se intenta colocar 8 satélites con un método voraz. Si lo logra, el escenario es *factible demostrado* (existe al menos un testigo). Si no, solo se informa que la muestra no encontró un testigo. Ni la malla ni el algoritmo evolutivo demuestran inviabilidad; una demostración requiere un argumento independiente.
 
 ## 5. Estrategia del algoritmo evolutivo
 
@@ -157,6 +157,8 @@ Algoritmo genético generacional con elitismo:
 | Semilla | 42 (referencia) | Toda la aleatoriedad usa un generador con semilla: la misma semilla produce exactamente el mismo resultado. |
 
 Todos los parámetros son configurables desde la CLI y desde la interfaz. Los valores de N, σ y la alineación del cruce **se validan experimentalmente** en las pruebas propias, no solo se asumen.
+
+El motor exige que N, G, k, E y la semilla sean enteros; N ≥ 2, G ≥ 0, k ≥ 1 y 0 ≤ E < N. Las probabilidades deben estar entre 0 y 1, y σ debe ser positivo. La interfaz limita además los rangos editables. Los valores inválidos se rechazan en lugar de ejecutarse con redondeos implícitos.
 
 ## 7. ¿Cuándo una solución es suficientemente buena?
 

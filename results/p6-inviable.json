@@ -37,11 +37,11 @@
    "mensaje": "Posiblemente inviable: solo caben 2 de 8 satélites con separación ≥ 3° en el espacio libre (0.03 %)."
   },
   "estados": [
-   "INVIABLE",
-   "INVIABLE",
-   "INVIABLE",
-   "INVIABLE",
-   "INVIABLE"
+   "SIN_VALIDA",
+   "SIN_VALIDA",
+   "SIN_VALIDA",
+   "SIN_VALIDA",
+   "SIN_VALIDA"
   ],
   "validosEnTodaLaEjecucion": [
    0,

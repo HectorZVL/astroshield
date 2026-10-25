@@ -9,7 +9,7 @@ export interface ContextoVista {
   escenarioModificado: boolean;
   /** Se muestra la configuración final del run (no una generación intermedia ni la inicial). */
   esFinal: boolean;
-  /** Estado de la ejecución completa (VÁLIDA o INVIABLE). */
+  /** Estado de la ejecución completa (VÁLIDA o SIN_VALIDA). */
   estadoRun: EstadoSolucion;
 }
 
@@ -18,6 +18,6 @@ export interface ContextoVista {
  * actuales, calculada por el núcleo. Si es inválida, el resultado nunca es VÁLIDA.
  */
 export function estadoParaMostrar(ev: Evaluacion, c: ContextoVista): EstadoSolucion {
-  if (!ev.valida && !c.escenarioModificado && c.esFinal && c.estadoRun === 'INVIABLE') return 'INVIABLE';
+  if (!ev.valida && !c.escenarioModificado && c.esFinal && c.estadoRun === 'SIN_VALIDA') return 'SIN_VALIDA';
   return estadoDeConfiguracion(ev);
 }

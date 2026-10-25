@@ -87,7 +87,7 @@ export const semanticaInterfaz = {
   inactivo: paletaInterfaz.textoTenue,
   valida: paletaInterfaz.verde,
   invalida: paletaInterfaz.rojo,
-  inviable: paletaInterfaz.ambar,
+  sinValida: paletaInterfaz.ambar,
 } as const;
 
 /**
@@ -145,7 +145,7 @@ export const semantica = {
   // Chip de estado
   valida: paleta.verdeAgua,
   invalida: paleta.coral,
-  inviable: paleta.miel,
+  sinValida: paleta.miel,
 } as const;
 
 /** Aplica al CSS solo los colores del HUD; los materiales 3D leen `paleta`. */

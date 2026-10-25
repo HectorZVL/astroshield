@@ -31,10 +31,10 @@ export function estadoDeConfiguracion(e: Evaluacion): EstadoSolucion {
  * Estado del resultado de una ejecución. Gracias a las reglas de Deb, si en
  * algún momento existió una configuración válida, la mejor final es válida.
  * Por lo tanto, una mejor final inválida implica que no se encontró ninguna
- * válida: el escenario se reporta INVIABLE (con la de menor violación).
+ * válida: se reporta que no se encontró una válida (con la de menor violación).
  */
 export function estadoDeEjecucion(mejorFinal: Evaluacion): EstadoSolucion {
-  return mejorFinal.valida ? 'VÁLIDA' : 'INVIABLE';
+  return mejorFinal.valida ? 'VÁLIDA' : 'SIN_VALIDA';
 }
 
 export type NivelCalidad = 'Inválida' | 'Aceptable' | 'Satisfactoria';

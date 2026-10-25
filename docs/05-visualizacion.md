@@ -41,7 +41,7 @@ Cada escenario rápido fija las condiciones **y la semilla** de una ejecución d
 
 ## Interfaz (HUD)
 
-- **Barra superior:** origen del run y verificación, los tres indicadores principales (aptitud F, cobertura y regiones cubiertas) y el chip **Válida / Inválida / Inviable** con su contexto y nivel (Aceptable / Satisfactoria). El botón **Detalles del run** muestra semilla, población y generaciones, mutación, cruce, evaluaciones, redundancia y el archivo de origen.
+- **Barra superior:** origen del run y verificación, los tres indicadores principales (aptitud F, cobertura y regiones cubiertas) y el chip **Válida / Inválida / Sin válida encontrada** con su contexto y nivel (Aceptable / Satisfactoria). El último estado describe una ejecución sin solución válida, no una prueba de inviabilidad. El botón **Detalles del run** muestra semilla, población y generaciones, mutación, cruce, evaluaciones, redundancia y el archivo de origen.
 - **Panel izquierdo (Escenario):** secciones plegables con los presets de escenario (inicial, espacio reducido, difícil, inviable), regiones con prioridad y activación, zonas de desechos y objetos (activar, mover, cambiar radio, agregar y borrar), parámetros del modelo y del algoritmo. El arranque en caliente y el botón **Evolucionar** quedan siempre visibles al pie. Al editar las condiciones se muestra el análisis de factibilidad.
 - **Panel derecho (Regiones):** cada región con su % observado, barra de cobertura, estado escrito (*Cubierta / Parcial / Sin cubrir*), prioridad y los satélites que la cubren completa; un clic hace volar la cámara a la región. Debajo, la leyenda agrupada (constelación, regiones, restricciones).
 - Ambos paneles laterales se pueden **plegar** para ver el globo completo; el globo se recentra en el espacio libre.
@@ -96,7 +96,9 @@ Las capturas de esta sección se tomaron antes del cambio de paleta del HUD y mu
 
 | Comparar inicial contra final | Escenario inviable | Teléfono |
 |---|---|---|
-| ![Comparar](capturas/comparar.png) | ![Inviable](capturas/inviable.png) | ![Teléfono](capturas/movil.png) |
+| ![Comparar](capturas/comparar.png) | ![Captura anterior del preset Inviable: el chip actual dice Sin válida encontrada](capturas/inviable.png) | ![Teléfono](capturas/movil.png) |
+
+La captura del preset conserva el texto anterior del chip. La interfaz actual muestra **«Sin válida encontrada»** para una ejecución sin configuración válida.
 
 ## Rendimiento
 

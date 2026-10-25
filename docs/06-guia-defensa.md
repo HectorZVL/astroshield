@@ -47,10 +47,10 @@ Con experimentos de control (misma zona, activa o desactivada):
 Además, 0 de 31 configuraciones finales del escenario original invaden alguna zona.
 
 **13. ¿Qué pasa si el escenario es inviable?**
-El análisis de factibilidad lo advierte ("posiblemente inviable") y el algoritmo no encuentra ninguna válida. El sistema reporta **INVIABLE** y muestra la de menor violación: baja de 457.68° a 11.01° (P6). Nunca muestra nada como válido.
+El análisis de factibilidad no encuentra un testigo en la malla y el algoritmo no encuentra ninguna válida. El sistema reporta **SIN_VALIDA** y muestra la de menor violación: baja de 457.68° a 11.01° (P6). Nunca muestra nada como válido.
 
 **14. ¿Pueden demostrar que un escenario es inviable?**
-El algoritmo evolutivo no puede: solo puede no encontrar solución. Por eso el sistema dice "posiblemente inviable". La demostración la da el argumento geométrico (8 puntos a ≥ 3° no caben en un casquete de 2°). El análisis de factibilidad sí puede demostrar *factibilidad*: si encuentra un testigo, existe una solución.
+El algoritmo evolutivo y la malla no pueden: solo pueden no encontrar solución. Por eso el sistema reporta **SIN_VALIDA** o que no se encontró un testigo. En el preset P6, la demostración la da el argumento geométrico (8 puntos a ≥ 3° no caben en un casquete de 2°). El análisis de factibilidad sí puede demostrar *factibilidad*: si encuentra un testigo, existe una solución.
 
 ## C. Algoritmo evolutivo
 

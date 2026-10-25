@@ -27,7 +27,7 @@ describe('escenarios rápidos de la interfaz', () => {
   it('«Inviable» reproduce exactamente la configuración de menor violación de P6 (b)', () => {
     const p = crearPreset('inviable');
     const r = evolucionar(p.escenario, p.parametros);
-    expect(r.estado).toBe('INVIABLE');
+    expect(r.estado).toBe('SIN_VALIDA');
     expect(r.final.config).toEqual(p6.inviable.configuracionMenorViolacion);
     expect(r.final.eval.violacionTotal).toBe(p6.inviable.violacionFinal[0]);
   });
