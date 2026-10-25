@@ -130,14 +130,16 @@ Justificación completa y supuestos (S1–S10): [docs/01-definicion-del-problema
 | Decisiones justificadas y supuestos declarados | docs/01 (supuestos S1–S10) y docs/04 §6 (limitaciones) |
 | Historial de git coherente | `git log --oneline` |
 
-## Equipo
+## Equipo — Grupo LITIID72
 
-| Integrante | GitHub |
-|---|---|
-| Carlos Daniel Cocom García | [@cocom288](https://github.com/cocom288) |
-| Saúl Alejandro Rendón Cocom | [@Elitesou1](https://github.com/Elitesou1) |
-| Ángel Fernando Ocampo García | [@fernandoagg](https://github.com/fernandoagg) |
-| Héctor (HectorZVL) | [@HectorZVL](https://github.com/HectorZVL) |
+Proyecto elaborado por integrantes del grupo **LITIID72**:
+
+| Integrante | Grupo | GitHub |
+|---|---|---|
+| Zavala López Héctor | LITIID72 | [@HectorZVL](https://github.com/HectorZVL) |
+| Cocom García Carlos Daniel | LITIID72 | [@cocom288](https://github.com/cocom288) |
+| Rendón Cocom Saúl Alejandro | LITIID72 | [@Elitesou1](https://github.com/Elitesou1) |
+| Ocampo García Ángel Fernando | LITIID72 | [@fernandoagg](https://github.com/fernandoagg) |
 
 Reparto propuesto para la demostración: [docs/06-guia-defensa.md](docs/06-guia-defensa.md#propuesta-de-reparto-para-la-demostración).
 

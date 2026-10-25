@@ -108,11 +108,11 @@ Sí. Ver [AI_USAGE.md](../AI_USAGE.md): para qué se usó, qué se verificó y q
 
 ## Propuesta de reparto para la demostración
 
-Es una propuesta: el equipo puede reasignar las partes. Lo importante es que cada integrante domine la suya y pueda responder las preguntas de las otras.
+Proyecto elaborado por el equipo del grupo **LITIID72**. Es una propuesta: el equipo puede reasignar las partes; lo importante es que cada integrante domine la suya y pueda responder las preguntas de las otras.
 
 | Integrante | Parte a explicar y demostrar | Archivos clave |
 |---|---|---|
-| Carlos Daniel Cocom García | Modelo y restricciones: representación, cobertura, aptitud, cota F*, reglas de Deb; demo del preset «Inviable» y de mover una zona (chip INVÁLIDA) | docs/01, `evaluacion.ts`, `comparacion.ts`, `factibilidad.ts` |
-| Saúl Alejandro Rendón Cocom | Operadores evolutivos; demo de la línea de tiempo y de la vista Comparar | `ag.ts`, docs/02 |
-| Ángel Fernando Ocampo García | Pruebas y análisis: P7, P8 y P9; correr `npm test` y `npm run experimentos` | `experiments/run-all.ts`, docs/03, docs/04 |
-| Héctor (HectorZVL) | Visualización: cómo los datos llegan al globo; cambiar un color en `tema.ts` | `src/app/*`, docs/05 |
+| Cocom García Carlos Daniel | Modelo y restricciones: representación, cobertura, aptitud, cota F*, reglas de Deb; demo del preset «Inviable» y de mover una zona (chip INVÁLIDA) | docs/01, `evaluacion.ts`, `comparacion.ts`, `factibilidad.ts` |
+| Rendón Cocom Saúl Alejandro | Operadores evolutivos; demo de la línea de tiempo y de la vista Comparar | `ag.ts`, docs/02 |
+| Ocampo García Ángel Fernando | Pruebas y análisis: P7, P8 y P9; correr `npm test` y `npm run experimentos` | `experiments/run-all.ts`, docs/03, docs/04 |
+| Zavala López Héctor | Visualización: cómo los datos llegan al globo; cambiar un color en `tema.ts` | `src/app/*`, docs/05 |
